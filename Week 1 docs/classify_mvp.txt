@@ -1,0 +1,3 @@
+According to Minimum Viable Product, we conclude our software provide a service where the clients are not the users. This 
+software will be sold to bussinesses that will install it in their workplaces and will use it with their clients, who will be 
+the users.

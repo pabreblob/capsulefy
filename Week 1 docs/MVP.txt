@@ -1,0 +1,7 @@
+- Core use cases: Register events and venues, create raffles, add songs and allow attendants to vote in order to listen to
+the songs they want.
+- Payment: Owners should be able to pay so that they can add their events and venues to the system
+- Registration: Owners and atendants will register to the system using whatever credentials they want; administrators, on the
+other hand, will be manually introduced into the database.
+- Basic admin: Administrators must be able to suspend or ban owners or attendants if they misuse the system. A dashboard with
+some information about the system should be available too.

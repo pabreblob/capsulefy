@@ -6,7 +6,7 @@ R2-> Los usuarios no registrados deberán poder ver una lista de cápsulas publi
 forma libre, esta lista se podrá buscar por medio de autor, fecha de publicación o
 palabras del texto que contiene.
 
-R3 -> El sistema constara de tres tipos de cápsulas, "gratuita", "barata", "Broadcast" y  
+R3 -> El sistema constara de cuatro tipos de cápsulas, "gratuita", "barata", "Broadcast", "privada" y  
 "Fosil", de las cuales el sistema deberá almacenar el usuario que la has creado, título, 
 texto, fecha de publicación y archivos adjuntos (fotos, videos, imágenes), solo para la 
 "barata", la "broadcast", la "privada" y la "Fosil".
@@ -30,7 +30,7 @@ comunicado que la cápsula ha sido abierta.
 
 R8 -> La cápsula "Privada" funciona de la misma forma que la "barata" pero esta se
 publica de forma privada, solo estará disponible por medio una URL que se enviará a una lista
-de correos que él usuario que la creo configuro previamente.
+de correos que él usuario creo previamente.
 
 R9 -> La cápsula "Fosil" se contrata mediante un pago único, esta cápsula se publicará en la 
 fecha configurada o se puede configurar para que sea publicada cuando el usuario deje 

@@ -1,0 +1,26 @@
+
+Estimación de ganancias con presupuesto Realista 1:
+
+Día 0: -41-561,94 €
+
+Crecimiento en 3 años, asumimos que todos los clientes van a pagar 30euros por esos 3 años
+Cada cliente es 24,79 €
+Asumimos que se reserva espacio suficiente para usuarios gratuitos, en concreto, 5x usuarios gratuitos más que de pago
+
+Primer tier: 43,88 euros al mes, 64 gb
+20 gb gratis= 2048 usuarios gratis
+44 gb de pago= 450 usuarios de pago
+
+Segundo tier: 175,99 euros al mes, 256 gb
+80gb gratis=8192 gratis
+176gb de pago=1802 de pago
+
+Tercer tier: 351,98 euros al mes, 512 gb
+160 gb gratis=16384 usuarios gratis
+352 gb de pago=3604 usuarios de pago
+
+No podemos saber ahora mismo cuál será nuestro crecimiento,porque de hecho, creceremos lento al principio pero cuantos más clientes,
+más conocidos seremos y más rápido nos expandiremos
+
+También debemos tener en cuenta que contamos con 526,56€ de presupuesto para los servidores, hasta que no se gasten, no habrá
+que poner dinero extra en servidores

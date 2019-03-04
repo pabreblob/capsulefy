@@ -1,0 +1,10 @@
+- 5: No está claro lo que significa el icono. No transmite bien la idea. El icono no acompañaba al discurso.
+- MVP no está bien presentado
+- No usar el gráfico de la asignatura para la calsificación
+- Añadir contenido de la planificación
+- Bien la parte de los usuarios finales. Poner más detalles de ellos. (Edad).
+- Dar una cápsula otra persona y se le abra sólo para esa persona. Cápsula con varios compartimentos que se liberan poco a poco
+- Mejorar el comienzo
+- Poner un email
+
+

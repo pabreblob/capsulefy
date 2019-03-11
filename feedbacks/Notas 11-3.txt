@@ -55,3 +55,40 @@ el precio unitario
 - Planning concreto del sprint 1 con responsabilidades
 - A parte de las ganancias, indicar el número de personas
 - Desglose de costes y las ganancias
+
+
+- Plantearse por qué los usuarios van a usar nuestra aplicación
+- ¿Por qué los usuarios pueden dejar de usar mi aplicación?
+- Las presentaciones deben ser autoinclusivas
+
+Checklist
+- Inicio efectivo
+- De donde se saca el dinero
+- Análisis objetivo de los competidores
+- DAFO
+- No poner cosas evidentes
+- Planes de contingencia para los riesgos
+- Tener claro precios de almacenamiento
+- Costes: Tienen que estar de forma explícita
+	· Costes de personal
+	· Costes de amortización
+	· Costes indirectos
+	· Costes de instalación (luz, agua, internet...)
+- Equipo: 
+	· Fotografías uniformes
+	· Habilidades
+- Mockups
+- Cuando se describa un caso de uso, si se usa alguna tecnología específica, detallarlo
+y si tiene impacto económico ponerlo también
+- ALM
+- Modelo de gestión de código para etiquetar los entregables
+- Modelo de integración continua
+- Modelo de automatización de la calidad (tests automáticos, coverage)
+Vamos a hacer este tipo de pruebas con este tipo de tecnología
+- Como se va a desplegar y en que plataforma. Tiene que permitir varios despliegues
+- Hacer una landing page con la info que ya tenemos
+- Planning del sprint
+- Orden de las tareas 1 y priorizar las tareas del core use case
+- Hay que plantear una forma de medir el rendimiento del equipo
+
+

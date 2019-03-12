@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block contenido %}
-<h1>Contact us</h1>
-    <p>Página en construcción</p>
+<h1 class="title">Contact us</h1>
+    <p>Si desea ponerse en contacto con nosotros puede escribirnos en capsulefy@gmail.com o a través de este formulario</p>
+    <div class="form">
+     <form method=POST>
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Send"/>
+    </form>
+</div>
 {% endblock %}

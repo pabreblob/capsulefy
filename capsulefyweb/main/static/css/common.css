@@ -4,8 +4,34 @@
     height: auto;
 }
 
-.contenido{
+.title{
+    margin: auto;
+    text-align: center;
+}
 
+.profile{
+    margin: auto;
+    display: block;
+    width: 100%;
+    text-align: center;
+    max-width: 200px;
+}
+
+.profile-text{
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.technologies{
+    padding: auto;
+    text-align: center;
+}
+
+.technologies img{
+    width: 100%;
+    max-width: 100px;
+    margin: auto;
 }
 
 .margin-right {

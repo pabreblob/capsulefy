@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block contenido %}
+{% load static %}
+<h1 class="title">Our team</h1>
+<div class="container">
+    <div class="row">
+    <div class="col-sm">
+    <img class="img-responsive rounded-circle profile" src="{% static 'images/pablo.jpg' %}" alt="Capsulefy"/>
+    <p class="profile-text">Pablo Rebollo</p>
+    <p class="profile-text">Project manager and backend developer</p>
+    <div class="technologies">
+        <img src="{% static 'images/spring.png' %}"  alt="Spring">
+        <img src="{% static 'images/django.png' %}" alt="Django">
+        <img src="{% static 'images/php.svg' %}" alt="PHP">
+    </div>
+    </div>
+    <div class="col-sm">
+     <img class="img-responsive rounded-circle profile" src="{% static 'images/adrian.jpg' %}" alt="Capsulefy"/>
+    <p class="profile-text">Adrián Cantón</p>
+    <p class="profile-text">Business manager and full-stack developer</p>
+    <div class="technologies">
+        <img src="{% static 'images/django.png' %}" alt="Django">
+        <img src="{% static 'images/java.png' %}"  alt="Java">
+        <img src="{% static 'images/boostrap.png' %}" alt="Boostrap">
+    </div>
+    </div>
+  </div>
+    <div class="row">
+        <div class="col-sm">
+     <img class="img-responsive rounded-circle profile" src="{% static 'images/daniel.jpg' %}" alt="Capsulefy"/>
+        <p class="profile-text">Daniel Carpio</p>
+     <p class="profile-text">Analist and frontend developer</p>
+        <div class="technologies">
+        <img src="{% static 'images/django.png' %}" alt="Django">
+        <img src="{% static 'images/javascript.png' %}"  alt="JavaScript">
+        <img src="{% static 'images/boostrap.png' %}" alt="Boostrap">
+        </div>
+    </div>
+        <div class="col-sm">
+    <img class="img-responsive rounded-circle profile" src="{% static 'images/juan.jpg' %}" alt="Capsulefy"/>
+    <p class="profile-text">Juan Rodríguez</p>
+    <p class="profile-text">Requirements engineer and backend developer</p>
+    <div class="technologies">
+        <img src="{% static 'images/django.png' %}" alt="Django">
+        <img src="{% static 'images/python.svg' %}"  alt="Python">
+        <img src="{% static 'images/boostrap.png' %}" alt="Boostrap">
+    </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <img class="img-responsive rounded-circle profile" src="{% static 'images/rafa.jpg' %}" alt="Capsulefy"/>
+    <p class="profile-text">Rafael Fresno</p>
+    <p class="profile-text">Backend developer and API integration</p>
+    <div class="technologies">
+        <img src="{% static 'images/node.png' %}"  alt="NodeJS">
+        <img src="{% static 'images/django.png' %}" alt="Django">
+        <img src="{% static 'images/php.svg' %}" alt="PHP">
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

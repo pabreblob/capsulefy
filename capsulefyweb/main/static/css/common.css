@@ -1,7 +1,11 @@
 .logo {
     width: 100%;
-    max-width: 300px;
+    max-width: 120px;
     height: auto;
+}
+
+.contenido{
+
 }
 
 .margin-right {

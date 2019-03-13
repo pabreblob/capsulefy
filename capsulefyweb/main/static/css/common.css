@@ -58,6 +58,15 @@ body{
     text-align: justify;
 }
 
-.text p{
+footer p {
+    text-align: center;
+}
 
+.imageAbout{
+    text-align: center;
+}
+
+.imageAbout img{
+    width: 100%;
+    max-width: 500px;
 }

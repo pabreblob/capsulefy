@@ -123,6 +123,7 @@ STATIC_URL = '/static/'
 
 
 BASEURL = 'https://capsulefy.herokuapp.com/'
+APIS = {}
 import django_heroku
 django_heroku.settings(locals())
 

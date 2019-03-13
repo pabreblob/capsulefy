@@ -125,5 +125,4 @@ STATIC_URL = '/static/'
 BASEURL = 'https://capsulefy.herokuapp.com/'
 import django_heroku
 django_heroku.settings(locals())
-BASEURL = 'https://TU URL'
 

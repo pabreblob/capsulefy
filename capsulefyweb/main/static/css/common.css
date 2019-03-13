@@ -9,7 +9,6 @@ body{
 }
 
 .title{
-    margin: 20px auto 0px auto;
     text-align: center;
 }
 
@@ -46,6 +45,7 @@ body{
     margin: 20px auto 20px auto;
     box-shadow: gainsboro 5px 5px;
     padding: 10px 10px 10px 10px;
+    color: black;
 }
 
 .margin-right {
@@ -59,6 +59,8 @@ body{
 }
 
 footer p {
+    padding-top: 20px;
+    padding-bottom: 20px;
     text-align: center;
 }
 
@@ -69,4 +71,16 @@ footer p {
 .imageAbout img{
     width: 100%;
     max-width: 500px;
+}
+
+.faq {
+    padding: 15px 20px 2px 20px;
+    margin: 20px auto 20px auto;
+    width: 80%;
+    background-color: white;
+    color: #555555;
+}
+
+.faq p{
+    width: 100%;
 }

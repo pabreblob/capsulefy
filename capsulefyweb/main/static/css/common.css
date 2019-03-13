@@ -1,3 +1,7 @@
+body{
+    background-color: #f8f9fa;
+}
+
 .logo {
     width: 100%;
     max-width: 120px;
@@ -5,7 +9,7 @@
 }
 
 .title{
-    margin: auto;
+    margin: 20px auto 0px auto;
     text-align: center;
 }
 
@@ -35,13 +39,25 @@
 }
 
 .form{
-    width: 310px;
-    border: 1px solid black;
-    text-align: center;
-    margin: auto;
+    background-color: white;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    margin: 20px auto 20px auto;
+    box-shadow: gainsboro 5px 5px;
     padding: 10px 10px 10px 10px;
 }
 
 .margin-right {
     margin-right: 10px;
+}
+
+.text {
+    margin: 20px auto 20px auto;
+    width: 80%;
+    text-align: justify;
+}
+
+.text p{
+
 }

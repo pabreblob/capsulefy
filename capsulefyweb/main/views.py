@@ -26,7 +26,7 @@ def contact(request):
             message = form.cleaned_data["Message"]
             form = ContactForm()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login("capsulefy.communications@gmail.com", "aG7nOp4FhG")
+            server.login(enterpriseEmail, "aG7nOp4FhG")
             msg = name+"\n" + email + "\n" + message
             msg = msg.encode('utf-8')
             server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])

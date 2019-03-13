@@ -120,3 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+BASEURL = 'https://capsulefy.herokuapp.com/'
+import django_heroku
+django_heroku.settings(locals())
+BASEURL = 'https://TU URL'
+

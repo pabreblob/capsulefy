@@ -1,0 +1,2 @@
+-	release: sh -c 'cd caosulefyweb && python manage.py migrate'
+-	web: sh -c 'cd capsulefyweb && gunicorn capsulefyweb.wsgi --log-file –

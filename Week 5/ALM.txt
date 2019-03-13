@@ -1,0 +1,49 @@
+- Decide a method to tag our releases
+
+Para localizar de una manera efeciva nuestras releases, lo que haremos será crear tags en el último commit 
+que se haga antes de la entrega del trabajo.
+Estos tags tendrán una estructura: Release X, siendo X el nº de la entrega correspondiente.
+En nuestro hosting estará desplegado las versiones de nuestra app indicados con los tags.
+
+- Decide how we will automatize our tests and what kind of tests will be made
+Para la automatización de los tests, usaremos Travis, debido a la experiencia por parte del equipo de trabajo
+con este servicio, además de ser gratuito (siempre que tengamos el repositorio público). Con esta herramienta,
+podremos lanzar los tests cada vez que se haga un push al servidor (a menos que cambiemos la configuración,
+que sería algo óptimo para que no haga los tests innecesariamente).
+Análogamente, con esta herramienta podremos automatizar los despliegues de nuestra app al servidor.
+
+Con esta herramienta, podemos realizar las pruebas unitarias y de integración, usando las propias herramientas
+que nos ofrece Django. Además, si Travis nos lo permite (debido a la alta carga de tiempo que supone), realizar
+los tests de rendimiento con herramientas como Apache JMeter.
+
+- Investigate about possible tests we may include besides functional tests
+
+=====================================================================================================================
+Estos de aquí siguen siendo tests funcionales. Aun así, viene bien tenerlos en cuenta
+=====================================================================================================================
+
+Pruebas de humo: Revisión rápida del software antes de una recepción formal para comprobar que no tiene defectos
+		 y no tienen defectos que interrumpan. No están pensados para encontrar bugs, sino para que antes
+		 de una entrega verificar que todo está bien a alto nivel.
+
+Test de integración: Tests para comprobar la correcta integración entre los distintos módulos de 
+		     nuestro sistema.
+
+Pruebas de aceptación: Tests para comprobar si el software cumple con los requisitos.
+
+=====================================================================================================================
+Tests no funcionales
+=====================================================================================================================
+
+Test de rendimiento: Tests para comprobar el rendimiento de nuestro software, tales como consumo de recursos
+		     y tiempo. Útiles para encontrar cuellos de botella y para estudiar la escalabilidad.
+
+Cobertura de código: Análisis con herramientas específicas para buscar bugs en el código.
+
+Pruebas de usabilidad: Pruebas con los mismos usuarios para evaluar la el diseño de un producto.
+
+Pruebas de escalabilidad: Pruebas que permiten determinar el grado de escalabilidad de un sistema.
+
+- Establish the deployment process into our server and how it will be automated
+
+Esto lo comentará el Rafa cuando lo mire.

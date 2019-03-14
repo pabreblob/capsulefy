@@ -1,6 +1,6 @@
 .bg-1 {
-    background-color: #1abc9c; /* Green */
-    color: #ffffff;
+    background-color: #fad90f; /* Green */
+    color: #000000;
 }
 .bg-2 {
     background-color: #ffffff; /* White */
@@ -27,7 +27,7 @@
     font-size: 18px;
 }
 .navbar-nav  li a:hover {
-    color: #1abc9c !important;
+    color: #222222 !important;
 }
 
 .menu{

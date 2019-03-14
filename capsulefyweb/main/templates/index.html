@@ -9,6 +9,25 @@
 to the future so you can share it with yourself and whoever you want.</p>
 </div>
 
+<a name="about"></a>
+<div class="bg-3 container-fluid">
+    <h1 class="title">About Capsulefy</h1>
+        <div class="text">
+            <p>Capsulefy is an online time capsule that allows users to create an instance in our website and store their memories inside it by uploading text and files such as images and videos and select an opening date so they can be shared in the future. One of the main focus of our product is to allow users to leave a message or their memories behind in case they pass away, and for this reason, users will be able to set a timer that they can reset by periodically logging in. In case this timer expires, the capsule will be released.</p>
+            <p>Furthermore, our product offers extra features such as connect time capsules to the user’s social networks accounts in order to publish a message when a capsule is released, share the capsules via email, making them private so that only people with an access link can display its contents. Users will also be able to create capsules with different modules whose content may be released gradually at different dates.</p>
+            <p>Why use us? In these times were a lot of our interactions with certain people are online.
+We offer you way to share your memories with them and notify them in case something happens to you.
+Besides, because we provide you lots of customization option when creating a capsule, the possibilites of
+what you can do with our capsules are limitless.
+We also guarantee that your capsules will not disappear before being activated. Should that happen, we will
+give you a full refund.
+Still not convinced? You can always check out our free capsules and try for yourself.</p>
+        </div>
+    <div class="imageAbout">
+        <img src="{% static 'images/logo.svg' %}" alt="Capsulefy"/>
+    </div>
+</div>
+
 <a name="team"></a>
 <div class="bg-2 container-fluid">
     <h1 class="title">Our team</h1>
@@ -71,41 +90,24 @@ to the future so you can share it with yourself and whoever you want.</p>
         </div>
 </div>
 </div>
-<a name="about"></a>
-<div class="bg-3 container-fluid">
-    <h1 class="title">About Capsulefy</h1>
-        <div class="text">
-            <p>Capsulefy is an online time capsule that allows users to create an instance in our website and store their memories inside it by uploading text and files such as images and videos and select an opening date so they can be shared in the future. One of the main focus of our product is to allow users to leave a message or their memories behind in case they pass away, and for this reason, users will be able to set a timer that they can reset by periodically logging in. In case this timer expires, the capsule will be released.</p>
-            <p>Furthermore, our product offers extra features such as connect time capsules to the user’s social networks accounts in order to publish a message when a capsule is released, share the capsules via email, making them private so that only people with an access link can display its contents. Users will also be able to create capsules with different modules whose content may be released gradually at different dates.</p>
-            <p>Why use us? In these times were a lot of our interactions with certain people are online.
-We offer you way to share your memories with them and notify them in case something happens to you.
-Besides, because we provide you lots of customization option when creating a capsule, the possibilites of
-what you can do with our capsules are limitless.
-We also guarantee that your capsules will not disappear before being activated. Should that happen, we will
-give you a full refund.
-Still not convinced? You can always check out our free capsules and try for yourself.</p>
-        </div>
-    <div class="imageAbout">
-        <img src="{% static 'images/logo.svg' %}" alt="Capsulefy"/>
-    </div>
-</div>
+
 
 <a name="faq"></a>
 <div class="bg-1 container-fluid">
     <h1 class="title">FAQ</h1>
     <div class="faq">
         <p class="font-weight-bold">Q: What can I store inside a capsule?</p>
-        <p>A: You can write a message inside the capsule while creating it and upload photos and videos</p>
+        <p>A: You can write a message inside the capsule while creating it and upload photos and videos.</p>
     </div>
     <div class="faq">
         <p class="font-weight-bold">Q: Is there a limit on how many files can I upload to a capsule?</p>
         <p>A: We don't limit you on the number of files you can upload, but on the storage size. This means that
 you may be able to upload a lot of small files but only one or two really big files such as videos. For more
-information about our storage size, check out our <a href="#pricing">pricing</a></p>
+information about our storage size, check out our <a href="#pricing">pricing</a>.</p>
     </div>
     <div class="faq">
         <p class="font-weight-bold">Q: Can I edit my capsules' content?</p>
-        <p>A: Yes you can, as long as your capsule is not yet released to the public</p>
+        <p>A: Yes you can, as long as your capsule is not yet released to the public.</p>
     </div>
 
     <div class="faq">
@@ -144,8 +146,8 @@ You can turn this feature off whenever you want.</p>
 <a name="contact"></a>
 <div class="bg-3 container-fluid">
     <h1 class="title">Contact us</h1>
-    <p class="text">If you wish to contact us, you can send an email to capsulefy.communications@gmail.com or fill this form</p>
-    <div class="form">
+    <p class="text">If you wish to contact us, you can send an <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#97;&#112;&#115;&#117;&#108;&#101;&#102;&#121;&#46;&#99;&#111;&#109;&#109;&#117;&#110;&#105;&#99;&#97;&#116;&#105;&#111;&#110;&#115;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">email</a> or fill this form:</p>
+    <div class="form rounded">
      <form method=POST>
         {% csrf_token %}
         <div class="form-group">
@@ -160,7 +162,7 @@ You can turn this feature off whenever you want.</p>
             <label>Message</label>
             <textarea class="form-control" name="Message" rows="3" required="" id="id_Message"></textarea>
         </div>
-        <input type="submit" value="Send"/>
+        <input class="btn-secondary rounded" type="submit" value="Send"/>
     </form>
 </div>
 </div>

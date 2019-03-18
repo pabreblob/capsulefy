@@ -1,0 +1,11 @@
+For developing the main web application and the different APIs, the used framework will be Django. That means that the
+programming language is Python. For the database, we will use PostgreSQL. To integrate with social media, we still have
+to test whether OAuth can be used or not. To keep track of tasks and upload all the code, we use a GitHub repository.
+For continuous integration, Travis CI will be used, and it will automatically execute the tests and deploy the application
+if there are no errors. The hosting platform will be Heroku.
+
+The risks of using Django is potential breakage if any dependency stops working. This has happened before, where a database
+would not work after an update and it took about half a month for the bug to be fixed. The integration with social media
+presents the risk of not finding a way to schedule future posts. Both GitHub and Travis CI can suffer temporary problems
+on their end, which would leave us with no way to quickly deploy the application after making a change. Heroku has the risk
+of having problems and also changing their policies and pricing options, as we could find that hosting costs are increased.

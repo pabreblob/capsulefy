@@ -1,0 +1,5 @@
+Twitter allows scheduled tweets, but only for advertiser accounts. This does not work for regular accounts.
+Facebook allows scheduled posts, but only for Facebook pages.
+A common solution among StackOverflow is to store future posts in a database, including their publication date. Then,
+through a scheduled job, the system should get the posts that need to be published based on the current date. Heroku
+has an addon that allows scheduled tasks.

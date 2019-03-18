@@ -1,0 +1,109 @@
+- 5: No está claro lo que significa el icono. No transmite bien la idea. El icono no acompañaba al discurso.
+- MVP no está bien presentado
+- No usar el gráfico de la asignatura para la calsificación
+- Añadir contenido de la planificación
+- Bien la parte de los usuarios finales. Poner más detalles de ellos. (Edad).
+- Desconexion entre la parte de pricing y pilot users(el orden
+- Dar una cápsula otra persona y se le abra sólo para esa persona. Cápsula con varios compartimentos que se liberan poco a poco
+- Mejorar el comienzo
+- Poner un email para feedback
+- En la idea de negocio podemos mencionar a las compañias de seguro(esto le he añadido yo,Pablo)
+
+MusicRoad
+-----------
+- Preguntas sobre el feedback de la semana pasada, no han hecho caso a lo del elevator slide
+- Tienen que revisar que todo funcione bien en la clase(referente al numero de diapositivas que salen)
+- La innovation slide es genérica, para poner eso mejor no ponerla.
+- Si además no añaden innovación a su idea, es un problema
+- Faltaba una overview de tecnologia y riesgos
+- Simular que no ha habido presentaciones anteriores, no hablar de lo que se hizo el otro dia(esto lo hemos hecho pero no nos lo han dicho)
+- Cuando se muestra el mockup, mostrar indicador de qué usuario está haciendo el proceso
+- Especificar a que se refieren con el rol wbe designer
+- Todos los roles deben estar relacionados con aspectos tecnicos
+- Las estrellitas de los competitors no se entienden que significa
+- Que no se ponga a la defensiva cuando le den feedback
+
+Motorlog
+-----------
+- Demasiado texto en core use cases
+- No puede ver todo el flujo del proceso en los mockups
+- Deben asegurarse que los posibles clientes estén dispuestos a seguir el proceso que se propone(en principio si lo han preguntado)
+- Clarificar la business idea al principio
+- En los costes, un grafico se agradeceria
+- Hay que vestirse bien para presentar (esto lo han hecho bien)
+- En inglés, la separación de 1000 es hace con "," (que degenerados los ingleses)
+- Que no se pongan a la defensiva coño
+
+BAR2BAR
+----------
+- En algunas dispositivas las letras siguen siendo pequeñas
+- Los mockups también salen pequeñitos, y el loop a lo mejor lia un poco
+- Commitment explícito de los pilot user
+- Poner el número de personas que han contestado al survey
+- Evitar el sobreuso de QR en las presentaciones
+- El inicio efectivo ha sido un buen intento pero hay que ir más allá
+- Ver el icono de quien esta logeado
+- El nuevo competidor, ¿buena o mala noticia?
+
+THORNEO
+----------
+- Gestionan muy bien el feedback
+- Hacer más atractiva la aplicación para fidelizar al usuario
+- Buscar más locales para que validen la idea de negocio
+- Falta la planificación
+- Los mockups no se ven
+- Roles no técnicos
+- Cómo permite adaptar diferentes tipos de torneos: Por puntos, por partidos, etc...
+- Les recomienda que se centren en un tipo más concreto
+
+SOUNDGO
+---------
+- No han aplicado feedback dado a otros grupos
+- Mucho texto,poco visual en algunas partes
+- Mostrar el usuario que está logeado
+- Han pasado muy rápido por la comparación de competidores
+- Pilot customers
+- Las presentaciones autocontenidas
+- La tabla es demasiado grande para luego hablar de 2 competidores solo
+- No mostrar la fórmula
+- La fuente es horrible
+ROOMBIT
+--------
+- Poner el QR de los mockups al final para que puedan escanearlos tranquilamente
+- Hay que poner mockups de las partes más importante, los core use cases, no solo en qr
+- Que no pongan la diapositiva del elevator
+- No tiene claro que de nuevo tiene la idea ni cuanto pagarian los pilot user
+- Le preocupa el tema de la suscripcion, a lo mejor hay una mejor forma de financiarse
+- Buscar cómo ganar dinero de clientes gratuitos
+- Necesita tener la muestra de personas encuestadas
+- Cuestiones legales, impuestos
+- Cómo evitar fraude
+- Mejor 3 slides que una slide con 3 imagenes
+
+EASYPANTRY
+---------
+- La clave para su aplicación es lo fácil que sea meter datos
+- Hooked(libro)
+- Muchas fuentes de texto
+
+CHECKLIST 11/03/2019
+ESTRUCTURA PRESENTACION
+- Presentación breve
+- Ver equipo
+- Detalle:Mockups, casos de uso, sprints
+- Viabilidad, beneficios
+
+ENTREGABLE FORMAL EN LA EV (15 DE MARZO
+El lunes siguiente se presenta ese entregable
+La presentación del 18 es la que se evalua
+
+A entregar la próxima semana:
+-Inicio efectivo/elevator pitch
+-SWOT
+-Costes:Explicitar de forma visual los diferentes costes
+-Compromiso concreto del usuario piloto.
+-Más detalles en las tecnologías y los riesgos tecnológicos
+-ALM(Aplication life cycle management): Integracion continua, gestion de codigo, automatizacion de pruebas...
+-Planificación de los sprints
+-Todo el mundo tiene que tener roles técnicos
+

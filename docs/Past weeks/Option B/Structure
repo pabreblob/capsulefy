@@ -1,0 +1,20 @@
+NOTE: Rather than 'structure', the corresponding slide should be named 'architecture'. I'll leave 'structure' as the file name to match the GitHub issue name.
+
+The application will make use of a microservices architecture:
+- Main Django web app.
+- Different APIs (implemented using Django, Node.js...), each of them focused on performing one specific set of tasks.
+- PostgreSQL database, that will contain user and capsule data.
+- Facebook and Twitter APIs, which will handle the publication of messages in a user account.
+
+The architecture would be as follows:
+              Django app
+            /      |      \
+           /       |       \
+          <        v        >
+Users API   Capsules API   Social media middleware APIs
+   \              /              |
+    \            /               |
+     >          <                v
+    PSQL database          Social media APIs
+
+NOTE: the 'Social media middleware APIs' are our own created APIs that will manage authentication in social networks (we can use one for each network or one for every network). The 'Social media APIs' are the third party APIs provided by the networks themselves.

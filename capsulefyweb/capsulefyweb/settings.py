@@ -90,6 +90,7 @@ DATABASES = {
 
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -135,5 +136,5 @@ import django_heroku
 django_heroku.settings(locals())
 
 FIXTURE_DIRS = (
-   r'capsulefyweb\fixtures',
+   os.path.join(BASE_DIR, 'capsulefyweb/fixtures'),
 )

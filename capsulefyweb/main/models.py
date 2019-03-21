@@ -47,7 +47,7 @@ class Capsule(models.Model):
     
     creator=models.ForeignKey(User,related_name='capsuls', on_delete=CASCADE)
     
-    credit_card=models.ForeignKey(Credit_card,related_name='capsuls', on_delete=CASCADE)
+    credit_card=models.ForeignKey(Credit_card,related_name='capsuls', on_delete=CASCADE,null=True)
     
 class Module(models.Model):
     description=models.CharField(max_length=250)
@@ -56,7 +56,7 @@ class Module(models.Model):
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
     
 class File(models.Model):
-    url=models.URLField
+    url=models.URLField()
     size=models.DecimalField(null=True,max_digits=7, decimal_places=2)
     type=models.CharField(max_length=1,choices=(('F','FILE'),('I','IMAGE')))
     remote_name=models.CharField(max_length=150)

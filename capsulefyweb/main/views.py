@@ -64,20 +64,14 @@ def editFreeCapsule(request, pk):
         form = FreeCapsuleForm(request.POST)
         if form.is_valid():
             formulario = form.cleaned_data
-            title = formulario['title']
-            emails = formulario['emails']
-            capsule_type = 'F'
-            private = False
-            dead_man_switch = False
-            dead_man_counter = 0
-            twitter = formulario['twitter']
-            facebook = formulario['facebook']
-            description = formulario['description']
-            release_date = formulario['release_date']
-            capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
-                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=2)
-            Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+            oldcapsule.title = formulario['title']
+            oldcapsule.emails = formulario['emails']
+            oldcapsule.twitter = formulario['twitter']
+            oldcapsule.facebook = formulario['facebook']
+            oldmodule.description = formulario['description']
+            oldmodule.release_date = formulario['release_date']
+            oldcapsule.save()
+            oldmodule.save()
             return HttpResponseRedirect('/')
     else:
         form = FreeCapsuleForm(initial=olddata)

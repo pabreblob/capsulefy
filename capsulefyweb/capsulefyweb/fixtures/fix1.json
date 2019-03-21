@@ -487,7 +487,7 @@
   },
   {
     "model": "main.module",
-    "pk": 10,
+    "pk": 11,
     "fields": {
       "description":"This is capsule 10",
       "release_date":"2019-03-15",

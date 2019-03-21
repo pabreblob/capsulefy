@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
 
+
 # Create your models here.
 class Credit_card(models.Model):
     holder_name=models.CharField(max_length=50)
@@ -23,6 +24,8 @@ class User(Actor):
 
 class Social_network(models.Model):
     social_type=models.CharField(max_length=1,choices=(('F','FACEBOOK'),('T','TWITTER')))
+    token=models.CharField(max_length=50)
+
     user=models.ForeignKey(User,related_name='social_networks', on_delete=CASCADE)
     
     
@@ -55,6 +58,7 @@ class File(models.Model):
     url=models.URLField
     size=models.DecimalField(null=True,max_digits=7, decimal_places=2)
     type=models.CharField(max_length=1,choices=(('F','FILE'),('I','IMAGE')))
-    
+    remote_name=models.CharField(max_length=150)
+    local_name=models.CharField(max_length=150)
     module=models.ForeignKey(Module, related_name='files', on_delete=CASCADE)
     

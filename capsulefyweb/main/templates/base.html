@@ -17,6 +17,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
+    {% block styles %}{% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom menu">

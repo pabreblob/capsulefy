@@ -2,6 +2,8 @@ from django.shortcuts import render
 from main.forms import ContactForm
 import smtplib
 
+from main.models import Capsule
+
 
 def index(request):
     enterpriseEmail = "capsulefy.communications@gmail.com"
@@ -21,3 +23,16 @@ def index(request):
     else:
         form = ContactForm()
     return render(request, 'index.html', {'form': form})
+
+
+def displayCapsules(request, id):
+    capsule = Capsule.objects.get(pk= id)
+    modules = []
+    for module in capsule.modules.all():
+        #Cuando tengamos los usuarios implementados, se filtrarán los módulos no publicados si el usuario loggeado no es el creador
+        modules.append(module)
+        print("hola")
+
+    return render(request, 'display-capsule.html', {'capsule': capsule , 'modules': modules})
+
+

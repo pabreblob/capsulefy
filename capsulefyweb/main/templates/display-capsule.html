@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/display-capsule.css' %}"/>
+{% endblock %}
+{% block contenido %}
+    <div class="container-fluid rounded">
+        <h3>{{ capsule.title }}</h3>
+        <h5>Written by: {{ capsule.creator.username }}</h5>
+        {% for module in modules %}
+            <div class="module">
+                <p>{{ module.description }}</p>
+                {% if module.files %}
+                    {% for file in module.files.all %}
+                        {% if file.type == "I" %}
+                            <img class="module-img" src="{{ file.url }}"/>
+                        {% endif %}
+                        {% if file.type == "F" %}
+                            <a src="{{ file.url }}">File</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        {% endfor %}
+
+    </div>
+{% endblock %}

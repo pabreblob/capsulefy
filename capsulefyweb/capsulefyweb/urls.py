@@ -19,6 +19,8 @@ from django.urls import path
 from main import views
 
 urlpatterns = [
-    path(r'', views.index),
+    path('', views.index),
     path('admin/', admin.site.urls),
+    path('newfreecapsule/', views.createFreeCapsule, name='createfreecapsule'),
+    path('editfreecapsule/<int:pk>/', views.editFreeCapsule, name='editfreecapsule'),
 ]

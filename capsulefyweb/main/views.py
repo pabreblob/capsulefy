@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from main.forms import ContactForm, ModularCapsuleForm, ModuleForm
 import smtplib
+from django.contrib.auth.views import LoginView
 
 from main.models import Capsule, Module
 
@@ -95,3 +96,10 @@ def editModularCapsule(request, pk):
     else:
         form = ModularCapsuleForm(initial=olddata)
     return render(request, 'modularcapsule.html', {'form': form})
+
+
+class login(LoginView):
+    def __init__(self,  *args, **kwargs):
+        super(LoginView, self).__init__(*args, **kwargs)
+        
+

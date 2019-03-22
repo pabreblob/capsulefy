@@ -57,7 +57,7 @@ class Module(models.Model):
 class File(models.Model):
     url=models.URLField()
     size=models.DecimalField(null=True,max_digits=7, decimal_places=2)
-    type=models.CharField(max_length=1,choices=(('F','FILE'),('I','IMAGE')))
+    type=models.CharField(max_length=1,choices=(('F','FILE'),('I','IMAGE'),('V','VIDEO')))
     remote_name=models.CharField(max_length=150)
     local_name=models.CharField(max_length=150)
     module=models.ForeignKey(Module, related_name='files', on_delete=CASCADE)

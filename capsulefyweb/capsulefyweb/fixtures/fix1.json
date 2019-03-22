@@ -562,7 +562,7 @@
     "fields": {
       "url":"https://www.youtube.com/watch?v=T5o_0BoTvWg",
       "size":33.28,
-      "type":"F",
+      "type":"V",
       "module_id":5,
       "local_name":"file6",
       "remote_name":"file6"
@@ -574,7 +574,7 @@
     "fields": {
       "url":"https://www.youtube.com/watch?v=YFFUVLsPi6A",
       "size":15.11,
-      "type":"F",
+      "type":"V",
       "module_id":9,
       "local_name":"file7",
       "remote_name":"file7"

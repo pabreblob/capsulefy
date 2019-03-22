@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modular-capsule.css' %}"/>
+{% endblock %}
+{% block contenido %}
+    {% load static %}
+    <div class="container-fluid">
+        <form id="form" action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p><input type="submit" value="Update capsule"></p>
+        </form>
+        {% for module in oldmodules %}
+            <div class="moduleform">
+                <p>{{ module.description }}</p>
+                {% if module.files %}
+                    {% for file in module.files.all %}
+                        {% if file.type == "I" %}
+                            <img class="module-img" src="{{ file.url }}"/>
+                        {% endif %}
+                        {% if file.type == "F" %}
+                            <a src="{{ file.url }}">File</a>
+                        {% endif %}
+                        {% if file.type == "V" %}
+                            <video width="320" height="240" controls>
+                                <source src="{{ file.url }}"/>
+                            </video>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <a href="/editmodule/{{ module.id }}">Edit</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

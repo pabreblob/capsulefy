@@ -30,7 +30,7 @@ def index(request):
 
 
 def displayCapsules(request, id):
-    capsule =  get_object_or_404(Capsule, id=id)
+    capsule = get_object_or_404(Capsule, id=id)
     print(capsule.id)
     creator = False
     if request.user.is_authenticated:
@@ -39,7 +39,7 @@ def displayCapsules(request, id):
             creator = True
     modules = []
     for module in capsule.modules.all():
-        if not(creator == False and module.release_date > datetime.now(timezone.utc)):
+        if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
     if len(modules) == 0:
@@ -58,40 +58,41 @@ def createModularCapsule(request):
             title = capsuleFormulario['title']
             emails = capsuleFormulario['emails']
             capsule_type = 'M'
-            private = False
+            private = capsuleFormulario['private']
             dead_man_switch = False
             dead_man_counter = 0
+            price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=user.id)
+                                             twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
-                description = request.POST['description'+str(i)]
-                release_date = request.POST['release_date'+str(i)]
-                file = request.POST['file'+str(i)]
+                description = request.POST['description' + str(i)]
+                release_date = request.POST['release_date' + str(i)]
+                file = request.POST['file' + str(i)]
                 # Subir archivo a firebase
                 Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
-
             return HttpResponseRedirect('/')
-    else:
-        form = ModularCapsuleForm()
 
-    return render(request, 'capsule/modularcapsule.html')
-
+    return render(request, 'capsule/createmodularcapsule.html')
 
 def editModularCapsule(request, pk):
     oldcapsule = get_object_or_404(Capsule, id=pk)
-    oldmodule = oldcapsule.modules.first()
+    if (oldcapsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    user = request.user
+    if user.id != oldcapsule.creator.id:
+        return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
-        'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
-        'facebook': oldcapsule.facebook
+        'facebook': oldcapsule.facebook,
+        'private': oldcapsule.private,
     }
+
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST)
         if form.is_valid():
@@ -100,18 +101,41 @@ def editModularCapsule(request, pk):
             oldcapsule.emails = formulario['emails']
             oldcapsule.twitter = formulario['twitter']
             oldcapsule.facebook = formulario['facebook']
-            oldmodule.description = formulario['description']
-            oldmodule.release_date = formulario['release_date']
+            oldcapsule.private = formulario['private']
             oldcapsule.save()
-            oldmodule.save()
             return HttpResponseRedirect('/')
     else:
         form = ModularCapsuleForm(initial=olddata)
-    return render(request, 'capsule/modularcapsule.html', {'form': form})
+    return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldmodules': oldcapsule.modules.all()})
+
+
+
+def editModule(request, pk):
+    oldmodule = get_object_or_404(Module, id=pk)
+    if (oldmodule.capsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    user = request.user
+    if user.id != oldmodule.capsule.creator.id:
+        return HttpResponseNotFound()
+    olddata = {
+        'description': oldmodule.description,
+        'release_date': oldmodule.release_date,
+    }
+
+    if request.method == 'POST':
+        form = ModuleForm(request.POST)
+        if form.is_valid():
+            formulario = form.cleaned_data
+            oldmodule.description = formulario['description']
+            oldmodule.release_date = formulario['release_date']
+            oldmodule.save()
+            return HttpResponseRedirect('/editmodularcapsule/'+ str(oldmodule.capsule.id))
+    else:
+        form = ModuleForm(initial=olddata)
+    return render(request, 'capsule/editmodule.html',
+                  {'form': form, 'oldmodule': oldmodule})
 
 
 class login(LoginView):
-    def __init__(self,  *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
-        
-

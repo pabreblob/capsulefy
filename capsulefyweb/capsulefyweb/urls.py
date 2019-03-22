@@ -24,6 +24,7 @@ urlpatterns = [
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
+    path('editmodule/<int:pk>/', login_required(views.editModule), name='editmodule'),
     path('admin/', admin.site.urls),
     
     path('login/', views.login.as_view(),name='login'),  

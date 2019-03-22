@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modular-capsule.css' %}"/>
+{% endblock %}
+{% block contenido %}
+    {% load static %}
+    <div class="container-fluid">
+        <form id="form" action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p><input type="submit" value="Update module"></p>
+        </form>
+    </div>
+{% endblock %}

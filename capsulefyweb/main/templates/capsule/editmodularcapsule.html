@@ -11,7 +11,7 @@
             {{ form.as_p }}
             <p><input type="submit" value="Update capsule"></p>
         </form>
-        {% for module in oldmodules %}
+        {% for module in oldcapsule.modules.all %}
             <div class="moduleform">
                 <p>{{ module.description }}</p>
                 {% if module.files %}
@@ -30,7 +30,12 @@
                     {% endfor %}
                 {% endif %}
                 <a href="/editmodule/{{ module.id }}">Edit</a>
+                {% if oldcapsule.modules.all.count != 1 %}
+                    <a href="/deletemodule/{{ module.id }}">Delete</a>
+                {% endif %}
             </div>
         {% endfor %}
+    <a href="/newmodule/{{ oldcapsule.id }}">Create module</a>
+
     </div>
 {% endblock %}

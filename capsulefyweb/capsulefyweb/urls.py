@@ -23,8 +23,10 @@ urlpatterns = [
     path(r'', views.index),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
+    path('newmodule/<int:pk>/', login_required(views.createModule), name='createmodule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
     path('editmodule/<int:pk>/', login_required(views.editModule), name='editmodule'),
+    path('deletemodule/<int:pk>/', login_required(views.deleteModule), name='deletemodule'),
     path('admin/', admin.site.urls),
     
     path('login/', views.login.as_view(),name='login'),  

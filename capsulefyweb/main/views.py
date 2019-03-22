@@ -106,8 +106,23 @@ def editModularCapsule(request, pk):
             return HttpResponseRedirect('/')
     else:
         form = ModularCapsuleForm(initial=olddata)
-    return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldmodules': oldcapsule.modules.all()})
+        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
 
+
+def createModule(request, pk):
+    user = request.user
+    if request.method == 'POST':
+        moduleForm = ModuleForm(request.POST)
+        if moduleForm.is_valid():
+            moduleFormulario = moduleForm.cleaned_data
+            description = moduleFormulario['description']
+            release_date = moduleFormulario['release_date']
+            file = moduleForm['file']
+            Module.objects.create(description=description, release_date=release_date, capsule_id=pk)
+            return HttpResponseRedirect('/editmodularcapsule/'+ str(pk))
+    else:
+        moduleForm = ModuleForm()
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm})
 
 
 def editModule(request, pk):
@@ -121,7 +136,6 @@ def editModule(request, pk):
         'description': oldmodule.description,
         'release_date': oldmodule.release_date,
     }
-
     if request.method == 'POST':
         form = ModuleForm(request.POST)
         if form.is_valid():
@@ -134,6 +148,15 @@ def editModule(request, pk):
         form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
                   {'form': form, 'oldmodule': oldmodule})
+
+
+def deleteModule(request, pk):
+    module = get_object_or_404(Module, id=pk)
+    user = request.user
+    if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
+        return HttpResponseNotFound()
+    module.delete()
+    return HttpResponseRedirect('/editmodularcapsule/'+ str(module.capsule.id))
 
 
 class login(LoginView):

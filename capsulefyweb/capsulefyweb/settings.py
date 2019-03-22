@@ -138,3 +138,5 @@ django_heroku.settings(locals())
 FIXTURE_DIRS = (
    os.path.join(BASE_DIR, 'capsulefyweb/fixtures'),
 )
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL='/login'

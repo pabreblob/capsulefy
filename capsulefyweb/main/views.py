@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from main.forms import ContactForm
 import smtplib
+from django.contrib.auth.views import LoginView
 
 
 def index(request):
@@ -21,3 +22,9 @@ def index(request):
     else:
         form = ContactForm()
     return render(request, 'index.html', {'form': form})
+
+class login(LoginView):
+    def __init__(self,  *args, **kwargs):
+        super(LoginView, self).__init__(*args, **kwargs)
+        
+        

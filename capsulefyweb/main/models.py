@@ -52,7 +52,6 @@ class Capsule(models.Model):
 class Module(models.Model):
     description=models.CharField(max_length=250)
     release_date=models.DateTimeField()
-    
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
     
 class File(models.Model):

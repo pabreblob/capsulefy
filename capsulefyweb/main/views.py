@@ -1,6 +1,11 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from .forms import ContactForm, FreeCapsuleForm
+from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm
 from .models import Capsule, Module, File
+from gcloud import storage
+from oauth2client.service_account import ServiceAccountCredentials
+from django.conf import settings
+from random import randint
+import os
 import smtplib
 
 
@@ -26,7 +31,7 @@ def index(request):
 
 def createFreeCapsule(request):
     if request.method == 'POST':
-        form = FreeCapsuleForm(request.POST)
+        form = NewFreeCapsuleForm(request.POST, request.FILES)
         if form.is_valid():
             formulario = form.cleaned_data
             title = formulario['title']
@@ -42,10 +47,18 @@ def createFreeCapsule(request):
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=2)
-            Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+            module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+            if formulario['file'] is not None:
+                credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                client = storage.Client(credentials=credentials, project='capsulefy')
+                bucket = client.get_bucket('capsulefy.appspot.com')
+                idrand = randint(0, 999)
+                filename, fileext = os.path.splitext(formulario['file'].name)
+                blob = bucket.blob(title + str(idrand) + fileext)
+                blob.upload_from_file(formulario['file'].file, size=formulario['file'].size)
             return HttpResponseRedirect('/')
     else:
-        form = FreeCapsuleForm()
+        form = NewFreeCapsuleForm()
     return render(request, 'freecapsule.html', {'form': form})
 
 
@@ -61,7 +74,7 @@ def editFreeCapsule(request, pk):
         'facebook': oldcapsule.facebook
     }
     if request.method == 'POST':
-        form = FreeCapsuleForm(request.POST)
+        form = EditFreeCapsuleForm(request.POST)
         if form.is_valid():
             formulario = form.cleaned_data
             oldcapsule.title = formulario['title']
@@ -74,6 +87,12 @@ def editFreeCapsule(request, pk):
             oldmodule.save()
             return HttpResponseRedirect('/')
     else:
-        form = FreeCapsuleForm(initial=olddata)
+        form = EditFreeCapsuleForm(initial=olddata)
     return render(request, 'freecapsule.html', {'form': form})
+
+
+def deleteCapsule(request, pk):
+    capsule = get_object_or_404(Capsule, id=pk)
+    capsule.delete()
+    return HttpResponseRedirect('/')
 

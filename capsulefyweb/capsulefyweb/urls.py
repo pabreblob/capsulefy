@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('newfreecapsule/', views.createFreeCapsule, name='createfreecapsule'),
     path('editfreecapsule/<int:pk>/', views.editFreeCapsule, name='editfreecapsule'),
+    path('deletecapsule/<int:pk>/', views.deleteCapsule, name='deletecapsule'),
 ]

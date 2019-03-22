@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+from datetime import datetime, timezone
+
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 from main.forms import ContactForm, ModularCapsuleForm, ModuleForm
 import smtplib
@@ -28,16 +30,27 @@ def index(request):
 
 
 def displayCapsules(request, id):
+    print("Hola")
     capsule =  get_object_or_404(Capsule, id=id)
+    print(capsule.id)
+    creator = False
+    if request.user.is_authenticated:
+        user = request.user
+        if user.id == capsule.creator.id:
+            creator = True
     modules = []
     for module in capsule.modules.all():
-        # Cuando tengamos los usuarios implementados, se filtrarán los módulos no publicados si el usuario loggeado no es el creador
-        modules.append(module)
+        if not(creator == False and module.release_date > datetime.now(timezone.utc)):
+            modules.append(module)
     modules.sort(key=lambda x: x.pk)
-    return render(request, 'display-capsule.html', {'capsule': capsule, 'modules': modules})
+    if len(modules) == 0:
+        return HttpResponseNotFound()
+    else:
+        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
 
 
 def createModularCapsule(request):
+    user = request.user
     if request.method == 'POST':
         modulesSize = request.POST['modulesSize']
         capsuleForm = ModularCapsuleForm(request.POST)
@@ -53,7 +66,7 @@ def createModularCapsule(request):
             facebook = capsuleFormulario['facebook']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=2)
+                                             twitter=twitter, facebook=facebook, creator_id=user.id)
 
             for i in range(int(modulesSize)):
                 description = request.POST['description'+str(i)]
@@ -66,7 +79,7 @@ def createModularCapsule(request):
     else:
         form = ModularCapsuleForm()
 
-    return render(request, 'modularcapsule.html')
+    return render(request, 'capsule/modularcapsule.html')
 
 
 def editModularCapsule(request, pk):
@@ -95,7 +108,7 @@ def editModularCapsule(request, pk):
             return HttpResponseRedirect('/')
     else:
         form = ModularCapsuleForm(initial=olddata)
-    return render(request, 'modularcapsule.html', {'form': form})
+    return render(request, 'capsule/modularcapsule.html', {'form': form})
 
 
 class login(LoginView):

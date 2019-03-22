@@ -21,8 +21,22 @@
                     {% endfor %}
                 {% endif %}
             </div>
-
         {% endfor %}
+        {% if user.id == capsule.creator.id %}
+            {% if capsule.capsule_type == "F" %}
+                <a href="/editfreecapsule/{{ capsule.id }}">Edit capsule</a>
+            {% endif %}
+            {% if capsule.capsule_type == "P" %}
+                <a href="/editpremiumcapsule/{{ capsule.id }}">Edit capsule</a>
+            {% endif %}
+            {% if capsule.capsule_type == "M" %}
+                <a href="/editmodularcapsule/{{ capsule.id }}">Edit capsule</a>
+            {% endif %}
+            <a href="/deletecapsule/{{ capsule.id }}">Delete capsule</a>
+            {% if capsule.dead_man_switch %}
+                <a href="refresh">Refresh capsule</a>
+            {% endif %}
 
+        {% endif %}
     </div>
 {% endblock %}

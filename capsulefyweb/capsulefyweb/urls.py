@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from main import views
@@ -21,8 +22,8 @@ from main import views
 urlpatterns = [
     path(r'', views.index),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
-    path('newmodularcapsule/', views.createModularCapsule, name='createmodularcapsule'),
-    path('editmodularcapsule/<int:pk>/', views.editModularCapsule, name='editmodularcapsule'),
+    path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
+    path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
     path('admin/', admin.site.urls),
     
     path('login/', views.login.as_view(),name='login'),  

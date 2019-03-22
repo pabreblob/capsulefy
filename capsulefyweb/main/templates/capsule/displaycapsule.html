@@ -18,6 +18,11 @@
                         {% if file.type == "F" %}
                             <a src="{{ file.url }}">File</a>
                         {% endif %}
+                        {% if file.type == "V" %}
+                            <video width="320" height="240" controls>
+                                <source src="{{ file.url }}"/>
+                            </video>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             </div>

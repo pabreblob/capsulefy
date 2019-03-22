@@ -30,7 +30,6 @@ def index(request):
 
 
 def displayCapsules(request, id):
-    print("Hola")
     capsule =  get_object_or_404(Capsule, id=id)
     print(capsule.id)
     creator = False

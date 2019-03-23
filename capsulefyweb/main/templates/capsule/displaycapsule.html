@@ -7,39 +7,44 @@
     <div class="container-fluid rounded">
         <h3>{{ capsule.title }}</h3>
         <h5>Written by: {{ capsule.creator.username }}</h5>
+        <h5>Created on: {{ capsule.creation_date }}</h5>
         {% for module in modules %}
-            <div class="module">
+            <div class="module rounded">
+                <h5>Description</h5>
                 <p>{{ module.description }}</p>
                 {% if module.files %}
-                    {% for file in module.files.all %}
-                        {% if file.type == "I" %}
-                            <img class="module-img" src="{{ file.url }}"/>
-                        {% endif %}
-                        {% if file.type == "F" %}
-                            <a src="{{ file.url }}">File</a>
-                        {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
-                        {% endif %}
-                    {% endfor %}
+                    <h5>Files</h5>
+                    <div class="files">
+                        {% for file in module.files.all %}
+                            {% if file.type == "I" %}
+                                <img class="module-img rounded" src="{{ file.url }}"/>
+                            {% endif %}
+                            {% if file.type == "F" %}
+                                <a src="{{ file.url }}">File</a>
+                            {% endif %}
+                            {% if file.type == "V" %}
+                                <video width="320" height="240" controls>
+                                    <source src="{{ file.url }}"/>
+                                </video>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
         {% endfor %}
         {% if user.id == capsule.creator.id %}
             {% if capsule.capsule_type == "F" %}
-                <a href="/editfreecapsule/{{ capsule.id }}">Edit capsule</a>
+                <a class="btn btn-lg btn-secondary" href="/editfreecapsule/{{ capsule.id }}">Edit capsule</a>
             {% endif %}
             {% if capsule.capsule_type == "P" %}
-                <a href="/editpremiumcapsule/{{ capsule.id }}">Edit capsule</a>
+                <a class="btn btn-lg btn-secondary" href="/editpremiumcapsule/{{ capsule.id }}">Edit capsule</a>
             {% endif %}
             {% if capsule.capsule_type == "M" %}
-                <a href="/editmodularcapsule/{{ capsule.id }}">Edit capsule</a>
+                <a class="btn btn-lg btn-secondary" href="/editmodularcapsule/{{ capsule.id }}">Edit capsule</a>
             {% endif %}
-            <a href="/deletecapsule/{{ capsule.id }}">Delete capsule</a>
+            <a class="btn btn-lg btn-secondary" href="/deletecapsule/{{ capsule.id }}">Delete capsule</a>
             {% if capsule.dead_man_switch %}
-                <a href="refresh">Refresh capsule</a>
+                <a class="btn btn-lg btn-secondary" href="refresh">Refresh capsule</a>
             {% endif %}
 
         {% endif %}

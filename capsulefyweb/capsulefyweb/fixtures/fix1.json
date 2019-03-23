@@ -155,7 +155,8 @@
     "pk": 1,
     "fields": {
       "social_type":"F",
-      "user_id":2
+      "user_id":2,
+      "token":"142154"
     }
   },
   {
@@ -163,7 +164,8 @@
     "pk": 2,
     "fields": {
       "social_type":"T",
-      "user_id":2
+      "user_id":2,
+      "token":"204746"
     }
   },
   {
@@ -171,7 +173,8 @@
     "pk": 3,
     "fields": {
       "social_type":"F",
-      "user_id":3
+      "user_id":3,
+      "token":"219077"
     }
   },
   {
@@ -179,7 +182,8 @@
     "pk": 4,
     "fields": {
       "social_type":"T",
-      "user_id":3
+      "user_id":3,
+      "token":"152889"
     }
   },
   {
@@ -187,7 +191,8 @@
     "pk": 5,
     "fields": {
       "social_type":"F",
-      "user_id":4
+      "user_id":4,
+      "token":"187003"
     }
   },
   {
@@ -195,7 +200,8 @@
     "pk": 6,
     "fields": {
       "social_type":"T",
-      "user_id":4
+      "user_id":4,
+      "token":"130901"
     }
   },
   {
@@ -203,7 +209,8 @@
     "pk": 7,
     "fields": {
       "social_type":"F",
-      "user_id":5
+      "user_id":5,
+      "token":"139808"
     }
   },
   {
@@ -211,7 +218,8 @@
     "pk": 8,
     "fields": {
       "social_type":"T",
-      "user_id":6
+      "user_id":6,
+      "token":"258212"
     }
   },
   {
@@ -479,7 +487,7 @@
   },
   {
     "model": "main.module",
-    "pk": 10,
+    "pk": 11,
     "fields": {
       "description":"This is capsule 10",
       "release_date":"2019-03-15",
@@ -494,7 +502,9 @@
       "url":"https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg",
       "size":4177.92,
       "type":"I",
-      "module_id":1
+      "module_id":1,
+      "local_name":"file1",
+      "remote_name":"file1"
     }
   }
   ,
@@ -505,7 +515,9 @@
       "url":"https://images.pexels.com/photos/1207918/pexels-photo-1207918.jpeg",
       "size":8151.04,
       "type":"I",
-      "module_id":1
+      "module_id":1,
+      "local_name":"file2",
+      "remote_name":"file2"
     }
   },
   {
@@ -515,7 +527,9 @@
       "url":"https://images.pexels.com/photos/849835/pexels-photo-849835.jpeg",
       "size":676,
       "type":"I",
-      "module_id":3
+      "module_id":3,
+      "local_name":"file3",
+      "remote_name":"file3"
     }
   },
   {
@@ -525,7 +539,9 @@
       "url":"https://images.pexels.com/photos/1352196/pexels-photo-1352196.jpeg",
       "size":106,
       "type":"I",
-      "module_id":5
+      "module_id":5,
+      "local_name":"file4",
+      "remote_name":"file4"
     }
   },
   {
@@ -535,7 +551,9 @@
       "url":"https://images.pexels.com/photos/955463/pexels-photo-955463.jpeg",
       "size":3123.2,
       "type":"I",
-      "module_id":5
+      "module_id":5,
+      "local_name":"file5",
+      "remote_name":"file5"
     }
   },
   {
@@ -544,8 +562,10 @@
     "fields": {
       "url":"https://www.youtube.com/watch?v=T5o_0BoTvWg",
       "size":33.28,
-      "type":"F",
-      "module_id":5
+      "type":"V",
+      "module_id":5,
+      "local_name":"file6",
+      "remote_name":"file6"
     }
   },
   {
@@ -554,8 +574,10 @@
     "fields": {
       "url":"https://www.youtube.com/watch?v=YFFUVLsPi6A",
       "size":15.11,
-      "type":"F",
-      "module_id":9
+      "type":"V",
+      "module_id":9,
+      "local_name":"file7",
+      "remote_name":"file7"
     }
   },
   {
@@ -565,7 +587,9 @@
       "url":"https://images.pexels.com/photos/16598/pexels-photo.jpg",
       "size":6348.8,
       "type":"I",
-      "module_id":10
+      "module_id":10,
+      "local_name":"file8",
+      "remote_name":"file8"
     }
   },
   {

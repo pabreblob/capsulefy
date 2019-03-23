@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block contenido %}
+{% load static %}
+<div class="bg-2 container-fluid">
+
+ <form class="form-signin" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+     <!-- <img class="mb-4" src="../../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+	  	<img lass="mb-4" alt="" width="350" height="300" style="margin-left:-20px" src="{% static 'images/LOGOGAV.png' %}" />
+	  	<br><br>
+	  	{% if form.errors %}
+		<p style="color:red;">User or password error.</p>
+		{% endif %}
+		
+		{% if next %}
+		    {% if user.is_authenticated %}
+		    <p>Your account doesn't have access to this page. To proceed,
+		    please login with an account that has access.</p>
+		    {% else %}
+		    
+		    {% endif %}
+		{% endif %}
+		
+	
+      <h3 class="h5 mb-3 font-weight-normal">Login</h3>
+      <label for="inputEmail" class="sr-only">User</label>
+      <input type="text" id="id_username" name="username" class="form-control" placeholder="Usuario" required="" autofocus="">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="id_password" name="password" class="form-control" placeholder="Clave" required="">
+      <div class="checkbox mb-3">
+        <!-- <label>
+          <input type="checkbox" value="remember-me"> Recuerdame
+        </label> -->
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+      <p class="mt-5 mb-3 text-muted">© 2018</p>
+    </form>
+</div>
+{% endblock %}

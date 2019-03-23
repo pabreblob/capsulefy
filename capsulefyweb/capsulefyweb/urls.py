@@ -22,6 +22,7 @@ from main import views
 urlpatterns = [
     path('', views.index),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
+    path('list/', views.list,  name='list'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
     path('admin/', admin.site.urls),

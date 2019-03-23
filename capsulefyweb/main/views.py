@@ -118,17 +118,19 @@ def editModularCapsule(request, pk):
 class login(LoginView):
     def __init__(self,  *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
-        
+
+
 def list(request):
     
     capsules=Capsule.objects.filter(private=False)
 
     return render(request, 'capsule/list.html',{'capsules':capsules})
 
+
 @login_required
 def createFreeCapsule(request):
     if request.method == 'POST':
-        form = NewFreeCapsuleForm(request.POST, request.FILES)
+        form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             formulario = form.cleaned_data
             title = formulario['title']
@@ -143,7 +145,7 @@ def createFreeCapsule(request):
             release_date = formulario['release_date']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=2)
+                                             twitter=twitter, facebook=facebook, creator_id=request.user.id)
             module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
             if formulario['file'] is not None:
                 credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
@@ -161,9 +163,9 @@ def createFreeCapsule(request):
                 blob.upload_from_file(formulario['file'], size=formulario['file'].size, content_type=filetype)
                 url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + str(idrand) +\
                       fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                File.objects.create(url=url, size=formulario['file'].size, type=filetypedb,
-                                    remote_name=title + str(idrand) + fileext, local_name=formulario['file'].name,
-                                    module_id=module.id)
+                filesize = formulario['file'].size / 1000000
+                File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=title + str(idrand) + fileext,
+                                    local_name=formulario['file'].name, module_id=module.id)
             return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         form = NewFreeCapsuleForm()
@@ -207,6 +209,12 @@ def deleteCapsule(request, pk):
     capsule = get_object_or_404(Capsule, id=pk)
     if capsule.creator_id != request.user.id:
         return HttpResponseNotFound()
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+    client = storage.Client(credentials=credentials, project='capsulefy')
+    bucket = client.get_bucket('capsulefy.appspot.com')
+    files = File.objects.filter(module__capsule_id=pk)
+    for file in files:
+        bucket.delete_blob(file.remote_name)
     capsule.delete()
     return HttpResponseRedirect('/')
 

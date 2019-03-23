@@ -2,6 +2,8 @@ import datetime
 
 from django import forms
 from datetime import datetime, timedelta, timezone
+from .models import File
+from django.db.models import Sum
 
 
 class ContactForm(forms.Form):
@@ -32,6 +34,10 @@ class NewFreeCapsuleForm(forms.Form):
     facebook = forms.BooleanField(required=False)
     file = forms.FileField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(NewFreeCapsuleForm, self).__init__(*args, **kwargs)
+
     def clean_release_date(self):
         data = self.cleaned_data['release_date']
         if data <= datetime.now(timezone.utc):
@@ -43,8 +49,13 @@ class NewFreeCapsuleForm(forms.Form):
 
     def clean_file(self):
         data = self.cleaned_data['file']
-        if data is not None and data.size > 99999999:
-            raise forms.ValidationError('The file size must not be over 10 B')
+        files = File.objects.filter(module__capsule__capsule_type='F', module__capsule__creator_id=self.user.id).\
+            aggregate(totalsum=Sum('size'))
+        totalsum = 0.0
+        if files['totalsum'] is not None:
+            totalsum = float(files['totalsum'])
+        if data is not None and totalsum + (data.size / 1000000) > 20.0:
+            raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
 
 

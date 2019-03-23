@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm
+from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm
 from .models import Capsule, Module, File
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
@@ -7,14 +7,9 @@ from django.conf import settings
 from random import randint
 import os
 from datetime import datetime, timezone
-
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from django.shortcuts import render, get_object_or_404
-from main.forms import ContactForm, ModularCapsuleForm, ModuleForm
+from django.http import HttpResponseNotFound
 import smtplib
 from django.contrib.auth.views import LoginView
-
-from main.models import Capsule, Module
 
 
 def index(request):
@@ -121,8 +116,6 @@ def editModularCapsule(request, pk):
 class login(LoginView):
     def __init__(self,  *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
-        
-
 
 
 def createFreeCapsule(request):

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="container-fluid rounded">
+<h3>List Capsule</h3>
+<div style="max-height: 550px; overflow-y: scroll;">
+{% for cap in capsules %}
+<div class="card">
+  <div class="card-header">
+    {{cap.title}}
+  </div>
+  <div class="card-body">
+  {% for mod in cap.modules.all %}
+    <blockquote class="blockquote mb-0">
+      <p>{{mod.description}}</p>
+      <footer class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date}}</cite></footer>
+    </blockquote>
+    
+    {% endfor %}
+    <a href="/displaycapsule/{{cap.id}}" >Display Capsule</a>
+  </div>
+</div>
+{% endfor %}
+</div>
+</div>
+{% endblock %}

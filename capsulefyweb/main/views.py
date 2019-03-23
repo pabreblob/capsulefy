@@ -114,4 +114,8 @@ class login(LoginView):
     def __init__(self,  *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
         
+def list(request):
+    
+    capsules=Capsule.objects.filter(private=False)
 
+    return render(request, 'capsule/list.html',{'capsules':capsules})

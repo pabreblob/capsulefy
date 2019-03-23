@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 from django.http import HttpResponseNotFound
 import smtplib
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
+import mimetypes
 
 
 def index(request):
@@ -118,6 +120,7 @@ class login(LoginView):
         super(LoginView, self).__init__(*args, **kwargs)
 
 
+@login_required
 def createFreeCapsule(request):
     if request.method == 'POST':
         form = NewFreeCapsuleForm(request.POST, request.FILES)
@@ -144,15 +147,29 @@ def createFreeCapsule(request):
                 idrand = randint(0, 999)
                 filename, fileext = os.path.splitext(formulario['file'].name)
                 blob = bucket.blob(title + str(idrand) + fileext)
-                blob.upload_from_file(formulario['file'].file, size=formulario['file'].size)
-            return HttpResponseRedirect('/')
+                filetype = mimetypes.guess_type(formulario['file'].name)[0]
+                filetypedb = 'F'
+                if filetype.split('/')[0] == 'image':
+                    filetypedb = 'I'
+                elif filetype.split('/')[0] == 'video':
+                    filetypedb = 'V'
+                blob.upload_from_file(formulario['file'], size=formulario['file'].size, content_type=filetype)
+                url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + str(idrand) +\
+                      fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                File.objects.create(url=url, size=formulario['file'].size, type=filetypedb,
+                                    remote_name=title + str(idrand) + fileext, local_name=formulario['file'].name,
+                                    module_id=module.id)
+            return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         form = NewFreeCapsuleForm()
-    return render(request, 'freecapsule.html', {'form': form})
+    return render(request, 'capsule/freecapsule.html', {'form': form})
 
 
+@login_required
 def editFreeCapsule(request, pk):
     oldcapsule = get_object_or_404(Capsule, id=pk)
+    if oldcapsule.capsule_type != 'F' or oldcapsule.creator_id != request.user.id:
+        return HttpResponseNotFound()
     oldmodule = oldcapsule.modules.first()
     olddata = {
         'title': oldcapsule.title,
@@ -174,14 +191,17 @@ def editFreeCapsule(request, pk):
             oldmodule.release_date = formulario['release_date']
             oldcapsule.save()
             oldmodule.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/displaycapsule/' + str(oldcapsule.id))
     else:
         form = EditFreeCapsuleForm(initial=olddata)
-    return render(request, 'freecapsule.html', {'form': form})
+    return render(request, 'capsule/freecapsule.html', {'form': form})
 
 
+@login_required
 def deleteCapsule(request, pk):
     capsule = get_object_or_404(Capsule, id=pk)
+    if capsule.creator_id != request.user.id:
+        return HttpResponseNotFound()
     capsule.delete()
     return HttpResponseRedirect('/')
 

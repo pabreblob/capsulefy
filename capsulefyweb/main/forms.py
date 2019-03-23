@@ -34,6 +34,8 @@ class NewFreeCapsuleForm(forms.Form):
 
     def clean_release_date(self):
         data = self.cleaned_data['release_date']
+        if data <= datetime.now(timezone.utc):
+            raise forms.ValidationError('The release date must be in the future')
         yearafter = datetime.now(timezone.utc) + timedelta(days=365)
         if data > yearafter:
             raise forms.ValidationError('The release date must be within 1 year from now')

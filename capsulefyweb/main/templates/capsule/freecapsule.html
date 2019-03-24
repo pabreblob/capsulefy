@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block contenido %}
 {% load static %}
+<!--
 <div class="container">
     <form action="" method="post" enctype="multipart/form-data">
         <h3 class="title">Free capsule</h3>
@@ -8,28 +9,28 @@
     	    {% csrf_token %}
     	    <div class="form-group">
 			    <label for="id_title"><span class="red">*</span> Title</label>
-			    <input type="text" class="form-control" name="title" id="id_title" maxlength="250" required placeholder="Title">
+			    <input type="text" class="form-control" name="title" id="id_title" maxlength="250" value="{{form.title.value}}" required placeholder="Title">
 			</div>
 			<div class="form-group">
 			    <label for="id_description"><span class="red">*</span> Description</label>
-			    <textarea class="form-control" id="id_description" name="description" rows="5" required placeholder="Description"></textarea>
+			    <textarea class="form-control" id="id_description" name="description" rows="5" required placeholder="Description">{{form.description.value}}</textarea>
   			</div>
   			<div class="form-group">
 			    <label for="id_release_date"><span class="red">*</span> Release date</label>
-			    <input type="text" class="form-control" id="id_release_date" name="release_date" maxlength="250" required placeholder="yyyy-mm-dd">
+			    <input type="text" class="form-control" id="id_release_date" name="release_date" maxlength="250" value="{{form.release_date.value}}" required placeholder="yyyy-mm-dd">
 			</div>
 			<div class="form-group">
 			    <label for="id_emails">Email</label>
-			    <input type="text" class="form-control" id="id_release_date" name="emails" maxlength="250">
+			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{{form.emails.value}}" maxlength="250">
 			</div>
 			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" id="id_twitter" name="twitter">
+			  <input class="form-check-input" type="checkbox" id="id_twitter" value="{{form.twitter.value}}" name="twitter">
 			  <label class="form-check-label" for="id_twitter">
 			    Twitter
 			  </label>
 			</div>
 			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" id="id_facebook" name="facebook">
+			  <input class="form-check-input" type="checkbox" id="id_facebook" value="{{form.facebook.value}}" name="facebook">
 			  <label class="form-check-label" for="id_facebook">
 			    Facebook
 			  </label>
@@ -40,17 +41,29 @@
 			  <label class="custom-file-label" for="id_file">Choose file</label>
 			</div>
 			<br><br>
+			{% if not '/editfreecapsule/' in request.path %}
 			<div class="form-check">
 			  <input class="form-check-input" type="checkbox" required>
 			  <label class="form-check-label" for="id_facebook">
 			    <span class="red">*</span> You are accepting Terms and Conditions
 			  </label>
 			</div>
+			{% endif %}
 			<br>
 			<p><span class="red">Fields with * are required</span></p>
 			<button class="btn btn-primary">Submit</button>
 			<button type="button" class="btn btn-secondary" onclick="window.location = '/'">Cancel</button>
     	</div>
+    </form>
+</div>
+-->
+
+    <a name="index"></a>
+<div class="bg-1 container-fluid">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
     </form>
 </div>
 {% endblock %}

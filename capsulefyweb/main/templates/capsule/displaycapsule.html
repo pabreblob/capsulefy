@@ -34,6 +34,8 @@
                 {{ module.description }}
             </div>
             <div class="card-body">
+                                {{ module.description }}
+
                 {% if module.files %}
                     {% for file in module.files.all %}
                         {% if file.type == "I" %}

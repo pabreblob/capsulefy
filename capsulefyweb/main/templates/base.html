@@ -38,15 +38,16 @@
           </li>
             {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="/list">All capsules</a>
+            <a class="nav-link" href="/list">Search capsules</a>
           </li> 
           {% if user.username %}
             <li class="nav-item dropdown dmenu">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 My Capsules
               </a>
-              <div class="dropdown-menu sm-menu">
-                <a class="dropdown-item" href="/list">List</a>
+              <div class="dropdown-menu sm-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/list">List my capsules</a>
+                <a class="dropdown-item" href="/list">Create a capsules</a>
               </div>
             </li>
             
@@ -54,7 +55,8 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 {{user.username}}
               </a>
-              <div class="dropdown-menu sm-menu">
+              <div class="dropdown-menu sm-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/logout">My account</a>
                 <a class="dropdown-item" href="/logout">Exit</a>
               </div>
             </li>

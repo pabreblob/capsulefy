@@ -15,33 +15,33 @@
               	{% csrf_token %}
 
               	{% if form.errors %}
-					<p style="color:red;">User or password error.</p>
-				{% endif %}
-		
-				{% if next %}
-				    {% if user.is_authenticated %}
-					    <p style="color: red">Your account doesn't have access to this page. To proceed,
-				    please login with an account that has access.</p>
-				    {% else %}
+        					<p style="color:red;">User or password error.</p>
+        				{% endif %}
+
+                {% if next %}
+	    			      {% if user.is_authenticated %}
+  	   	 			      <p style="color: red">Your account doesn't have access to this page. To proceed,
+			         	       please login with an account that has access.</p>
+    				      {% else %}
 				    
-				    {% endif %}
-				{% endif %}
+		  		        {% endif %}
+			         	{% endif %}
 
 
                 <div class="form-label-group">
-                  <input type="text" id="id_username" class="form-control" placeholder="Username" required autofocus>
+                  <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" required autofocus>
                   <label for="id_username">Username</label>
                 </div>
 
                 <div class="form-label-group">
-                  <input type="password" id="id_password" class="form-control" placeholder="Password" required>
+                  <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
                   <label for="id_password">Password</label>
                 </div>
 
-                <div class="custom-control custom-checkbox mb-3">
+                <!--<div class="custom-control custom-checkbox mb-3">
                   <input type="checkbox" class="custom-control-input" id="customCheck1">
                   <label class="custom-control-label" for="customCheck1">Remember password</label>
-                </div>
+                </div>-->
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Sign in</button>
                 <div class="text-center">
                   <a class="small" href="#">Forgot password?</a></div>

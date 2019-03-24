@@ -31,3 +31,25 @@ class SimpleTest(TestCase):
         createFreeCapsule(request)
         capsule = Capsule.objects.filter(emails='test@test.com').first()
         self.assertIsNotNone(capsule)
+
+    def test_create_modular(self):
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestModular',
+            'modulesSize': 2,
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            'description0': 'Test',
+            'release_date0': '2019-10-10',
+            'file0': None,
+            'description1': 'Test',
+            'release_date1': '2020-10-10',
+            'file1': None
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertIs(len(capsule.modules), 2)

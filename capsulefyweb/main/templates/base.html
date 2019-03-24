@@ -1,80 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Capsulefy</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
-    {% block styles %}{% endblock %}
-</head>
-<body>
-<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom menu">
-    <a class="navbar-brand" href="/"><img class="logo" src="{% static 'images/logo.svg' %}" alt="Capsulefy"/></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
+<html>
+    <head lang="en">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+        {% block styles %}{% endblock %}
+    </head>
+    <body>
+    
+    <nav class="navbar navbar-expand-sm   navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="#index">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/list">Capsules</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#about">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#team">Team</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#faq">FAQ</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#pricing">Pricing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#contact">Contact us</a>
+              <a class="nav-link" href="/"><h3>Capsulefy</h3></a>
             </li>
             
-            		
-			 {% if user.username %}
-			 <li class="nav-item">
-		 		<a class="nav-link" href="#">User: {{ user.username }}</a>
-			</li>
-				<li class="nav-item">
-				<a class="nav-link" href="/logout">Exit</a>
-				</li>
-			</li>
-			{% else %}
-			<li class="nav-item">
-            		<a class="nav-link" href="/login">Login</a>
+          </ul>
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            {% if not user.username%}
+            <li class="nav-item">
+                <a class="nav-link" href="/#about">About</a>
             </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/#pricing">Pricing</a>
+            </li>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="https://capsulefy.herokuapp.com">Team</a>
+          </li>
+            {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/list">Search capsules</a>
+          </li> 
+          {% if user.username %}
+            <li class="nav-item dropdown dmenu">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                My Capsules
+              </a>
+              <div class="dropdown-menu sm-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/list">List my capsules</a>
+                <a class="dropdown-item" href="/select_capsule">Create a capsule</a>
+              </div>
+            </li>
+            
+            <li class="nav-item dropdown dmenu">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                {{user.username}}
+              </a>
+              <div class="dropdown-menu sm-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/">My account</a>
+                <a class="dropdown-item" href="/logout">Exit</a>
+              </div>
+            </li>
+            {% else %}
+              <li class="nav-item">
+                <button class="btn btn-primary" onclick="window.location='/login'">Sign up</button>
+              </li>
             {% endif %}
             </li>
-        </ul>
-    </div>
-</nav>
-<section class='contenido bg-light '>
+          </ul>
+        </div>
+      </nav>
+
+            		
+
     {% block contenido %}{% endblock %}
-</section>
-<footer>
-    <div class="bg-4" >
-        <p>Capsulefy &copy;2019 </p>
+
+
+
+    <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+      <div class="container text-center">
+      <small>Do you want more information about out team? Click <a href="https://capsulefy.herokuapp.com">here</a> to know about us</small>
+      <br>
+      <small>Copyright &copy; Capsulefy</small>
     </div>
-</footer>
-</body>
+   </footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+$('.navbar-light .dmenu').hover(function () {
+        $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
+    }, function () {
+        $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
+    });
+});
+
+</script>
+    </body>
 </html>

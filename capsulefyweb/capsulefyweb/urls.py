@@ -31,4 +31,5 @@ urlpatterns = [
     path('deletecapsule/<int:pk>/', views.deleteCapsule, name='deletecapsule'),
     path('login/', views.login.as_view(),name='login'),  
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
+    path('select_capsule/', views.select_capsule),
 ]

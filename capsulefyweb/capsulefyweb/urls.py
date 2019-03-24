@@ -20,13 +20,15 @@ from django.contrib.auth import views as auth_views
 from main import views
 
 urlpatterns = [
-    path(r'', views.index),
+    path('', views.index),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
     path('list/', views.list,  name='list'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
     path('admin/', admin.site.urls),
-    
+    path('newfreecapsule/', views.createFreeCapsule, name='createfreecapsule'),
+    path('editfreecapsule/<int:pk>/', views.editFreeCapsule, name='editfreecapsule'),
+    path('deletecapsule/<int:pk>/', views.deleteCapsule, name='deletecapsule'),
     path('login/', views.login.as_view(),name='login'),  
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
 ]

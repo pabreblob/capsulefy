@@ -98,7 +98,7 @@ def createModularCapsule(request):
                         url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
                         idrand) + \
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                        filesize = file.size / 1000000
+                        filesize = file.size / 1048576
                         File.objects.create(url=url, size=filesize, type=filetypedb,
                                         remote_name=capsule.title + str(idrand) + fileext,
                                         local_name=file.name, module_id=module.id)
@@ -197,7 +197,7 @@ def createModule(request, pk):
                     blob.upload_from_file(file, size=file.size, content_type=filetype)
                     url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(idrand) +\
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1000000
+                    filesize = file.size / 1048576
 
                     File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=capsule.title + str(idrand) + fileext,
                                     local_name=file.name, module_id=module.id)
@@ -252,7 +252,7 @@ def editModule(request, pk):
                     blob.upload_from_file(file, size=file.size, content_type=filetype)
                     url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldmodule.capsule.title + str(idrand) +\
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1000000
+                    filesize = file.size / 1048576
 
                     File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=oldmodule.capsule.title + str(idrand) + fileext,
                                     local_name=file.name, module_id=oldmodule.id)
@@ -355,7 +355,7 @@ def createFreeCapsule(request):
                 blob.upload_from_file(formulario['file'], size=formulario['file'].size, content_type=filetype)
                 url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + str(idrand) +\
                       fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                filesize = formulario['file'].size / 1000000
+                filesize = formulario['file'].size / 1048576
                 File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=title + str(idrand) + fileext,
                                     local_name=formulario['file'].name, module_id=module.id)
             return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))

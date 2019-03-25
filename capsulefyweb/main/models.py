@@ -3,6 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
+import datetime
+from datetime import timezone
+
 
 # Create your models here.
 class Credit_card(models.Model):
@@ -49,10 +52,25 @@ class Capsule(models.Model):
     
     credit_card=models.ForeignKey(Credit_card,related_name='capsuls', on_delete=CASCADE,null=True)
     
+    ''' Una capsula es liberada si tiene algún 
+    modulo que este liberado '''
+    @property
+    def is_released(self):
+        res=False
+        for i in self.modules.all():
+            if(i.is_released):
+                res=True
+                break
+        return res
+    
 class Module(models.Model):
     description=models.CharField(max_length=250)
     release_date=models.DateTimeField()
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
+    
+    @property
+    def is_released(self):
+        return datetime.datetime.now(timezone.utc) >= self.release_date
     
 class File(models.Model):
     url=models.URLField()

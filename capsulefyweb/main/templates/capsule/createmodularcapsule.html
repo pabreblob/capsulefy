@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/modular-capsule.css' %}"/>
-{% endblock %}
 {% block contenido %}
     {% load static %}
     <a name="index"></a>
     <div class="bg-1 container-fluid">
-        <form id="form" action="" method="post">
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+        <form id="form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" id="modulesSize" name="modulesSize" value="1">
             <p>
@@ -26,6 +26,10 @@
                 <label for="id_facebook">Facebook:</label>
                 <input type="checkbox" name="facebook" id="id_facebook">
             </p>
+            <p>
+                <label for="id_private">Private capsule:</label>
+                <input type="checkbox" name="private" id="id_private">
+            </p>
             <div class="modules" id="modules">
                 <div class="moduleform">
                     <p>
@@ -39,7 +43,7 @@
                     </p>
                     <p>
                         <label for="id_file0">File:</label>
-                        <input type="file" name="file0" id="id_file0">
+                        <input type="file" name="file0" id="id_file0" multiple>
                     </p>
                 </div>
             </div>

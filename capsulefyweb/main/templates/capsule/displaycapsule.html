@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block contenido %}
-
 <div class="container main-capsule">
     <h3> {{ capsule.title }} 
         <blockquote class="blockquote">
@@ -41,7 +40,7 @@
                             <img class="img-fluid rounded module-img" src="{{ file.url }}"/>
                         {% endif %}
                         {% if file.type == "F" %}
-                            <a src="{{ file.url }}">File</a>
+                            <a href="{{ file.url }}">File</a>
                         {% endif %}
                         {% if file.type == "V" %}
                             <video width="320" height="240" controls>
@@ -63,6 +62,7 @@
     {% if user.id == capsule.creator.id %}
     <div class="module-btn-bottom">
             {% if capsule.capsule_type == "F" %}
+
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             {% if capsule.capsule_type == "P" %}

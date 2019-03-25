@@ -52,4 +52,4 @@ class SimpleTest(TestCase):
         request.user = self.test_user
         createModularCapsule(request)
         capsule = Capsule.objects.filter(title='TestModular').first()
-        self.assertIs(len(capsule.modules), 2)
+        self.assertIs(len(capsule.modules.all()), 2)

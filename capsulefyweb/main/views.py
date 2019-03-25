@@ -126,8 +126,9 @@ def checkModularCapsule(request):
             errors.append("Release date " + str(i + 1) + " can not be empty")
         if files is not None:
             for file in files:
+                print(file.size)
                 totalSize += file.size
-    if totalSize > 5242880:
+    if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
 
@@ -212,7 +213,7 @@ def checkModule(request):
     if files is not None:
         for file in files:
             totalSize += file.size
-    if totalSize > 5242880:
+    if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
 
@@ -274,7 +275,7 @@ def checkEditModule(request, pk):
     if files is not None:
         for file in files:
             totalSize += file.size
-    if totalSize > 5242880:
+    if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
 

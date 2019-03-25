@@ -12,6 +12,7 @@ import smtplib
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 import mimetypes
+import main
 
 
 def index(request):
@@ -121,11 +122,17 @@ class login(LoginView):
 
 
 def list(request):
-    
     capsules=Capsule.objects.filter(private=False)
 
     return render(request, 'capsule/list.html',{'capsules':capsules})
 
+def private_list(request):
+    
+    user = main.models.User.objects.get(pk=request.user.id)
+    request.user
+    capsules=user.capsuls.all()
+
+    return render(request, 'capsule/privatelist.html',{'capsules':capsules})
 
 @login_required
 def createFreeCapsule(request):

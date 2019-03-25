@@ -36,7 +36,6 @@ def index(request):
 
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
-    print(capsule.id)
     creator = False
     if request.user.is_authenticated:
         user = request.user
@@ -118,7 +117,6 @@ def checkModularCapsule(request):
 
     totalSize = 0
     for i in range(int(request.POST['modulesSize'])):
-        print(request.POST)
         description = request.POST['description' + str(i)]
         release_date = request.POST['release_date' + str(i)]
         files = request.FILES.getlist('file' + str(i))
@@ -166,12 +164,15 @@ def editModularCapsule(request, pk):
 
 def createModule(request, pk):
     user = request.user
+    capsule = get_object_or_404(Capsule, id=pk)
+    if user.id != capsule.creator.id:
+        return HttpResponseNotFound()
     errors = []
     if request.method == 'POST':
         moduleForm = ModuleForm(request.POST, request.FILES)
-        capsule = get_object_or_404(Capsule, id=pk)
         errors = checkModule(request)
-        errors.append(moduleForm.errors)
+        if moduleForm.is_valid() == False:
+            errors.append(moduleForm.errors)
         if moduleForm.is_valid() and len(errors) == 0:
             moduleFormulario = moduleForm.cleaned_data
             description = moduleFormulario['description']
@@ -223,11 +224,12 @@ def editModule(request, pk):
     user = request.user
     if user.id != oldmodule.capsule.creator.id:
         return HttpResponseNotFound()
-    if request.method == 'POST' and len(errors) == 0:
+    if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkEditModule(request, pk)
-        errors.append(form.errors)
-        if form.is_valid() :
+        if form.is_valid() == False:
+            errors.append(form.errors)
+        if form.is_valid() and len(errors) == 0:
             formulario = form.cleaned_data
             oldmodule.description = formulario['description']
             oldmodule.release_date = formulario['release_date']

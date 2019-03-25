@@ -1,0 +1,62 @@
+BAR2BAR
+La presentacion parece una revision de la del deliverable anterior
+La demo con mockups no
+Que rangos de la metrica de rendimiento son aceptables, medidas a tomar
+El orden es importante, no se puede pasar de la tecnologia a la monetizacion
+THORNEO
+El foco sigue siendo el equivocado, como bar2bar
+SOUNDGO
+No es necesario ir diciendo las cosas cifra a cifra 
+
+MUSICROAD
+Los costes tan precisos no quedan bien, mejor darlo a groso modo
+Sprint 2 poco detallado
+Debe haber mucho mas foco en las lecciones aprendidas durante el sprint
+Se puede usar algo distinto para los pilot user a lo que se deje desplegado
+Poner los resultados del rendimiento, rango de que rendimiento es aceptable o no
+Cómo van a medir las soluciones propuestas
+Presentación técnica, poner diagramas incluso
+
+MOTORLOG
+Foco de la presentación equivocado
+Detallar más la planificación y quien va a asumir cada responsabilidad
+Distintas formas de medir el rendimiento según los roles
+
+FEEDBACK GENERAL
+Todo lo que no se enseñe en la presentación no cuenta
+No se puede hacer ningún cambio en la presentación desde el viernes
+La estructura general y el foco muy mal. Se debe dar mucho mas peso a la revision delos sprints
+Alargar más la presentación para la entrega, acortar feedback
+Plan de pilotjae, ha estado difuso, hay que tener las fechas, personas responsables, acciones
+concretas en cada momento, si se va a monitorizar los datos de la gente, como se va a obtener el feedback
+El analisis de rendimiento ha sido otro de los problemas. Todos deben tener medidas de rendimiento
+claras y con sus resultados. Puede haber formas distintas de medir esos roles, y definir que es aceptable
+y que no. En caso de que haya gente que no cumple las expectativas, establecer acciones concretas
+para mejorar ese rendimiento. Proceso y resultado. Esto es tanto para medir rendimiento como cualquier otra
+situación : problema, acciones tomadas, cómo se miden esas mejoras.
+Demos: Tienen que ir al caso de uso core, quitar lo superfluo, que se vea bien, los nombres
+deben ser reales, nada de "test", lorem ipsum, etc... El proyecto debe estar funcionando, desplegado
+y congelado. La base de datos se debe quedar también congelada.
+Razones de suspenso por software: Errores http en accesos normales, cualquier acción
+que bloquee al sistema o se caiga. Introducir datos erróneos, si el sistema falla o ne se detecta es suspenso.
+El core debe estar completamente implementado. Un tipo de actor no puede hacer acciones de otro tipo de actor
+Documentación: Se puede usar postman para documentar las APIs.
+Se entrega el código
+
+ESTRUCTURA PRESENTACION
+-Introducción (10-15% del modelo de negocio): Inicio efectivo, anuncios para diferentes objetivos
+no debe irse más allá de 1 minuto-1,5 minutos ->Incluir soporte visual en diapositivas, planificar puesta en escena
+-Resumen rápido de competidores->Lo tenemos listo
+-Resumen de los costes(1-2 transparencias con números claves), que se vea realista->Podemos reducirlo algo más
+-El equipo, roles->Esto lo tenemos perfecto
+-Ver el resultado del sprint, demostración técnica(otro 15%)->Tenemos que seguir trabajando en la implementación
+-En la demostración deben mostrarse los casos de uso core, si hay una parte de pago que se llegue al pago,
+no perder el tiempo en detalles superfluos. Debería estar claro dónde está entregado(se puede poner también uml),
+cómo localizar el código(si es un tag, un zip...)->A tener en cuenta cuando preparemos la demo
+-El grueso(30-40%) debe ser la retrospectiva del sprint:Cómo hemos aplicado el análisis de rendimiento,
+qué modelo se usa y cuál es el resultado concreto. Automatización de la calidad. Siempre dar el estado,
+lecciones aprendidas y cómo se ha reaccionado a esos problemas.->El análisis de rendimiento y medidas a tomar respecto al rendimiento está subido, a falta de revisarlo(cont.)
+(cont.)Siempre hablamos de la parte de automatizacion pero no está hecha. Poner en marcha travis lo antes posible y reajustar la presentación a lo que le hayamos metido al travis(cont.)
+(cont.)Según los tests que nos dé tiempo a hacer, modificar presentación. Para lecciones aprendidas, debemos antes de acabar el desarrollo de los casos core.
+-Hablar del siguiente sprint: (Re)planificación, dar planning completo del sprint, secuencia, responsabilidades...->Otra cosa que hasta no tener acabado el desarrollo es dificil preveer
+-En torno a un 10%: Hablar del plan de pilotaje: Fechas, acciones, esfuerzos, cómo se va a medir los datos...->Ya está contemplado como tarea

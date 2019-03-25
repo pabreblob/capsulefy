@@ -76,28 +76,28 @@ def createModularCapsule(request):
             for i in range(int(modulesSize)):
                 description = request.POST['description' + str(i)]
                 release_date = request.POST['release_date' + str(i)]
-                file = request.FILES['file' + str(i)]
+                files = request.FILES.getlist('file' + str(i))
                 module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
-                print(file)
-                if file is not None:
-                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                    client = storage.Client(credentials=credentials, project='capsulefy')
-                    bucket = client.get_bucket('capsulefy.appspot.com')
-                    idrand = randint(0, 999)
-                    filename, fileext = os.path.splitext(file.name)
-                    blob = bucket.blob(capsule.title + str(idrand) + fileext)
-                    filetype = mimetypes.guess_type(file.name)[0]
-                    filetypedb = 'F'
-                    if filetype.split('/')[0] == 'image':
-                        filetypedb = 'I'
-                    elif filetype.split('/')[0] == 'video':
-                        filetypedb = 'V'
-                    blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
+                if files is not None:
+                    for file in files:
+                        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                        client = storage.Client(credentials=credentials, project='capsulefy')
+                        bucket = client.get_bucket('capsulefy.appspot.com')
+                        idrand = randint(0, 999)
+                        filename, fileext = os.path.splitext(file.name)
+                        blob = bucket.blob(capsule.title + str(idrand) + fileext)
+                        filetype = mimetypes.guess_type(file.name)[0]
+                        filetypedb = 'F'
+                        if filetype.split('/')[0] == 'image':
+                            filetypedb = 'I'
+                        elif filetype.split('/')[0] == 'video':
+                            filetypedb = 'V'
+                        blob.upload_from_file(file, size=file.size, content_type=filetype)
+                        url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
                         idrand) + \
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1000000
-                    File.objects.create(url=url, size=filesize, type=filetypedb,
+                        filesize = file.size / 1000000
+                        File.objects.create(url=url, size=filesize, type=filetypedb,
                                         remote_name=capsule.title + str(idrand) + fileext,
                                         local_name=file.name, module_id=module.id)
             return HttpResponseRedirect('/')

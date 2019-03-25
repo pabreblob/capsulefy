@@ -32,6 +32,8 @@ urlpatterns = [
     path('newfreecapsule/', views.createFreeCapsule, name='createfreecapsule'),
     path('editfreecapsule/<int:pk>/', views.editFreeCapsule, name='editfreecapsule'),
     path('deletecapsule/<int:pk>/', views.deleteCapsule, name='deletecapsule'),
-    path('login/', views.login.as_view(),name='login'),  
+    path('login/', views.login.as_view(),name='login'),
+    path('accounts/login/', views.login.as_view(),name='login'),
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
+    path('select_capsule/', views.select_capsule),
 ]

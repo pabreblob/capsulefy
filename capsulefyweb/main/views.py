@@ -312,3 +312,6 @@ def deleteCapsule(request, pk):
     capsule.delete()
     return HttpResponseRedirect('/')
 
+@login_required
+def select_capsule(request):
+    return render(request, 'capsule/select_capsule.html')

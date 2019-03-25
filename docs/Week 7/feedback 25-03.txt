@@ -1,3 +1,20 @@
+CAPSULEFY
+- Inicio efectivo con contenido visual
+- Falta el elevator pitch
+- Logo sin "serifa"
+- Análisis de rendimiento informal. Más detalles
+- Diap. 21. "CRUD"
+- Plan de pilotaje mucho más detallado
+- Foco de la presentación. Centrarse en el estado del sprint
+  No se dice que cambios se van a hacer o detallar más los problemas
+- Demo poco ágil
+- Más "seriedad" en los videos
+- Añadir en la planificación la realización de la propia planificación
+- Destacar los riesgos. Iconos no se corresponden
+- Mejorar estilos
+
+- Mirar páginas de funerarias
+
 BAR2BAR
 La presentacion parece una revision de la del deliverable anterior
 La demo con mockups no

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
 import datetime
+from datetime import timezone
 
 
 # Create your models here.
@@ -69,7 +70,7 @@ class Module(models.Model):
     
     @property
     def is_released(self):
-        return datetime.datetime.now() >= self.release_date
+        return datetime.datetime.now(timezone.utc) >= self.release_date
     
 class File(models.Model):
     url=models.URLField()

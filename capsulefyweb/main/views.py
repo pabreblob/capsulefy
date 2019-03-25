@@ -55,10 +55,12 @@ def displayCapsules(request, id):
 
 def createModularCapsule(request):
     user = request.user
+    errors = []
     if request.method == 'POST':
         modulesSize = request.POST['modulesSize']
         capsuleForm = ModularCapsuleForm(request.POST)
-        if capsuleForm.is_valid():
+        errors = checkModularCapsule(request)
+        if capsuleForm.is_valid() and len(errors) == 0:
             capsuleFormulario = capsuleForm.cleaned_data
             title = capsuleFormulario['title']
             emails = capsuleFormulario['emails']
@@ -69,6 +71,7 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
+            totalSize = 0
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
@@ -102,7 +105,33 @@ def createModularCapsule(request):
                                         local_name=file.name, module_id=module.id)
             return HttpResponseRedirect('/displaycapsule/'+ str(capsule.id))
 
-    return render(request, 'capsule/createmodularcapsule.html')
+    return render(request, 'capsule/createmodularcapsule.html', {"errors": errors})
+
+
+def checkModularCapsule(request):
+    errors = []
+    if request.POST['title'] is None:
+        errors.append("Title can not be empty")
+
+    if request.POST['emails'] is None and not request.POST['email'].contains("@"):
+        errors.append("Email not valid")
+
+    totalSize = 0
+    for i in range(int(request.POST['modulesSize'])):
+        print(request.POST)
+        description = request.POST['description' + str(i)]
+        release_date = request.POST['release_date' + str(i)]
+        files = request.FILES.getlist('file' + str(i))
+        if description is None:
+            errors.append("Description "+ str(i+1) + " can not be empty")
+        if release_date is None:
+            errors.append("Release date " + str(i + 1) + " can not be empty")
+        if files is not None:
+            for file in files:
+                totalSize += file.size
+    if totalSize > 5242880:
+        errors.append("The total size of files can not be more than 500mb ")
+    return errors
 
 def editModularCapsule(request, pk):
     oldcapsule = get_object_or_404(Capsule, id=pk)
@@ -137,10 +166,13 @@ def editModularCapsule(request, pk):
 
 def createModule(request, pk):
     user = request.user
+    errors = []
     if request.method == 'POST':
         moduleForm = ModuleForm(request.POST, request.FILES)
         capsule = get_object_or_404(Capsule, id=pk)
-        if moduleForm.is_valid():
+        errors = checkModule(request)
+        errors.append(moduleForm.errors)
+        if moduleForm.is_valid() and len(errors) == 0:
             moduleFormulario = moduleForm.cleaned_data
             description = moduleFormulario['description']
             release_date = moduleFormulario['release_date']
@@ -170,19 +202,32 @@ def createModule(request, pk):
             return HttpResponseRedirect('/editmodularcapsule/'+ str(pk))
     else:
         moduleForm = ModuleForm()
-    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create'})
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
 
+def checkModule(request):
+    errors = []
+    files = request.FILES.getlist('file')
+    totalSize = 0
+    if files is not None:
+        for file in files:
+            totalSize += file.size
+    if totalSize > 5242880:
+        errors.append("The total size of files can not be more than 500mb ")
+    return errors
 
 def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
+    errors = []
     if (oldmodule.capsule.capsule_type != "M"):
         return HttpResponseNotFound()
     user = request.user
     if user.id != oldmodule.capsule.creator.id:
         return HttpResponseNotFound()
-    if request.method == 'POST':
+    if request.method == 'POST' and len(errors) == 0:
         form = ModuleForm(request.POST, request.FILES)
-        if form.is_valid():
+        errors = checkEditModule(request, pk)
+        errors.append(form.errors)
+        if form.is_valid() :
             formulario = form.cleaned_data
             oldmodule.description = formulario['description']
             oldmodule.release_date = formulario['release_date']
@@ -212,9 +257,24 @@ def editModule(request, pk):
             return HttpResponseRedirect('/editmodularcapsule/'+ str(oldmodule.capsule.id))
 
     return render(request, 'capsule/editmodule.html',
-                  {'oldmodule': oldmodule, 'type': 'edit'})
+                  {'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
 
+def checkEditModule(request, pk):
+    errors = []
+    files = request.FILES.getlist('file')
+    module = get_object_or_404(Module, id=pk)
+    totalSize = 0
+    for module in module.capsule.modules.all():
+        if len(module.files.all()) != 0:
+            for file in module.files.all():
+                totalSize += file.size
 
+    if files is not None:
+        for file in files:
+            totalSize += file.size
+    if totalSize > 5242880:
+        errors.append("The total size of files can not be more than 500mb ")
+    return errors
 
 def deleteModule(request, pk):
     module = get_object_or_404(Module, id=pk)

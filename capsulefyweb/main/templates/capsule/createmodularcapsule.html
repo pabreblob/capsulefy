@@ -4,6 +4,9 @@
     {% load static %}
     <a name="index"></a>
     <div class="bg-1 container-fluid">
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
         <form id="form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" id="modulesSize" name="modulesSize" value="1">

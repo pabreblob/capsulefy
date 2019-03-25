@@ -24,8 +24,7 @@
 			    <input type="text" class="form-control" id="id_release_date" name="release_date" maxlength="250" value="{% if form.release_date.value != None %}{{form.release_date.value | date:'Y-m-d H:i'}}{% endif %}" required placeholder="YYYY-MM-DD HH:MM">
 			</div>
 			<div class="form-group">
-			    <label for="id_emails">Emails</label>
-				{{ form.emails.errors }}
+			    <label for="id_emails">Emails {{ form.emails.errors }}</label>
 			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{% if form.emails.value != None %}{{form.emails.value}}{% endif %}" maxlength="250">
 			</div>
 			<div class="form-check">
@@ -45,8 +44,8 @@
 
 
 		<div class="form-group">
-    	<label for="id_file">Files</label>
-	    <input type="file" name="file" id="id_file" class="form-control-file" multiple>
+    	<label for="id_file">Files {{form.files.errors}}</label>
+	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
   	</div>
 		<hr>
 			<div class="form-check">

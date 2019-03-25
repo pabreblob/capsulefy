@@ -84,9 +84,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'capsulefybd',
         'USER': 'capsulefyu',
-        'PASSWORD': 'capsulefy',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'PASSWORD':'capsulefy',
+        'HOST':'localhost',
+        'PORT':'',
+
     }
 }
 

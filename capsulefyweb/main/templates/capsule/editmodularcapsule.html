@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modular-capsule.css' %}"/>
+{% endblock %}
+{% block contenido %}
+    {% load static %}
+    <div class="container-fluid">
+        <form id="form" action="" method="post">
+            {% csrf_token %}
+            <p><label for="id_title">Title:</label> <input type="text" name="title" value="Prueba con varios ficheros" maxlength="250" required="" id="id_title"></p>
+            <p><label for="id_emails">Emails:</label> <input type="text" name="emails" maxlength="2500" id="id_emails"></p>
+            <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" id="id_twitter"></p>
+            <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" id="id_facebook"></p>
+            <p><label for="id_private">Private:</label> <input type="checkbox" name="private" id="id_private"></p>
+            <p><input type="submit" value="Update capsule"></p>
+
+        </form>
+        {% for module in oldcapsule.modules.all %}
+            <div class="moduleform">
+                <p>{{ module.description }}</p>
+                {% if module.files %}
+                    {% for file in module.files.all %}
+                        {% if file.type == "I" %}
+                            <img class="module-img" src="{{ file.url }}"/>
+                        {% endif %}
+                        {% if file.type == "F" %}
+                            <a href="{{ file.url }}">File</a>
+                        {% endif %}
+                        {% if file.type == "V" %}
+                            <video width="320" height="240" controls>
+                                <source src="{{ file.url }}"/>
+                            </video>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <a href="/editmodule/{{ module.id }}">Edit</a>
+                {% if oldcapsule.modules.all.count != 1 %}
+                    <a href="/deletemodule/{{ module.id }}">Delete</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    <a href="/newmodule/{{ oldcapsule.id }}">Create module</a>
+
+    </div>
+{% endblock %}

@@ -17,6 +17,7 @@ class ModularCapsuleForm(forms.Form):
     emails = forms.CharField(max_length=2500, required=False)
     twitter = forms.BooleanField(required=False)
     facebook = forms.BooleanField(required=False)
+    private = forms.BooleanField(required=False)
 
 
 class ModuleForm(forms.Form):

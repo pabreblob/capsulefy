@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modular-capsule.css' %}"/>
+{% endblock %}
+{% block contenido %}
+    {% load static %}
+    <a name="index"></a>
+    <div class="bg-1 container-fluid">
+        <form id="form" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="modulesSize" name="modulesSize" value="1">
+            <p>
+                <label for="id_title">Title:</label>
+                <input type="text" name="title" maxlength="250" required="" id="id_title">
+            </p>
+            <p>
+                <label for="id_emails">Emails:</label>
+                <input type="text" name="emails" maxlength="2500" id="id_emails">
+            </p>
+            <p>
+                <label for="id_twitter">Twitter:</label>
+                <input type="checkbox" name="twitter" id="id_twitter">
+            </p>
+            <p>
+                <label for="id_facebook">Facebook:</label>
+                <input type="checkbox" name="facebook" id="id_facebook">
+            </p>
+            <p>
+                <label for="id_private">Private capsule:</label>
+                <input type="checkbox" name="private" id="id_private">
+            </p>
+            <div class="modules" id="modules">
+                <div class="moduleform">
+                    <p>
+                        <label for="id_description0">Description:</label>
+                        <input type="text" name="description0" maxlength="250" required="" id="id_description0">
+                    </p>
+                    <p>
+                        <label for="id_release_date0">Release date:</label>
+                        <input type="text" name="release_date0" required="" id="id_release_date0"
+                               placeholder="YYYY-MM-DD HH:MM">
+                    </p>
+                    <p>
+                        <label for="id_file0">File:</label>
+                        <input type="file" name="file0" id="id_file0" multiple>
+                    </p>
+                </div>
+            </div>
+            <input type="button" value="Add module" onclick="addModule()">
+
+            <p><input type="submit" value="Save capsule"></p>
+        </form>
+
+    </div>
+
+    <script>
+        function addModule() {
+            var div = document.createElement('div');
+            var modulesSize = parseInt(document.getElementById('modulesSize').value);
+            div.className = 'moduleform';
+
+            div.innerHTML =
+                ' <p><label for="id_description'+modulesSize+'">Description:</label>' +
+                '<input type="text" name="description'+modulesSize+'" maxlength="250" required="" id="id_description'+modulesSize+'"></p>' +
+                '<p><label for="id_release_date'+modulesSize+'">Release date:</label>' +
+                '<input type="text" name="release_date'+modulesSize+'" required="" id="id_release_date'+modulesSize+'" placeholder="YYYY-MM-DD HH:MM"></p>' +
+                '<p><label for="id_file'+modulesSize+'">File:</label><input type="file" name="file'+modulesSize+'" id="id_file'+modulesSize+'"></p>' +
+                '<input type="button" value="-" onclick="removeRow(this)">';
+
+            document.getElementById('modules').appendChild(div);
+            document.getElementById('modulesSize').value = modulesSize + 1;
+        }
+
+        function removeRow(input) {
+            document.getElementById('modules').removeChild(input.parentNode);
+            var modulesSize = parseInt(document.getElementById('modulesSize').value);
+            document.getElementById('modulesSize').value = modulesSize - 1;
+        }
+    </script>
+{% endblock %}

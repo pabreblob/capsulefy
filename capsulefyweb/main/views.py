@@ -35,7 +35,7 @@ def index(request):
 
 
 def displayCapsules(request, id):
-    capsule =  get_object_or_404(Capsule, id=id)
+    capsule = get_object_or_404(Capsule, id=id)
     print(capsule.id)
     creator = False
     if request.user.is_authenticated:
@@ -44,7 +44,7 @@ def displayCapsules(request, id):
             creator = True
     modules = []
     for module in capsule.modules.all():
-        if not(creator == False and module.release_date > datetime.now(timezone.utc)):
+        if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
     if len(modules) == 0:
@@ -63,40 +63,62 @@ def createModularCapsule(request):
             title = capsuleFormulario['title']
             emails = capsuleFormulario['emails']
             capsule_type = 'M'
-            private = False
+            private = capsuleFormulario['private']
             dead_man_switch = False
             dead_man_counter = 0
+            price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=user.id)
+                                             twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
-                description = request.POST['description'+str(i)]
-                release_date = request.POST['release_date'+str(i)]
-                file = request.POST['file'+str(i)]
-                # Subir archivo a firebase
-                Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+                description = request.POST['description' + str(i)]
+                release_date = request.POST['release_date' + str(i)]
+                files = request.FILES.getlist('file' + str(i))
+                module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+                if files is not None:
+                    for file in files:
+                        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                        client = storage.Client(credentials=credentials, project='capsulefy')
+                        bucket = client.get_bucket('capsulefy.appspot.com')
+                        idrand = randint(0, 999)
+                        filename, fileext = os.path.splitext(file.name)
+                        blob = bucket.blob(capsule.title + str(idrand) + fileext)
+                        filetype = mimetypes.guess_type(file.name)[0]
+                        filetypedb = 'F'
+                        if filetype.split('/')[0] == 'image':
+                            filetypedb = 'I'
+                        elif filetype.split('/')[0] == 'video':
+                            filetypedb = 'V'
+                        blob.upload_from_file(file, size=file.size, content_type=filetype)
+                        url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
+                        idrand) + \
+                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                        filesize = file.size / 1000000
+                        File.objects.create(url=url, size=filesize, type=filetypedb,
+                                        remote_name=capsule.title + str(idrand) + fileext,
+                                        local_name=file.name, module_id=module.id)
+            return HttpResponseRedirect('/displaycapsule/'+ str(capsule.id))
 
-            return HttpResponseRedirect('/')
-    else:
-        form = ModularCapsuleForm()
-
-    return render(request, 'capsule/modularcapsule.html')
-
+    return render(request, 'capsule/createmodularcapsule.html')
 
 def editModularCapsule(request, pk):
     oldcapsule = get_object_or_404(Capsule, id=pk)
-    oldmodule = oldcapsule.modules.first()
+    if (oldcapsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    user = request.user
+    if user.id != oldcapsule.creator.id:
+        return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
-        'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
-        'facebook': oldcapsule.facebook
+        'facebook': oldcapsule.facebook,
+        'private': oldcapsule.private,
     }
+
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST)
         if form.is_valid():
@@ -105,25 +127,132 @@ def editModularCapsule(request, pk):
             oldcapsule.emails = formulario['emails']
             oldcapsule.twitter = formulario['twitter']
             oldcapsule.facebook = formulario['facebook']
-            oldmodule.description = formulario['description']
-            oldmodule.release_date = formulario['release_date']
+            oldcapsule.private = formulario['private']
             oldcapsule.save()
-            oldmodule.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
         form = ModularCapsuleForm(initial=olddata)
-    return render(request, 'capsule/modularcapsule.html', {'form': form})
+        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
+
+
+def createModule(request, pk):
+    user = request.user
+    if request.method == 'POST':
+        moduleForm = ModuleForm(request.POST, request.FILES)
+        capsule = get_object_or_404(Capsule, id=pk)
+        if moduleForm.is_valid():
+            moduleFormulario = moduleForm.cleaned_data
+            description = moduleFormulario['description']
+            release_date = moduleFormulario['release_date']
+            module = Module.objects.create(description=description, release_date=release_date, capsule_id=pk)
+            files = request.FILES.getlist('file')
+            if files is not None:
+                for file in files:
+                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                    client = storage.Client(credentials=credentials, project='capsulefy')
+                    bucket = client.get_bucket('capsulefy.appspot.com')
+                    idrand = randint(0, 999)
+                    filename, fileext = os.path.splitext(file.name)
+                    blob = bucket.blob(capsule.title + str(idrand) + fileext)
+                    filetype = mimetypes.guess_type(file.name)[0]
+                    filetypedb = 'F'
+                    if filetype.split('/')[0] == 'image':
+                        filetypedb = 'I'
+                    elif filetype.split('/')[0] == 'video':
+                        filetypedb = 'V'
+                    blob.upload_from_file(file, size=file.size, content_type=filetype)
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(idrand) +\
+                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                    filesize = file.size / 1000000
+
+                    File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=capsule.title + str(idrand) + fileext,
+                                    local_name=file.name, module_id=module.id)
+            return HttpResponseRedirect('/editmodularcapsule/'+ str(pk))
+    else:
+        moduleForm = ModuleForm()
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create'})
+
+
+def editModule(request, pk):
+    oldmodule = get_object_or_404(Module, id=pk)
+    if (oldmodule.capsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    user = request.user
+    if user.id != oldmodule.capsule.creator.id:
+        return HttpResponseNotFound()
+    if request.method == 'POST':
+        form = ModuleForm(request.POST, request.FILES)
+        if form.is_valid():
+            formulario = form.cleaned_data
+            oldmodule.description = formulario['description']
+            oldmodule.release_date = formulario['release_date']
+            files = request.FILES.getlist('file')
+            if files is not None:
+                for file in files:
+                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                    client = storage.Client(credentials=credentials, project='capsulefy')
+                    bucket = client.get_bucket('capsulefy.appspot.com')
+                    idrand = randint(0, 999)
+                    filename, fileext = os.path.splitext(file.name)
+                    blob = bucket.blob(oldmodule.capsule.title + str(idrand) + fileext)
+                    filetype = mimetypes.guess_type(file.name)[0]
+                    filetypedb = 'F'
+                    if filetype.split('/')[0] == 'image':
+                        filetypedb = 'I'
+                    elif filetype.split('/')[0] == 'video':
+                        filetypedb = 'V'
+                    blob.upload_from_file(file, size=file.size, content_type=filetype)
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldmodule.capsule.title + str(idrand) +\
+                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                    filesize = file.size / 1000000
+
+                    File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=oldmodule.capsule.title + str(idrand) + fileext,
+                                    local_name=file.name, module_id=oldmodule.id)
+            oldmodule.save()
+            return HttpResponseRedirect('/editmodularcapsule/'+ str(oldmodule.capsule.id))
+
+    return render(request, 'capsule/editmodule.html',
+                  {'oldmodule': oldmodule, 'type': 'edit'})
+
+
+
+def deleteModule(request, pk):
+    module = get_object_or_404(Module, id=pk)
+    user = request.user
+    if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
+        return HttpResponseNotFound()
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+    client = storage.Client(credentials=credentials, project='capsulefy')
+    bucket = client.get_bucket('capsulefy.appspot.com')
+    files = File.objects.filter(module__capsule_id=pk)
+    for file in files:
+        bucket.delete_blob(file.remote_name)
+    module.delete()
+    return HttpResponseRedirect('/editmodularcapsule/'+ str(module.capsule.id))
+
+
+@login_required
+def deleteFile(request, pk):
+    file = get_object_or_404(File, id=pk)
+    moduleid = file.module.id
+    user = request.user
+    if user.id != file.module.capsule.creator.id:
+        return HttpResponseNotFound()
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+    client = storage.Client(credentials=credentials, project='capsulefy')
+    bucket = client.get_bucket('capsulefy.appspot.com')
+    bucket.delete_blob(file.remote_name)
+    file.delete()
+    return HttpResponseRedirect('/editmodule/' + str(moduleid))
 
 
 class login(LoginView):
-    def __init__(self,  *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
 
 
 def list(request):
-    
     capsules=Capsule.objects.filter(private=False)
-
     return render(request, 'capsule/list.html',{'capsules':capsules})
 
 
@@ -216,5 +345,9 @@ def deleteCapsule(request, pk):
     for file in files:
         bucket.delete_blob(file.remote_name)
     capsule.delete()
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/list')
 
+
+@login_required
+def select_capsule(request):
+    return render(request, 'capsule/select_capsule.html')

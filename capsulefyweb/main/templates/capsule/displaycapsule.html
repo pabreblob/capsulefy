@@ -1,47 +1,85 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/display-capsule.css' %}"/>
-{% endblock %}
 {% block contenido %}
-    <div class="container-fluid rounded">
-        <h3>{{ capsule.title }}</h3>
-        <h5>Written by: {{ capsule.creator.username }}</h5>
-        {% for module in modules %}
-            <div class="module">
-                <p>{{ module.description }}</p>
+<div class="container main-capsule">
+    <h3> {{ capsule.title }} 
+        <blockquote class="blockquote">
+            <p class="blockquote-footer">Written by <cite title="Source Title">{{ capsule.creator.username }}</cite></p>
+        </blockquote>
+    </h3>
+
+    {% if user.id == capsule.creator.id %}
+    <div class="module-btn-top">
+            {% if capsule.capsule_type == "F" %}
+                <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
+            {% endif %}
+            {% if capsule.capsule_type == "P" %}
+                <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
+            {% endif %}
+            {% if capsule.capsule_type == "M" %}
+                <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
+            {% endif %}
+            <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
+            {% if capsule.dead_man_switch %}
+                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
+            {% endif %}
+    </div>
+    {% endif %}
+
+
+    {% for module in modules %}
+        <div class="card">
+            <div class="card-header">
+                {{ module.description }}
+            </div>
+            <div class="card-body">
+                {{ module.description }}
                 {% if module.files %}
                     {% for file in module.files.all %}
                         {% if file.type == "I" %}
-                            <img class="module-img" src="{{ file.url }}"/>
+                            <img class="img-fluid rounded module-img" src="{{ file.url }}"/>
                         {% endif %}
                         {% if file.type == "F" %}
-                            <a src="{{ file.url }}">File</a>
+                            <a href="{{ file.url }}">File</a>
                         {% endif %}
                         {% if file.type == "V" %}
                             <video width="320" height="240" controls>
                                 <source src="{{ file.url }}"/>
                             </video>
+                            <!--
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <iframe class="embed-responsive-item" src="{{file.url}}"></iframe>
+                            </div>
+                            -->
                         {% endif %}
                     {% endfor %}
                 {% endif %}
             </div>
-        {% endfor %}
-        {% if user.id == capsule.creator.id %}
+        </div>
+    {% endfor %}
+
+
+    {% if user.id == capsule.creator.id %}
+    <div class="module-btn-bottom">
             {% if capsule.capsule_type == "F" %}
-                <a href="/editfreecapsule/{{ capsule.id }}">Edit capsule</a>
+
+                <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             {% if capsule.capsule_type == "P" %}
-                <a href="/editpremiumcapsule/{{ capsule.id }}">Edit capsule</a>
+                <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             {% if capsule.capsule_type == "M" %}
-                <a href="/editmodularcapsule/{{ capsule.id }}">Edit capsule</a>
+                <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            <a href="/deletecapsule/{{ capsule.id }}">Delete capsule</a>
+            <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
             {% if capsule.dead_man_switch %}
-                <a href="refresh">Refresh capsule</a>
+                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
             {% endif %}
-
-        {% endif %}
     </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+{% block styles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styleDisplay.css' %}"/>
 {% endblock %}

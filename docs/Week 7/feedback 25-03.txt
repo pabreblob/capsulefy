@@ -45,16 +45,18 @@ Se entrega el código
 
 ESTRUCTURA PRESENTACION
 -Introducción (10-15% del modelo de negocio): Inicio efectivo, anuncios para diferentes objetivos
-no debe irse más allá de 1 minuto-1,5 minutos
--Resumen rápido de competidores
--Resumen de los costes(1-2 transparencias con números claves), que se vea realista
--El equipo, roles
--Ver el resultado del sprint, demostración técnica(otro 15%)
+no debe irse más allá de 1 minuto-1,5 minutos ->Incluir soporte visual en diapositivas, planificar puesta en escena
+-Resumen rápido de competidores->Lo tenemos listo
+-Resumen de los costes(1-2 transparencias con números claves), que se vea realista->Podemos reducirlo algo más
+-El equipo, roles->Esto lo tenemos perfecto
+-Ver el resultado del sprint, demostración técnica(otro 15%)->Tenemos que seguir trabajando en la implementación
 -En la demostración deben mostrarse los casos de uso core, si hay una parte de pago que se llegue al pago,
 no perder el tiempo en detalles superfluos. Debería estar claro dónde está entregado(se puede poner también uml),
-cómo localizar el código(si es un tag, un zip...)
+cómo localizar el código(si es un tag, un zip...)->A tener en cuenta cuando preparemos la demo
 -El grueso(30-40%) debe ser la retrospectiva del sprint:Cómo hemos aplicado el análisis de rendimiento,
 qué modelo se usa y cuál es el resultado concreto. Automatización de la calidad. Siempre dar el estado,
-lecciones aprendidas y cómo se ha reaccionado a esos problemas.
--Hablar del siguiente sprint: (Re)planificación, dar planning completo del sprint, secuencia, responsabilidades...
--En torno a un 10%: Hablar del plan de pilotaje: Fechas, acciones, esfuerzos, cómo se va a medir los datos...
+lecciones aprendidas y cómo se ha reaccionado a esos problemas.->El análisis de rendimiento y medidas a tomar respecto al rendimiento está subido, a falta de revisarlo(cont.)
+(cont.)Siempre hablamos de la parte de automatizacion pero no está hecha. Poner en marcha travis lo antes posible y reajustar la presentación a lo que le hayamos metido al travis(cont.)
+(cont.)Según los tests que nos dé tiempo a hacer, modificar presentación. Para lecciones aprendidas, debemos antes de acabar el desarrollo de los casos core.
+-Hablar del siguiente sprint: (Re)planificación, dar planning completo del sprint, secuencia, responsabilidades...->Otra cosa que hasta no tener acabado el desarrollo es dificil preveer
+-En torno a un 10%: Hablar del plan de pilotaje: Fechas, acciones, esfuerzos, cómo se va a medir los datos...->Ya está contemplado como tarea

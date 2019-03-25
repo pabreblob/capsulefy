@@ -100,7 +100,7 @@ def createModularCapsule(request):
                         File.objects.create(url=url, size=filesize, type=filetypedb,
                                         remote_name=capsule.title + str(idrand) + fileext,
                                         local_name=file.name, module_id=module.id)
-            return HttpResponseRedirect('/list')
+            return HttpResponseRedirect('/displaycapsule/'+ str(capsule.id))
 
     return render(request, 'capsule/createmodularcapsule.html')
 

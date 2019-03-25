@@ -43,12 +43,13 @@
 			  </label>
 			</div>
 			<br>
-			{% if not '/editfreecapsule/' in request.path %}
 			<div class="custom-file">
-			  <input type="file" class="custom-file-input" name="file" id="id_file">
-			  <label class="custom-file-label" for="id_file">Choose file</label>
+			  <input type="file" class="custom-file-input" name="files" id="id_files" multiple>
+                {{ form.files.errors }}
+			  <label class="custom-file-label" for="id_files">Choose files</label>
 			</div>
 			<br><br>
+            {% if not '/editfreecapsule/' in request.path %}
 			<div class="form-check">
 			  <input class="form-check-input" type="checkbox" id="id_terms" required>
 			  <label class="form-check-label" for="id_terms">
@@ -56,10 +57,31 @@
 			  </label>
 			</div>
 			<br>
+            {% else %}
+                {% if oldmodule.files%}
+            {% for file in oldmodule.files.all %}
+                 {% if file.type == "I" %}
+                           <img class="module-img" src="{{ file.url }}"/>
+                        {% endif %}
+                        {% if file.type == "F" %}
+                            <a href="{{ file.url }}">File</a>
+                        {% endif %}
+                        {% if file.type == "V" %}
+                            <video width="320" height="240" controls>
+                                <source src="{{ file.url }}"/>
+                            </video>
+                        {% endif %}
+                        <a href="/deletefreefile/{{ file.id }}">Delete</a>
+            {% endfor %}
+        {% endif %}
 			{% endif %}
 			<p><span class="red">Fields with * are required</span></p>
 			<button type="submit" value="submit" class="btn btn-primary">Submit</button>
+            {% if not '/editfreecapsule/' in request.path %}
 			<button type="button" class="btn btn-secondary" onclick="window.location = '/'">Cancel</button>
+            {% else %}
+            <button type="button" class="btn btn-secondary" onclick="window.location = '/displaycapsule/{{ oldcapsule.id }}'">Cancel</button>
+            {% endif %}
     </form>
 </div>
 

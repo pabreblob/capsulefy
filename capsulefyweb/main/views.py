@@ -53,7 +53,10 @@ def displayCapsules(request, id):
     else:
         return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
 
-conversion_to_seconds=[60,86400,2592000,31536000]
+
+conversion_to_seconds = [60, 86400, 2592000, 31536000]
+
+
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -80,7 +83,8 @@ def createModularCapsule(request):
             totalSize = 0
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
+                                             dead_man_initial_counter=dead_man_counter,time_unit=time_unit,twitter=twitter, facebook=facebook,
+                                             creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
                 description = request.POST['description' + str(i)]
@@ -360,7 +364,7 @@ def createFreeCapsule(request):
             description = formulario['description']
             release_date = formulario['release_date']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
-                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
+                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,dead_man_initial_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=request.user.id)
             module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
             if formulario['file'] is not None:

@@ -505,4 +505,4 @@ def run_deadman():
     scheduler.start()
 
 
-#run_deadman()
+run_deadman()

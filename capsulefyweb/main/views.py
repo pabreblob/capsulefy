@@ -497,7 +497,7 @@ def check_deadman_switch():
     capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter-=60
+        capsule.dead_man_counter-=3600
         if capsule.dead_man_counter<=0:
             capsule.dead_man_counter=0
             modules=capsule.modules.all()
@@ -509,7 +509,7 @@ def check_deadman_switch():
 
 def run_deadman():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=60)
     scheduler.start()
 
 

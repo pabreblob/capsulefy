@@ -159,8 +159,7 @@ def editModularCapsule(request, pk):
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
-        form = ModularCapsuleForm(initial=olddata)
-        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
+        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': oldcapsule})
 
 
 def createModule(request, pk):

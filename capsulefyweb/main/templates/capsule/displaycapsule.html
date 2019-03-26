@@ -10,17 +10,17 @@
 
     {% if user.id == capsule.creator.id %}
     <div class="module-btn-top">
-            {% if capsule.capsule_type == "F" %}
+            {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "P" %}
+            {% if capsule.capsule_type == "P" and editable%}
                 <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "M" %}
+            {% if capsule.capsule_type == "M" and editable%}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
-            {% if capsule.dead_man_switch %}
+            {% if capsule.dead_man_switch and editable%}
                 <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
             {% endif %}
     </div>
@@ -64,18 +64,17 @@
 
     {% if user.id == capsule.creator.id %}
     <div class="module-btn-bottom">
-            {% if capsule.capsule_type == "F" %}
-
+            {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "P" %}
+            {% if capsule.capsule_type == "P" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "M" %}
+            {% if capsule.capsule_type == "M" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
-            {% if capsule.dead_man_switch %}
+            {% if capsule.dead_man_switch and editable %}
                 <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
             {% endif %}
     </div>

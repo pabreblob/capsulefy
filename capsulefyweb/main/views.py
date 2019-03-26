@@ -13,6 +13,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 import mimetypes
 import main
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def index(request):
@@ -38,19 +39,25 @@ def index(request):
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
     creator = False
+    editable = True
     if request.user.is_authenticated:
         user = request.user
         if user.id == capsule.creator.id:
             creator = True
     modules = []
     for module in capsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            editable = False
         if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
     if len(modules) == 0:
         return HttpResponseNotFound()
     else:
-        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
+        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules, 'editable': editable})
+
+
+conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
 
 def createModularCapsule(request):
@@ -66,15 +73,22 @@ def createModularCapsule(request):
             emails = capsuleFormulario['emails']
             capsule_type = 'M'
             private = capsuleFormulario['private']
-            dead_man_switch = False
-            dead_man_counter = 0
+            try:
+                time_unit = int(capsuleFormulario['deadman_time_unit'])
+                dead_man_switch = capsuleFormulario['deadman_switch']
+                dead_man_counter = capsuleFormulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
+                time_unit = 0
             price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
             totalSize = 0
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
+                                             dead_man_initial_counter=dead_man_counter,time_unit=time_unit,twitter=twitter, facebook=facebook,
+                                             creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
                 description = request.POST['description' + str(i)]
@@ -140,12 +154,18 @@ def editModularCapsule(request, pk):
     user = request.user
     if user.id != oldcapsule.creator.id:
         return HttpResponseNotFound()
+    for module in oldcapsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook,
         'private': oldcapsule.private,
+        'deadman_switch':oldcapsule.dead_man_switch,
+        'deadman_counter':oldcapsule.dead_man_counter,
+        'deadman_time_unit':0
     }
 
     if request.method == 'POST':
@@ -157,11 +177,17 @@ def editModularCapsule(request, pk):
             oldcapsule.twitter = formulario['twitter']
             oldcapsule.facebook = formulario['facebook']
             oldcapsule.private = formulario['private']
+            try:
+                time_unit = int(formulario['deadman_time_unit'])
+                oldcapsule.dead_man_switch = formulario['deadman_switch']
+                oldcapsule.dead_man_counter = formulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
-        form = ModularCapsuleForm(initial=olddata)
-        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
+        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': oldcapsule})
 
 
 def createModule(request, pk):
@@ -222,6 +248,8 @@ def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
     errors = []
     if (oldmodule.capsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    if oldmodule.release_date < datetime.now(timezone.utc):
         return HttpResponseNotFound()
     user = request.user
     if user.id != oldmodule.capsule.creator.id:
@@ -285,12 +313,13 @@ def deleteModule(request, pk):
     user = request.user
     if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     module.delete()
     return HttpResponseRedirect('/editmodularcapsule/'+ str(module.capsule.id))
 
@@ -359,7 +388,7 @@ def createFreeCapsule(request):
             description = formulario['description']
             release_date = formulario['release_date']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
-                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
+                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,dead_man_initial_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=request.user.id)
             module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
             files = request.FILES.getlist('files')
@@ -451,12 +480,13 @@ def deleteCapsule(request, pk):
     capsule = get_object_or_404(Capsule, id=pk)
     if capsule.creator_id != request.user.id:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     capsule.delete()
     return HttpResponseRedirect('/list')
 
@@ -464,3 +494,25 @@ def deleteCapsule(request, pk):
 @login_required
 def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
+
+def check_deadman_switch():
+    capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
+
+    for capsule in capsules:
+        capsule.dead_man_counter-=3600
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
+            for module in modules:
+                module.release_date=datetime.now(timezone.utc)
+                module.save()
+            capsule.dead_man_switch=False
+        capsule.save()
+
+def run_deadman():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=60)
+    scheduler.start()
+
+
+run_deadman()

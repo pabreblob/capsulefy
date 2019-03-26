@@ -6,6 +6,7 @@ install:
 before_script:
     - cd capsulefyweb
     - python manage.py migrate
+    - python manage.py collectstatic
 script:
     - python manage.py test
 notifications:

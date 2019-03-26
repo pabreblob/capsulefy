@@ -179,15 +179,20 @@ def editModularCapsule(request, pk):
             oldcapsule.private = formulario['private']
             try:
                 time_unit = int(formulario['deadman_time_unit'])
+                oldcapsule.time_unit=time_unit
                 oldcapsule.dead_man_switch = formulario['deadman_switch']
                 oldcapsule.dead_man_counter = formulario['deadman_counter']*conversion_to_seconds[time_unit]
+                oldcapsule.dead_man_initial_counter = formulario['deadman_counter'] * conversion_to_seconds[time_unit]
             except:
                 dead_man_switch = False
                 dead_man_counter = 0
+                time_unit = 0
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
-        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': oldcapsule})
+        capsule_editing=oldcapsule
+        capsule_editing.dead_man_counter=capsule_editing.seconds_to_unit()
+        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': capsule_editing})
 
 
 def createModule(request, pk):
@@ -497,20 +502,30 @@ def check_deadman_switch():
     capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter-=3600
+        capsule.dead_man_counter-=60
         if capsule.dead_man_counter<=0:
             capsule.dead_man_counter=0
             modules=capsule.modules.all()
             for module in modules:
-                module.release_date=datetime.now(timezone.utc)
-                module.save()
+                if module.release_date>datetime.now(timezone.utc):
+                    module.release_date=datetime.now(timezone.utc)
+                    module.save()
             capsule.dead_man_switch=False
         capsule.save()
 
 def run_deadman():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_deadman_switch, 'interval', minutes=60)
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
     scheduler.start()
 
+@login_required
+def refresh_deadman(request, id):
+    capsule = get_object_or_404(Capsule, id=id)
+    if capsule.creator_id != request.user.id:
+        return HttpResponseNotFound()
+    if capsule.dead_man_switch==True:
+        capsule.dead_man_counter=capsule.dead_man_initial_counter
+        capsule.save()
+    return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
 run_deadman()

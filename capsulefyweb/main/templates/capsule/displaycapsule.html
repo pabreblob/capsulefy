@@ -33,26 +33,29 @@
                 {{ module.description }}
             </div>
             <div class="card-body">
-                {{ module.description }}
                 {% if module.files %}
+                <div class="container">
+                <div class="row">
                     {% for file in module.files.all %}
-                        {% if file.type == "I" %}
-                            <img class="img-fluid rounded module-img" src="{{ file.url }}"/>
-                        {% endif %}
-                        {% if file.type == "F" %}
-                            <a href="{{ file.url }}">File</a>
-                        {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
-                            <!--
-                            <div class="embed-responsive embed-responsive-4by3">
-                                <iframe class="embed-responsive-item" src="{{file.url}}"></iframe>
-                            </div>
-                            -->
-                        {% endif %}
+                        <div class="col-sm-12 col-md-5 elem-display">
+                            {% if file.type == "I" %}
+                                <img class="img-fluid rounded" src="{{ file.url }}"/>
+                            {% endif %}
+                            {% if file.type == "F" %}
+                                <div class="button_div">
+                                    <button type="button" class="btn btn-primary" onclick="window.location='{{file.url}}'">{{file.local_name}}</button>
+                                </div>
+                            {% endif %}
+                            {% if file.type == "V" %}
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    <video class="embed-responsive-item" controls preload="none" src="{{file.url}}"></video>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-1"> </div>
                     {% endfor %}
+                </div>
+                </div>
                 {% endif %}
             </div>
         </div>

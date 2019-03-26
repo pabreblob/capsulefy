@@ -3,31 +3,28 @@
 {% load static %}
 
 <div class="container">
-    <form action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     	{% if '/editfreecapsule/' in request.path %}
         	<h3 class="title">Editing the capsule</h3>
 		{% else %}
         	<h3 class="title">Creating a free capsule</h3>
 		{% endif %}
+		<hr>
     	    {% csrf_token %}
 			<div class="form-group">
-			    <label for="id_title"><span class="red">*</span> Title</label>
-			    {{ form.title.errors }}
+			    <label for="id_title"><span class="red">*</span> Title {{ form.title.errors }}</label>
 			    <input type="text" class="form-control" name="title" id="id_title" maxlength="250" value="{% if form.title.value != None %}{{form.title.value}}{% endif %}" required placeholder="Title">
 			</div>
 			<div class="form-group">
-			    <label for="id_description"><span class="red">*</span> Description</label>
-				{{ form.description.errors }}
+			    <label for="id_description"><span class="red">*</span> Description {{ form.description.errors }}</label>
 			    <textarea class="form-control" id="id_description" name="description" rows="5" required placeholder="Description">{% if form.description.value != None %}{{form.description.value}}{% endif %}</textarea>
   			</div>
   			<div class="form-group">
-			    <label for="id_release_date"><span class="red">*</span> Release date</label>
-				{{ form.release_date.errors }}
+			    <label for="id_release_date"><span class="red">*</span> Release date {{ form.release_date.errors }}</label>
 			    <input type="text" class="form-control" id="id_release_date" name="release_date" maxlength="250" value="{% if form.release_date.value != None %}{{form.release_date.value | date:'Y-m-d H:i'}}{% endif %}" required placeholder="YYYY-MM-DD HH:MM">
 			</div>
 			<div class="form-group">
-			    <label for="id_emails">Emails</label>
-				{{ form.emails.errors }}
+			    <label for="id_emails">Emails {{ form.emails.errors }}</label>
 			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{% if form.emails.value != None %}{{form.emails.value}}{% endif %}" maxlength="250">
 			</div>
 			<div class="form-check">
@@ -43,37 +40,49 @@
 			  </label>
 			</div>
 			<br>
-			<div class="custom-file">
-			  <input type="file" class="custom-file-input" name="files" id="id_files" multiple>
-                {{ form.files.errors }}
-			  <label class="custom-file-label" for="id_files">Choose files</label>
-			</div>
-			<br><br>
-            {% if not '/editfreecapsule/' in request.path %}
-			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" id="id_terms" required>
-			  <label class="form-check-label" for="id_terms">
-			    <span class="red">*</span> You are accepting Terms and Conditions
-			  </label>
-			</div>
-			<br>
-            {% else %}
-                {% if oldmodule.files%}
+
+		{% if '/editfreecapsule/' in request.path %}
+		
+		<div class="form-group">
+    	<label for="id_file">Files {{form.files.errors}}</label>
+	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
+  	</div>
+		<hr>
+
+		{% else %}
+		<div class="form-group">
+    	<label for="id_file">Add more files {{form.files.errors}}</label>
+	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
+  	</div>
+		<hr>
+		{% endif %}
+
+
+		{% if '/editfreecapsule/' in request.path %}
+          {% if oldmodule.files%}
+					<div class="row row-image-delete">
             {% for file in oldmodule.files.all %}
-                 {% if file.type == "I" %}
-                           <img class="module-img" src="{{ file.url }}"/>
-                        {% endif %}
-                        {% if file.type == "F" %}
-                            <a href="{{ file.url }}">File</a>
-                        {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
-                        {% endif %}
-                        <a href="/deletefreefile/{{ file.id }}">Delete</a>
+              <div class="col-md-3 image-delete">
+								{% if file.type == "I" %}
+									<img class="img-thumbnail mw-100" src="{{ file.url }}"/>
+								{% endif %}
+                {% if file.type == "F" %}
+									<button type="button" class="btn btn-primary btn-file" onclick="window.location='{{file.url}}'">{{file.local_name}}</button>
+                {% endif %}
+              	{% if file.type == "V" %}
+                  <div class="embed-responsive embed-responsive-4by3">
+  									<video class="embed-responsive-item" src="{{file.url}}" controls preload="none"></video>
+									</div>
+                {% endif %}
+								<button type="button" class="btn btn-danger button-delete" onclick="window.location='/deletefreefile/{{ file.id }}/'">Delete</button>
+							</div>
+							<div class="col-md-1"> </div>
+
             {% endfor %}
+						</div>
+						<hr>
         {% endif %}
+
 			{% endif %}
 			<p><span class="red">Fields with * are required</span></p>
 			<button type="submit" value="submit" class="btn btn-primary">Submit</button>
@@ -84,7 +93,7 @@
             {% endif %}
     </form>
 </div>
-
+<!--{{ form.as_p}}-->
 {% endblock %}
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

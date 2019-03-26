@@ -10,3 +10,20 @@
 .module-btn-bottom{
 	padding-top: 2%;
 }
+.elem-display{
+	margin-bottom: 2%;
+	border: solid #cccccc 1px;
+}
+
+.elem-display img, .elem-display video{
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.elem-display button{
+	width: 100%;
+}
+.button_div{
+	padding-top: 15px;
+	padding-bottom: 15px;
+}

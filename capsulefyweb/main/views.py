@@ -39,19 +39,22 @@ def index(request):
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
     creator = False
+    editable = True
     if request.user.is_authenticated:
         user = request.user
         if user.id == capsule.creator.id:
             creator = True
     modules = []
     for module in capsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            editable = False
         if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
     if len(modules) == 0:
         return HttpResponseNotFound()
     else:
-        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
+        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules, 'editable': editable})
 
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]
@@ -162,6 +165,9 @@ def editModularCapsule(request, pk):
     user = request.user
     if user.id != oldcapsule.creator.id:
         return HttpResponseNotFound()
+    for module in oldcapsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
         'emails': oldcapsule.emails,
@@ -257,6 +263,8 @@ def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
     errors = []
     if (oldmodule.capsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    if oldmodule.release_date < datetime.now(timezone.utc):
         return HttpResponseNotFound()
     user = request.user
     if user.id != oldmodule.capsule.creator.id:
@@ -515,10 +523,10 @@ def check_deadman_switch():
     capsules = Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter -= 60
-        if capsule.dead_man_counter <= 0:
-            capsule.dead_man_counter = 0
-            modules = capsule.modules.all()
+        capsule.dead_man_counter-=3600
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
             for module in modules:
                 module.release_date = datetime.now(timezone.utc)
                 module.save()
@@ -528,7 +536,7 @@ def check_deadman_switch():
 
 def run_deadman():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=60)
     scheduler.start()
 
 

@@ -151,6 +151,9 @@ def editModularCapsule(request, pk):
     user = request.user
     if user.id != oldcapsule.creator.id:
         return HttpResponseNotFound()
+    for module in oldcapsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
         'emails': oldcapsule.emails,
@@ -242,6 +245,8 @@ def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
     errors = []
     if (oldmodule.capsule.capsule_type != "M"):
+        return HttpResponseNotFound()
+    if oldmodule.release_date < datetime.now(timezone.utc):
         return HttpResponseNotFound()
     user = request.user
     if user.id != oldmodule.capsule.creator.id:

@@ -5,11 +5,35 @@
     <div class="container-fluid">
         <form id="form" action="" method="post">
             {% csrf_token %}
-            <p><label for="id_title">Title:</label> <input type="text" name="title" value="Prueba con varios ficheros" maxlength="250" required="" id="id_title"></p>
-            <p><label for="id_emails">Emails:</label> <input type="text" name="emails" maxlength="2500" id="id_emails"></p>
-            <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" id="id_twitter"></p>
-            <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" id="id_facebook"></p>
-            <p><label for="id_private">Private:</label> <input type="checkbox" name="private" id="id_private"></p>
+            <p><label for="id_title">Title:</label> <input type="text" name="title"value="{{ oldcapsule.title }}" maxlength="250" required="" id="id_title"></p>
+            <p><label for="id_emails">Emails:</label> <input type="text" name="emails" value="{{ oldcapsule.emails }}" maxlength="2500" id="id_emails"></p>
+            {% if oldcapsule.twitter == True %}
+                <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" checked id="id_twitter"></p>
+            {% else %}
+                <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" id="id_twitter"></p>
+            {% endif %}
+            {% if oldcapsuule.facebook == True %}
+                <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" checked id="id_facebook"></p>
+            {% else %}
+                <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" id="id_facebook"></p>
+            {% endif %}
+            {% if oldcapsule.private == True %}
+                <p><label for="id_private">Private:</label> <input type="checkbox" name="private" checked id="id_private"></p>
+            {% else %}
+                <p><label for="id_private">Private:</label> <input type="checkbox" name="private" id="id_private"></p>
+            {% endif %}
+            {% if oldcapsule.dead_man_switch == True %}
+                <p><label for="id_deadman_switch">Activate deadman switch:</label><input type="checkbox" checked name="deadman_switch" id="id_deadman_switch"></p>
+            {% else %}
+                <p><label for="id_deadman_switch">Activate deadman switch:</label><input type="checkbox" name="deadman_switch" id="id_deadman_switch"></p>
+            {% endif %}
+            <p><label for="id_deadman_counter">Deadman timer:</label><input type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}"></p>
+            <p><label for="id_deadman_time_unit">Deadman time unit:</label>
+                <select name="deadman_time_unit" id="id_deadman_time_unit">
+                    <option value=0 selected>Minutes</option>
+                    <option value=1>Days</option>
+                    <option value=2>Months</option>
+                    <option value=3>Years</option></select></p>
             <p><input type="submit" value="Update capsule"></p>
 
         </form>

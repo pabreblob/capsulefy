@@ -56,7 +56,7 @@ class NewFreeCapsuleForm(forms.Form):
         totalsum = 0.0
         if files['totalsum'] is not None:
             totalsum = float(files['totalsum'])
-        if data is not None:
+        if data is not None and data != []:
             for file in data:
                 totalsum += (file.size / 1000000)
             if totalsum > 20.0:
@@ -94,7 +94,7 @@ class EditFreeCapsuleForm(forms.Form):
         totalsum = 0.0
         if files['totalsum'] is not None:
             totalsum = float(files['totalsum'])
-        if data is not None:
+        if data is not None and data != []:
             for file in data:
                 totalsum += (file.size / 1000000)
             if totalsum > 20.0:

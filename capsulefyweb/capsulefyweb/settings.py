@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-BASEURL = 'https://capsulefy01.herokuapp.com/'
+BASEURL = 'https://capsulefy.herokuapp.com/'
 APIS = {}
 import django_heroku
 django_heroku.settings(locals())

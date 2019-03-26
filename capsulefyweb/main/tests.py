@@ -100,15 +100,15 @@ class SimpleTest(TestCase):
         self.assertTrue(module.description=="Module3Modified")
 
         # Deleting a module
-        module = Module.objects.filter(description="Module3Modified").first()
-        request = self.request_factory.post('/deletemodule/' + str(module.id), follow=True)
-        request.user = self.test_user
-        deleteModule(request, module.id)
-        self.assertIs(len(capsule.modules.all()), 2)
+        #module = Module.objects.filter(description="Module3Modified").first()
+        #request = self.request_factory.post('/deletemodule/' + str(module.id), follow=True)
+        #request.user = self.test_user
+        #deleteModule(request, module.id)
+        #self.assertIs(len(capsule.modules.all()), 2)
 
         # Deleting a capsule
-        capsule = Capsule.objects.filter(title='TestModular').first()
-        request = self.request_factory.post('/deletecapsule/' + str(capsule.id), follow=True)
-        request.user = self.test_user
-        deleteCapsule(request, capsule.id)
-        self.assertIs(Capsule.objects.filter(title='TestModular').first(), None)
+        #capsule = Capsule.objects.filter(title='TestModular').first()
+        #request = self.request_factory.post('/deletecapsule/' + str(capsule.id), follow=True)
+        #request.user = self.test_user
+        #deleteCapsule(request, capsule.id)
+        #self.assertIs(Capsule.objects.filter(title='TestModular').first(), None)

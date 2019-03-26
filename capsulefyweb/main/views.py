@@ -13,6 +13,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 import mimetypes
 import main
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def index(request):
@@ -422,3 +423,25 @@ def deleteCapsule(request, pk):
 @login_required
 def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
+
+def check_deadman_switch():
+    capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
+    for capsule in capsules:
+        capsule.dead_man_counter-=60
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
+            for module in modules:
+                module.release_date=datetime.now(timezone.utc)
+                module.save()
+            capsule.dead_man_switch=False
+        capsule.save()
+
+
+def run_deadman():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
+    scheduler.start()
+
+
+run_deadman()

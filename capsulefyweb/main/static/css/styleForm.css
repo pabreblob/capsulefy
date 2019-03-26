@@ -1,0 +1,19 @@
+form .title{
+	font-weight: bold;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+.red{
+	color: red;
+}
+
+.errorlist {
+	color: red;
+	list-style-type: none;
+	padding-inline-start:0;
+}
+
+label {
+	font-weight: bold;
+}

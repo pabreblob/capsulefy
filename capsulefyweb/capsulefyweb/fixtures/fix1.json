@@ -1,0 +1,655 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "admin",
+      "password": "pbkdf2_sha256$100000$e6c1RPYE5TMr$kyK4AZf20b03DI8c+ieZhBhwhLxP03cHFjq70KfObfY=",
+      "is_superuser":1,
+      "is_staff":1,
+      "email":"capsulefy.communications@gmail.com",
+      "first_name":"admin",
+      "last_name":"capsulefy"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "user1",
+      "password": "pbkdf2_sha256$100000$qegjuYpok2Od$EcSF0h9IgPrpTlE7O/pvVxactRiNZstxkLCVOxMmjfE=",
+      "email":"user1@test.com",
+      "first_name":"David",
+      "last_name":"Herrington"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "user2",
+      "password": "pbkdf2_sha256$100000$G4UpT8GpHUIt$Ka4KzrHrsRVAegcS4V3o8nvzh4tn44O/tnmqXRv/5X8=",
+      "email":"user2@test.com",
+      "first_name":"Paul",
+      "last_name":"Jones"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "user3",
+      "password": "pbkdf2_sha256$100000$Of1oBzIe8aUU$Wf3W0Th578FdGDsnRUKeuMzgoSW7h8BuTCnj5XH3VPc=",
+      "email":"user3@test.com",
+      "first_name":"Henry",
+      "last_name":"Brownson"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "username": "user4",
+      "password": "pbkdf2_sha256$100000$ZW5Wed7pZfP0$9dmHQZDb2uCx8vubddYXIKfZM7tw7v7A6+1iyysqP1Q=",
+      "email":"user4@test.com",
+      "first_name":"Jane",
+      "last_name":"Logan"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "username": "user5",
+      "password": "pbkdf2_sha256$100000$n2OQNbQWXpUS$jYtQ7jkqAE8FUo93BjMLPm1KVWe/9gU5goIOTcI8yHE=",
+      "email":"user5@test.com",
+      "first_name":"Angela",
+      "last_name":"Miller"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "username": "user6",
+      "password": "pbkdf2_sha256$100000$O3GcPTwy7Cah$RiwF0BWSbFepNaHuwFclMy/EAq/5th4uGQVrfAUxLuE=",
+      "email":"user6@test.com",
+      "first_name":"Carl",
+      "last_name":"Smith"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "username": "user7",
+      "password": "pbkdf2_sha256$100000$fMiTMsOxPZs4$Sk1KW/O1t89cxUvHZR0iEETmCAWVeBseCl+1szknzKM=",
+      "email":"user7@test.com",
+      "first_name":"Joe",
+      "last_name":"Smith"
+    }
+  },
+  {
+    "model": "main.admin",
+    "pk": 1,
+    "fields": {
+      "birthdate":"2001-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 2,
+    "fields": {
+      "birthdate":"1983-01-01",
+      "email_notification":"capsulefy.communications@gmail.com"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 3,
+    "fields": {
+      "birthdate":"1985-01-01",
+      "email_notification":"capsulefy.communications@gmail.com"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 4,
+    "fields": {
+      "birthdate":"1978-01-01",
+      "email_notification":"capsulefy.communications@gmail.com"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 5,
+    "fields": {
+      "birthdate":"1996-01-01",
+      "email_notification":"capsulefy.communications@gmail.com"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 6,
+    "fields": {
+      "birthdate":"1980-01-01",
+      "email_notification":""
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 7,
+    "fields": {
+      "birthdate":"1979-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 8,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 1,
+    "fields": {
+      "social_type":"F",
+      "user_id":2,
+      "token":"142154"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 2,
+    "fields": {
+      "social_type":"T",
+      "user_id":2,
+      "token":"204746"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 3,
+    "fields": {
+      "social_type":"F",
+      "user_id":3,
+      "token":"219077"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 4,
+    "fields": {
+      "social_type":"T",
+      "user_id":3,
+      "token":"152889"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 5,
+    "fields": {
+      "social_type":"F",
+      "user_id":4,
+      "token":"187003"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 6,
+    "fields": {
+      "social_type":"T",
+      "user_id":4,
+      "token":"130901"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 7,
+    "fields": {
+      "social_type":"F",
+      "user_id":5,
+      "token":"139808"
+    }
+  },
+  {
+    "model": "main.social_network",
+    "pk": 8,
+    "fields": {
+      "social_type":"T",
+      "user_id":6,
+      "token":"258212"
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 1,
+    "fields": {
+      "creation_date":"2019-02-20",
+      "title":"A journey to remember",
+      "emails":"capsulefy.communications@gmail.com,pab3.rebollo@gmail.com",
+      "capsule_type":"F",
+      "private":"False",
+      "price":0,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":2
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 2,
+    "fields": {
+      "creation_date":"2019-01-20",
+      "title":"A great day in the river",
+      "emails":"capsulefy.communications@gmail.com",
+      "capsule_type":"F",
+      "private":"False",
+      "price":0,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"True",
+      "facebook":"True",
+      "creator_id":2
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 3,
+    "fields": {
+      "creation_date":"2018-10-10",
+      "title":"Remember this when you feel down",
+      "capsule_type":"F",
+      "private":"False",
+      "price":0,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":3
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 4,
+    "fields": {
+      "creation_date":"2019-02-20",
+      "title":"Hello world!",
+      "emails":"capsulefy.communications@gmail.com",
+      "capsule_type":"F",
+      "private":"False",
+      "price":0,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":4
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 5,
+    "fields": {
+      "creation_date":"2018-02-20",
+      "title":"These are us! The Wilson Family",
+      "emails":"capsulefy.communications@gmail.com,pab3.rebollo@gmail.com",
+      "capsule_type":"P",
+      "private":"False",
+      "price":11.99,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"True",
+      "facebook":"False",
+      "creator_id":6,
+      "credit_card_id":1
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 6,
+    "fields": {
+      "creation_date":"2018-01-27",
+      "title":"For my son",
+      "emails":"capsulefy.communications@gmail.com",
+      "capsule_type":"P",
+      "private":"True",
+      "price":11.99,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":7,
+      "credit_card_id":2
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 7,
+    "fields": {
+      "creation_date":"2019-03-05",
+      "title":"I want to leave something behind me",
+      "capsule_type":"P",
+      "private":"False",
+      "price":11.99,
+      "dead_man_switch":"True",
+      "dead_man_counter":31536000,
+      "twitter":"True",
+      "facebook":"True",
+      "creator_id":3,
+      "credit_card_id":3
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 8,
+    "fields": {
+      "creation_date":"2018-12-20",
+      "title":"To my dear daughters",
+      "emails":"capsulefy.communications@gmail.com,pab3.rebollo@gmail.com",
+      "capsule_type":"P",
+      "private":"True",
+      "price":11.99,
+      "dead_man_switch":"True",
+      "dead_man_counter":31536000,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":8,
+      "credit_card_id":4
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 9,
+    "fields": {
+      "creation_date":"2019-02-16",
+      "title":"My life experience",
+      "emails":"capsulefy.communications@gmail.com",
+      "capsule_type":"M",
+      "private":"False",
+      "price":11.99,
+      "dead_man_switch":"True",
+      "dead_man_counter":31536000,
+      "twitter":"False",
+      "facebook":"True",
+      "creator_id":4,
+      "credit_card_id":5
+    }
+  },
+  {
+    "model": "main.capsule",
+    "pk": 10,
+    "fields": {
+      "creation_date":"2018-02-20",
+      "title":"Family trip!",
+      "capsule_type":"M",
+      "private":"False",
+      "price":11.99,
+      "dead_man_switch":"False",
+      "dead_man_counter":0,
+      "twitter":"False",
+      "facebook":"False",
+      "creator_id":8,
+      "credit_card_id":4
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 1,
+    "fields": {
+      "description":"I'll never forget my trip to Paris. Such a beautiful city. I'm so happy I could visit it with my dear friends",
+      "release_date":"2019-03-18",
+      "capsule_id":1
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 2,
+    "fields": {
+      "description":"Last holidays we all went rafting to the river, it was great fun, even if some of us got soaked. Let us remember this wonderful experience and hopefully we will do it again",
+      "release_date":"2020-01-18",
+      "capsule_id":2
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 3,
+    "fields": {
+      "description":"Dear future me. I know things may be rough sometimes, but remember you are surrounded by wonderful people who want the best for you. Cheer up and you will be able to overcome anything",
+      "release_date":"2019-03-15",
+      "capsule_id":3
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 4,
+    "fields": {
+      "description":"I'm trying this app! It looks very interesting, if I like it how it works I will buy a premium capsule to leave a diary. Pic related are me and my friends!",
+      "release_date":"2019-02-28",
+      "capsule_id":4
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 5,
+    "fields": {
+      "description":"We spent a great day in the countryside. In the photo you can see my parents, Harry and Louise, my husband Todd and our children Claire and Billy. We also took some videos while we were travelling by train!",
+      "release_date":"2019-03-18",
+      "capsule_id":5
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 6,
+    "fields": {
+      "description":"You are a teenager by now. We probably argue a lot. I made this capsule to remind you that there was a time when we were best of friends, and I hope we can get along forever",
+      "release_date":"2029-03-15",
+      "capsule_id":6
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 7,
+    "fields": {
+      "description":"Please don't forget me",
+      "release_date":"2019-09-08",
+      "capsule_id":7
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 8,
+    "fields": {
+      "description":"You are already grown up girls so you know that dad is going to undergo a very important operation. I hope we can all read this together. But if I'm no longer here, I want you to know how much I love you, and I will always be watching over you",
+      "release_date":"2019-03-18",
+      "capsule_id":8
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 9,
+    "fields": {
+      "description":"Hello there! Even if I'm not that old yet, I have lived a lot of different experiences, like that time I went climbing to Nepal. I think travelling around the world is great and everyone should try it. Anyways, here is a video I took when I was there",
+      "release_date":"2019-03-15",
+      "capsule_id":9
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 10,
+    "fields": {
+      "description":"It has been a while hasn't it? Did you remember, dear reader, when I advised you to travel around the world? Have you done anything about that? It's never late to make your live more exciting, but you should not delay it!",
+      "release_date":"2025-04-20",
+      "capsule_id":9
+    }
+  },
+  {
+    "model": "main.module",
+    "pk": 11,
+    "fields": {
+      "description":"Venice is great!",
+      "release_date":"2018-03-15",
+      "capsule_id":10
+    }
+  }
+  ,
+  {
+    "model": "main.file",
+    "pk": 1,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test464.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "size":0.06,
+      "type":"I",
+      "module_id":1,
+      "local_name":"eiffel-tower-priority.jpg",
+      "remote_name":"test464.jpg"
+    }
+  }
+  ,
+  {
+    "model": "main.file",
+    "pk": 2,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test111.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "size":0.12,
+      "type":"I",
+      "module_id":1,
+      "local_name":"retail-paris-trip-452x322.jpg",
+      "remote_name":"test111.jpg"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 3,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test614.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5.jpg",
+      "size":0.03,
+      "type":"I",
+      "module_id":3,
+      "local_name":"409771_10151085073279479_368398519_n.jpg",
+      "remote_name":"test614.jpg"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 4,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test496.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "size":0.07,
+      "type":"I",
+      "module_id":4,
+      "local_name":"e81e7787-dcb9-4480-abf3-1a877ddc772e.jpg",
+      "remote_name":"test496.jpg"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 5,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test213.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "size":0.16,
+      "type":"I",
+      "module_id":5,
+      "local_name":"shutterstock_282305945.jpg",
+      "remote_name":"test213.jpg"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 6,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo1.mp4?alt=media&token=44227ed6-ce31-4f59-9047-fee00d721aa3",
+      "size":27.99,
+      "type":"V",
+      "module_id":5,
+      "local_name":"capsulevideo1.mp4",
+      "remote_name":"capsulevideo1.mp4"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 7,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo2.mp4?alt=media&token=35a30601-2e60-4a43-9123-746874d58c23",
+      "size":173.65,
+      "type":"V",
+      "module_id":9,
+      "local_name":"capsulevideo2.mp4",
+      "remote_name":"capsulevideo2.mp4"
+    }
+  },
+  {
+    "model": "main.file",
+    "pk": 8,
+    "fields": {
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test563.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "size":0.06,
+      "type":"I",
+      "module_id":11,
+      "local_name":"3VeniceForKids.jpg",
+      "remote_name":"test563.jpg"
+    }
+  },
+  {
+    "model": "main.credit_card",
+    "pk": 1,
+    "fields": {
+      "holder_name":"Angela Miller",
+      "brand_name":"Visa",
+      "number":"4532141227142594",
+      "expiration_month":9,
+      "expiration_year":2022,
+      "cvv":350
+    }
+  },
+  {
+    "model": "main.credit_card",
+    "pk": 2,
+    "fields": {
+      "holder_name":"Carl Smith",
+      "brand_name":"MasterCard",
+      "number":"5585772338232057",
+      "expiration_month":5,
+      "expiration_year":2023,
+      "cvv":688
+    }
+  },
+  {
+    "model": "main.credit_card",
+    "pk": 3,
+    "fields": {
+      "holder_name":"Paul Jones",
+      "brand_name":"VISA",
+      "number":"4716372972806483",
+      "expiration_month":8,
+      "expiration_year":2022,
+      "cvv":521
+    }
+  },
+  {
+    "model": "main.credit_card",
+    "pk": 4,
+    "fields": {
+      "holder_name":"Joe Smith",
+      "brand_name":"MasterCard",
+      "number":"5489125482785742",
+      "expiration_month":5,
+      "expiration_year":2022,
+      "cvv":191
+    }
+  },
+  {
+    "model": "main.credit_card",
+    "pk": 5,
+    "fields": {
+      "holder_name":"Henry Brownson",
+      "brand_name":"VISA",
+      "number":"4929046786851058",
+      "expiration_month":9,
+      "expiration_year":2020,
+      "cvv":660
+    }
+  }
+]

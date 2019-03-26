@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign</title>
+    <style>
+        div {
+            position: absolute;
+            right: 10px;
+            top: 5px
+        }
+    </style>
+</head>
+<body>
+<H2>Upload file</H2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <!--<input type="file" name="files[]" id="files">
+    <input type="hidden" name="url" id="url">
+    <button type="button" onclick="uploadimage()">Upload</button>-->
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+<script>
+    var config = {
+        apiKey: "AIzaSyB_qGgYxe3ApgydHaB0S6-KXlNYFCWRCBI",
+        authDomain: "djangostorage-97bad.firebaseapp.com",
+        databaseURL: "https://djangostorage-97bad.firebaseio.com",
+        projectId: "djangostorage-97bad",
+        storageBucket: "djangostorage-97bad.appspot.com",
+        messagingSenderId: "137811661286"
+  };
+    firebase.initializeApp(config);
+
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    function uploadimage() {
+        var storage = firebase.storage();
+        var file = document.getElementById("files").files[0];
+        var storageRef = storage.ref();
+        var thisref = storageRef.child(file.name).put(file);
+        thisref.on('state_changed', function (snapshot) {
+                console.log("file uplaoded succesfully");
+            },
+            function (error) {
+            },
+            function () {
+                // Upload completed successfully, now we can get the download URL
+                var downloadURL = thisref.snapshot.downloadURL;
+                console.log("got url");
+                document.getElementById("url").value = downloadURL;
+                alert("file uploaded successfully");
+            });
+    }
+</script>
+</html>

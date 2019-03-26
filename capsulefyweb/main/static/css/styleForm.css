@@ -7,3 +7,13 @@ form .title{
 .red{
 	color: red;
 }
+
+.errorlist {
+	color: red;
+	list-style-type: none;
+	padding-inline-start:0;
+}
+
+label {
+	font-weight: bold;
+}

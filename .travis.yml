@@ -1,9 +1,20 @@
 language: python
 python:
-- 3.6.6
+    - 3.6.6
 install:
-- pip install -r requirements.txt
+    - pip install -r requirements.txt
 before_script:
-- cd capsulefyweb
+    - cd capsulefyweb
+    - psql -c "create user capsulefyu with password 'capsulefy'" 
+    - psql -c "create database capsulefybd owner capsulefyu"
+    - python manage.py migrate
 script:
-- python manage.py test
+    - python manage.py test
+notifications:
+    email: false
+services:
+    - postgresql
+addons:
+    postgresql: "9.6"
+global:
+    - PGPORT=5432

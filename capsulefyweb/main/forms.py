@@ -25,7 +25,6 @@ class ModuleForm(forms.Form):
     release_date = forms.DateTimeField()
     file = forms.FileField(required=False)
 
-
 class NewFreeCapsuleForm(forms.Form):
     title = forms.CharField(max_length=250)
     description = forms.CharField(max_length=250)

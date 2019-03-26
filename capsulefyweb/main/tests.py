@@ -32,7 +32,8 @@ class SimpleTest(TestCase):
         capsule = Capsule.objects.filter(emails='test@test.com').first()
         self.assertIsNotNone(capsule)
 
-    def test_create_modular(self):
+    def test_modular(self):
+        #Creating a new modular capsule
         createcapsule = self.client.get('/newmodularcapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
         data = {
@@ -41,10 +42,10 @@ class SimpleTest(TestCase):
             'emails': 'test@test.com',
             'twitter': False,
             'facebook': False,
-            'description0': 'Test',
+            'description0': 'Modulo1',
             'release_date0': '2019-10-10',
             'file0': None,
-            'description1': 'Test',
+            'description1': 'Modulo2',
             'release_date1': '2020-10-10',
             'file1': None
         }
@@ -52,4 +53,62 @@ class SimpleTest(TestCase):
         request.user = self.test_user
         createModularCapsule(request)
         capsule = Capsule.objects.filter(title='TestModular').first()
-        self.assertIs(len(capsule.modules), 2)
+        self.assertIs(len(capsule.modules.all()), 2)
+        #Editing a modular capsule
+        editcapsule = self.client.get('/editmodularcapsule/'+str(capsule.id), follow=True)
+        self.assertEquals(editcapsule.status_code, 200)
+        data = {
+            'title': 'TestModular',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            'private': True
+        }
+        request = self.request_factory.post('/editmodularcapsule/'+str(capsule.id), data, follow=True)
+        request.user = self.test_user
+        editModularCapsule(request, capsule.id)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertTrue(capsule.private)
+
+        #Creating a module
+        createcapsule = self.client.get('/newmodule/' + str(capsule.id), follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'description': 'Module3',
+            'release_date': '2019-10-10',
+            'file': None
+        }
+        request = self.request_factory.post('/newmodule/'+str(capsule.id), data, follow=True)
+        request.user = self.test_user
+        createModule(request, capsule.id)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertIs(len(capsule.modules.all()), 3)
+
+        # Editing a module
+        module = Module.objects.filter(description="Module3").first()
+        editcapsule = self.client.get('/editmodule/' + str(module.id), follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'description': 'Module3Modified',
+            'release_date': '2019-10-10',
+            'file': None
+        }
+        request = self.request_factory.post('/editmodule/' + str(module.id), data, follow=True)
+        request.user = self.test_user
+        editModule(request, module.id)
+        module = Module.objects.all().get(id=module.id)
+        self.assertTrue(module.description=="Module3Modified")
+
+        # Deleting a module
+        module = Module.objects.filter(description="Module3Modified").first()
+        request = self.request_factory.post('/deletemodule/' + str(module.id), follow=True)
+        request.user = self.test_user
+        deleteModule(request, module.id)
+        self.assertIs(len(capsule.modules.all()), 2)
+
+        # Deleting a capsule
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        request = self.request_factory.post('/deletecapsule/' + str(capsule.id), follow=True)
+        request.user = self.test_user
+        deleteCapsule(request, capsule.id)
+        self.assertIs(Capsule.objects.filter(title='TestModular').first(), None)

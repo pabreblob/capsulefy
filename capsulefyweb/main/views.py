@@ -12,6 +12,8 @@ import smtplib
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 import mimetypes
+import main
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def index(request):
@@ -52,6 +54,9 @@ def displayCapsules(request, id):
         return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
 
 
+conversion_to_seconds = [60, 86400, 2592000, 31536000]
+
+
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -65,15 +70,22 @@ def createModularCapsule(request):
             emails = capsuleFormulario['emails']
             capsule_type = 'M'
             private = capsuleFormulario['private']
-            dead_man_switch = False
-            dead_man_counter = 0
+            try:
+                time_unit = int(capsuleFormulario['deadman_time_unit'])
+                dead_man_switch = capsuleFormulario['deadman_switch']
+                dead_man_counter = capsuleFormulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
+                time_unit = 0
             price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
             totalSize = 0
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             twitter=twitter, facebook=facebook, creator_id=user.id, price=price)
+                                             dead_man_initial_counter=dead_man_counter,time_unit=time_unit,twitter=twitter, facebook=facebook,
+                                             creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
                 description = request.POST['description' + str(i)]
@@ -145,6 +157,9 @@ def editModularCapsule(request, pk):
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook,
         'private': oldcapsule.private,
+        'deadman_switch':oldcapsule.dead_man_switch,
+        'deadman_counter':oldcapsule.dead_man_counter,
+        'deadman_time_unit':0
     }
 
     if request.method == 'POST':
@@ -156,6 +171,13 @@ def editModularCapsule(request, pk):
             oldcapsule.twitter = formulario['twitter']
             oldcapsule.facebook = formulario['facebook']
             oldcapsule.private = formulario['private']
+            try:
+                time_unit = int(formulario['deadman_time_unit'])
+                oldcapsule.dead_man_switch = formulario['deadman_switch']
+                oldcapsule.dead_man_counter = formulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
@@ -308,6 +330,21 @@ def deleteFile(request, pk):
     return HttpResponseRedirect('/editmodule/' + str(moduleid))
 
 
+@login_required
+def deleteFreeFile(request, pk):
+    file = get_object_or_404(File, id=pk)
+    capsuleid = file.module.capsule.id
+    user = request.user
+    if user.id != file.module.capsule.creator.id:
+        return HttpResponseNotFound()
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+    client = storage.Client(credentials=credentials, project='capsulefy')
+    bucket = client.get_bucket('capsulefy.appspot.com')
+    bucket.delete_blob(file.remote_name)
+    file.delete()
+    return HttpResponseRedirect('/editfreecapsule/' + str(capsuleid))
+
+
 class login(LoginView):
     def __init__(self, *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
@@ -317,11 +354,18 @@ def list(request):
     capsules=Capsule.objects.filter(private=False)
     return render(request, 'capsule/list.html',{'capsules':capsules})
 
+def private_list(request):
+    
+    user = main.models.User.objects.get(pk=request.user.id)
+    request.user
+    capsules=user.capsuls.all()
+
+    return render(request, 'capsule/privatelist.html',{'capsules':capsules})
 
 @login_required
 def createFreeCapsule(request):
     if request.method == 'POST':
-        form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user)
+        form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user, upfiles=request.FILES.getlist('files'))
         if form.is_valid():
             formulario = form.cleaned_data
             title = formulario['title']
@@ -335,28 +379,31 @@ def createFreeCapsule(request):
             description = formulario['description']
             release_date = formulario['release_date']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
-                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
+                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,dead_man_initial_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=request.user.id)
             module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
-            if formulario['file'] is not None:
-                credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                client = storage.Client(credentials=credentials, project='capsulefy')
-                bucket = client.get_bucket('capsulefy.appspot.com')
-                idrand = randint(0, 999)
-                filename, fileext = os.path.splitext(formulario['file'].name)
-                blob = bucket.blob(title + str(idrand) + fileext)
-                filetype = mimetypes.guess_type(formulario['file'].name)[0]
-                filetypedb = 'F'
-                if filetype.split('/')[0] == 'image':
-                    filetypedb = 'I'
-                elif filetype.split('/')[0] == 'video':
-                    filetypedb = 'V'
-                blob.upload_from_file(formulario['file'], size=formulario['file'].size, content_type=filetype)
-                url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + str(idrand) +\
-                      fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                filesize = formulario['file'].size / 1048576
-                File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=title + str(idrand) + fileext,
-                                    local_name=formulario['file'].name, module_id=module.id)
+            files = request.FILES.getlist('files')
+            if files is not None:
+                for file in files:
+                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                    client = storage.Client(credentials=credentials, project='capsulefy')
+                    bucket = client.get_bucket('capsulefy.appspot.com')
+                    idrand = randint(0, 999)
+                    filename, fileext = os.path.splitext(file.name)
+                    blob = bucket.blob(title + str(idrand) + fileext)
+                    filetype = mimetypes.guess_type(file.name)[0]
+                    filetypedb = 'F'
+                    if filetype.split('/')[0] == 'image':
+                        filetypedb = 'I'
+                    elif filetype.split('/')[0] == 'video':
+                        filetypedb = 'V'
+                    blob.upload_from_file(file, size=file.size, content_type=filetype)
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title +\
+                          str(idrand) + fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                    filesize = file.size / 1000000
+                    File.objects.create(url=url, size=filesize, type=filetypedb,
+                                        remote_name=title + str(idrand) +fileext, local_name=file.name,
+                                        module_id=module.id)
             return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         form = NewFreeCapsuleForm()
@@ -369,6 +416,8 @@ def editFreeCapsule(request, pk):
     if oldcapsule.capsule_type != 'F' or oldcapsule.creator_id != request.user.id:
         return HttpResponseNotFound()
     oldmodule = oldcapsule.modules.first()
+    if oldmodule.release_date < datetime.now(timezone.utc):
+        return HttpResponseNotFound()
     olddata = {
         'title': oldcapsule.title,
         'description': oldmodule.description,
@@ -378,7 +427,7 @@ def editFreeCapsule(request, pk):
         'facebook': oldcapsule.facebook
     }
     if request.method == 'POST':
-        form = EditFreeCapsuleForm(request.POST)
+        form = EditFreeCapsuleForm(request.POST, request.FILES, user=request.user, upfiles=request.FILES.getlist('files'))
         if form.is_valid():
             formulario = form.cleaned_data
             oldcapsule.title = formulario['title']
@@ -389,10 +438,32 @@ def editFreeCapsule(request, pk):
             oldmodule.release_date = formulario['release_date']
             oldcapsule.save()
             oldmodule.save()
+            files = request.FILES.getlist('files')
+            if files is not None:
+                for file in files:
+                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+                    client = storage.Client(credentials=credentials, project='capsulefy')
+                    bucket = client.get_bucket('capsulefy.appspot.com')
+                    idrand = randint(0, 999)
+                    filename, fileext = os.path.splitext(file.name)
+                    blob = bucket.blob(oldcapsule.title + str(idrand) + fileext)
+                    filetype = mimetypes.guess_type(file.name)[0]
+                    filetypedb = 'F'
+                    if filetype.split('/')[0] == 'image':
+                        filetypedb = 'I'
+                    elif filetype.split('/')[0] == 'video':
+                        filetypedb = 'V'
+                    blob.upload_from_file(file, size=file.size, content_type=filetype)
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldcapsule.title + \
+                          str(idrand) + fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                    filesize = file.size / 1000000
+                    File.objects.create(url=url, size=filesize, type=filetypedb,
+                                        remote_name=oldcapsule.title + str(idrand) + fileext, local_name=file.name,
+                                        module_id=oldmodule.id)
             return HttpResponseRedirect('/displaycapsule/' + str(oldcapsule.id))
     else:
         form = EditFreeCapsuleForm(initial=olddata)
-    return render(request, 'capsule/freecapsule.html', {'form': form})
+    return render(request, 'capsule/freecapsule.html', {'form': form, 'oldcapsule': oldcapsule, 'oldmodule': oldmodule})
 
 
 @login_required
@@ -413,3 +484,25 @@ def deleteCapsule(request, pk):
 @login_required
 def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
+
+def check_deadman_switch():
+    capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
+
+    for capsule in capsules:
+        capsule.dead_man_counter-=60
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
+            for module in modules:
+                module.release_date=datetime.now(timezone.utc)
+                module.save()
+            capsule.dead_man_switch=False
+        capsule.save()
+
+def run_deadman():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
+    scheduler.start()
+
+
+run_deadman()

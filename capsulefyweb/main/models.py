@@ -3,6 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
+import datetime
+from datetime import timezone
+
 
 # Create your models here.
 class Credit_card(models.Model):
@@ -42,6 +45,8 @@ class Capsule(models.Model):
     price=models.DecimalField(null=True,max_digits=7, decimal_places=2)
     dead_man_switch=models.BooleanField()
     dead_man_counter=models.BigIntegerField()
+    dead_man_initial_counter=models.BigIntegerField()
+    time_unit=models.IntegerField(null=True,choices=((0,'minutes'),(1,'days'),(2,'months'),(3,'years')))
     twitter=models.BooleanField()
     facebook=models.BooleanField()
     
@@ -49,10 +54,40 @@ class Capsule(models.Model):
     
     credit_card=models.ForeignKey(Credit_card,related_name='capsuls', on_delete=CASCADE,null=True)
     
+    ''' Una capsula es liberada si tiene algún 
+    modulo que este liberado '''
+    @property
+    def is_released(self):
+        res=False
+        for i in self.modules.all():
+            if(i.is_released):
+                res=True
+                break
+        return res
+
+    def seconds_to_unit(self):
+        conversion_to_seconds = [60, 86400, 2592000, 31536000]
+        if self.time_unit!=None:
+            res=self.dead_man_counter/conversion_to_seconds[int(self.time_unit)]
+        else:
+            res=0
+        return res
+
+    def unit_to_seconds(self,unit):
+        conversion_to_seconds = [60, 86400, 2592000, 31536000]
+        if unit!=None:
+            res=self.dead_man_counter*conversion_to_seconds[unit]
+        else:
+            res=0
+        return res
 class Module(models.Model):
     description=models.CharField(max_length=250)
     release_date=models.DateTimeField()
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
+    
+    @property
+    def is_released(self):
+        return datetime.datetime.now(timezone.utc) >= self.release_date
     
 class File(models.Model):
     url=models.URLField()

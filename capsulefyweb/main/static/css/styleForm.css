@@ -17,3 +17,32 @@ form .title{
 label {
 	font-weight: bold;
 }
+
+.image-delete{
+	text-align: center;
+	padding: 2%;
+	border: 1px #cccccc solid;
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.image-delete img{
+	margin-bottom: 15%;
+}
+
+.image-delete .btn-file{
+	width: 50%;
+	margin-top: 25%;
+}
+
+.image-delete .button-delete{
+	margin-top: 2%;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;	
+}
+
+.row-image-delete div{
+	margin-bottom: 2%;
+}

@@ -54,11 +54,15 @@
 			    <span class="red">*</span> You are accepting Terms and Conditions
 			  </label>
 			</div>
-			<hr>
+			<br>
 			{% endif %}
 			<p><span class="red">Fields with * are required</span></p>
 			<button type="submit" value="submit" class="btn btn-primary">Submit</button>
+            {% if not '/editfreecapsule/' in request.path %}
 			<button type="button" class="btn btn-secondary" onclick="window.location = '/'">Cancel</button>
+            {% else %}
+            <button type="button" class="btn btn-secondary" onclick="window.location = '/displaycapsule/{{ oldcapsule.id }}'">Cancel</button>
+            {% endif %}
     </form>
 </div>
 <!--{{ form.as_p}}-->

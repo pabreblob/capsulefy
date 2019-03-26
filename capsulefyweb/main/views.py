@@ -39,19 +39,22 @@ def index(request):
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
     creator = False
+    editable = True
     if request.user.is_authenticated:
         user = request.user
         if user.id == capsule.creator.id:
             creator = True
     modules = []
     for module in capsule.modules.all():
+        if module.release_date < datetime.now(timezone.utc):
+            editable = False
         if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
     if len(modules) == 0:
         return HttpResponseNotFound()
     else:
-        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
+        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules, 'editable': editable})
 
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]

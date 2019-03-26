@@ -77,6 +77,7 @@ def createModularCapsule(request):
             except:
                 dead_man_switch = False
                 dead_man_counter = 0
+                time_unit = 0
             price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']

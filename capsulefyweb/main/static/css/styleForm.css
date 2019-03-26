@@ -3,6 +3,10 @@ form .title{
 	padding-top: 2%;
 }
 
+form .subtitle{
+	font-weight: bold;
+}
+
 .red{
 	color: red;
 }

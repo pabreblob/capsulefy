@@ -53,7 +53,7 @@ def displayCapsules(request, id):
     else:
         return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules})
 
-
+conversion_to_seconds=[60,86400,2592000,31536000]
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -67,8 +67,13 @@ def createModularCapsule(request):
             emails = capsuleFormulario['emails']
             capsule_type = 'M'
             private = capsuleFormulario['private']
-            dead_man_switch = False
-            dead_man_counter = 0
+            try:
+                time_unit = int(capsuleFormulario['deadman_time_unit'])
+                dead_man_switch = capsuleFormulario['deadman_switch']
+                dead_man_counter = capsuleFormulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
             price = 11.99
             twitter = capsuleFormulario['twitter']
             facebook = capsuleFormulario['facebook']
@@ -147,6 +152,9 @@ def editModularCapsule(request, pk):
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook,
         'private': oldcapsule.private,
+        'deadman_switch':oldcapsule.dead_man_switch,
+        'deadman_counter':oldcapsule.dead_man_counter,
+        'deadman_time_unit':0
     }
 
     if request.method == 'POST':
@@ -158,6 +166,13 @@ def editModularCapsule(request, pk):
             oldcapsule.twitter = formulario['twitter']
             oldcapsule.facebook = formulario['facebook']
             oldcapsule.private = formulario['private']
+            try:
+                time_unit = int(formulario['deadman_time_unit'])
+                oldcapsule.dead_man_switch = formulario['deadman_switch']
+                oldcapsule.dead_man_counter = formulario['deadman_counter']*conversion_to_seconds[time_unit]
+            except:
+                dead_man_switch = False
+                dead_man_counter = 0
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/'+ str(pk))
     else:
@@ -426,6 +441,7 @@ def select_capsule(request):
 
 def check_deadman_switch():
     capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
+
     for capsule in capsules:
         capsule.dead_man_counter-=60
         if capsule.dead_man_counter<=0:
@@ -437,11 +453,10 @@ def check_deadman_switch():
             capsule.dead_man_switch=False
         capsule.save()
 
-
 def run_deadman():
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_deadman_switch, 'interval', minutes=1)
     scheduler.start()
 
 
-run_deadman()
+#run_deadman()

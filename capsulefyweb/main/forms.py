@@ -13,11 +13,15 @@ class ContactForm(forms.Form):
 
 
 class ModularCapsuleForm(forms.Form):
+    UNIT_CHOICES=((0,'minutes'),(1,'days'),(2,'months'),(3,'years'))
     title = forms.CharField(max_length=250)
     emails = forms.CharField(max_length=2500, required=False)
     twitter = forms.BooleanField(required=False)
     facebook = forms.BooleanField(required=False)
     private = forms.BooleanField(required=False)
+    deadman_switch = forms.BooleanField(required=False)
+    deadman_counter=forms.IntegerField(required=False)
+    deadman_time_unit=forms.ChoiceField(required=False,choices=UNIT_CHOICES)
 
 
 class ModuleForm(forms.Form):

@@ -305,12 +305,13 @@ def deleteModule(request, pk):
     user = request.user
     if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     module.delete()
     return HttpResponseRedirect('/editmodularcapsule/'+ str(module.capsule.id))
 
@@ -471,12 +472,13 @@ def deleteCapsule(request, pk):
     capsule = get_object_or_404(Capsule, id=pk)
     if capsule.creator_id != request.user.id:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     capsule.delete()
     return HttpResponseRedirect('/list')
 

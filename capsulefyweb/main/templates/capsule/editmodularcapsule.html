@@ -2,66 +2,152 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
-    <div class="container-fluid">
+    <div class="container">
         <form id="form" action="" method="post">
             {% csrf_token %}
-            <p><label for="id_title">Title:</label> <input type="text" name="title"value="{{ oldcapsule.title }}" maxlength="250" required="" id="id_title"></p>
-            <p><label for="id_emails">Emails:</label> <input type="text" name="emails" value="{{ oldcapsule.emails }}" maxlength="2500" id="id_emails"></p>
+            <h3 class="title">Editing the capsule</h3>
+            <hr>
+            <div class="form-group">
+                <label for="id_title"><span class="red">* </span>Title:</label>
+                <input type="text" class="form-control" name="title"value="{{ oldcapsule.title }}" maxlength="250" required="" id="id_title">
+            </div>
+            <div class="form-group">
+                <label for="id_emails">Emails:</label>
+                <input type="text" class="form-control" name="emails" value="{{ oldcapsule.emails }}" maxlength="2500" id="id_emails">
+            </div>
+            <hr>
             {% if oldcapsule.twitter == True %}
-                <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" checked id="id_twitter"></p>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="twitter" checked id="id_twitter">
+                    <label class="form-check-label" for="id_twitter">Twitter</label>
+                </div>
             {% else %}
-                <p><label for="id_twitter">Twitter:</label> <input type="checkbox" name="twitter" id="id_twitter"></p>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter">
+                    <label class="form-check-label" for="id_twitter">Twitter</label>
+                </div>            
             {% endif %}
             {% if oldcapsuule.facebook == True %}
-                <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" checked id="id_facebook"></p>
+                <div class="form-check">
+                    <input type="checkbox" name="facebook" class="form-check-input" checked id="id_facebook">
+                    <label for="id_facebook" class="form-check-label">Facebook</label>
+                </div>
             {% else %}
-                <p><label for="id_facebook">Facebook:</label> <input type="checkbox" name="facebook" id="id_facebook"></p>
+                <div class="form-check">
+                    <input type="checkbox" name="facebook" class="form-check-input" id="id_facebook">
+                    <label for="id_facebook" class="form-check-label">Facebook</label>
+                </div>
             {% endif %}
+            <hr>
             {% if oldcapsule.private == True %}
-                <p><label for="id_private">Private:</label> <input type="checkbox" name="private" checked id="id_private"></p>
+                <div class="form-check">
+                    <input type="checkbox" name="private" class="form-check-input" checked id="id_private">
+                    <label for="id_private" class="form-check-label">Private</label>
+                </div>
             {% else %}
-                <p><label for="id_private">Private:</label> <input type="checkbox" name="private" id="id_private"></p>
+                <div class="form-check">
+                    <input type="checkbox" name="private" class="form-check-input" id="id_private">
+                    <label for="id_private" class="form-check-label">Private</label>
+                </div>
             {% endif %}
+
+
             {% if oldcapsule.dead_man_switch == True %}
-                <p><label for="id_deadman_switch">Activate deadman switch:</label><input type="checkbox" checked name="deadman_switch" id="id_deadman_switch"></p>
-            {% else %}
-                <p><label for="id_deadman_switch">Activate deadman switch:</label><input type="checkbox" name="deadman_switch" id="id_deadman_switch"></p>
-            {% endif %}
-            <p><label for="id_deadman_counter">Deadman timer:</label><input type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}"></p>
-            <p><label for="id_deadman_time_unit">Deadman time unit:</label>
-                <select name="deadman_time_unit" id="id_deadman_time_unit">
+                <div class="form-check">
+                    <input type="checkbox" checked name="deadman_switch" onclick="deadman_switch_activated()" class="form-check-input" id="id_deadman_switch">
+                    <label for="id_deadman_switch" class="form-check-label">Activate deadman switch</label>
+                </div>
+                <div id="input_deadman">
+                <hr>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
+                <div class="col-sm-2">
+                    <input type="number" min="0" class="form-control" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}">
+                </div>
+                <div class="col-sm-2">        
+                <select name="deadman_time_unit" class="form-control" id="id_deadman_time_unit">
                     <option value=0 selected>Minutes</option>
                     <option value=1>Days</option>
                     <option value=2>Months</option>
-                    <option value=3>Years</option></select></p>
-            <p><input type="submit" value="Update capsule"></p>
-
-        </form>
-        {% for module in oldcapsule.modules.all %}
-            <div class="moduleform">
-                <p>{{ module.description }}</p>
-                {% if module.files %}
-                    {% for file in module.files.all %}
-                        {% if file.type == "I" %}
-                            <img class="module-img" src="{{ file.url }}"/>
-                        {% endif %}
-                        {% if file.type == "F" %}
-                            <a href="{{ file.url }}">File</a>
-                        {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <a href="/editmodule/{{ module.id }}">Edit</a>
-                {% if oldcapsule.modules.all.count != 1 %}
-                    <a href="/deletemodule/{{ module.id }}">Delete</a>
-                {% endif %}
+                    <option value=3>Years</option>
+                </select>
+                </div>
             </div>
+            </div>
+            {% else %}
+                <div class="form-check">
+                    <input type="checkbox" name="deadman_switch" onclick="deadman_switch_activated()" class="form-check-input" id="id_deadman_switch">
+                    <label for="id_deadman_switch" class="form-check-label">Activate deadman switch</label>
+                </div>
+                <div id="input_deadman" style="display:none">
+                <hr>
+                <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
+                <div class="col-sm-2">
+                    <input type="number" min="0" class="form-control" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}">
+                </div>
+                <div class="col-sm-2">        
+                <select name="deadman_time_unit" class="form-control" id="id_deadman_time_unit">
+                    <option value=0 {% if oldcapsule.time_unit == 0 %}selected{%endif%}>Minutes</option>
+                    <option value=1 {% if oldcapsule.time_unit == 1 %}selected{%endif%}>Days</option>
+                    <option value=2 {% if oldcapsule.time_unit == 2 %}selected{%endif%}>Months</option>
+                    <option value=3 {% if oldcapsule.time_unit == 3 %}selected{%endif%}>Years</option>
+                </select>
+                </div>
+            </div>
+            </div>            
+            {% endif %}
+            <hr>
+
+            <button type="submit" class="btn btn-primary" value="submit">Update</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location = '/displaycapsule/{{oldcapsule.id}}'">Cancel</button>
+        </form>
+        <hr>
+
+        {% for module in oldcapsule.modules.all%}
+            <div>
+                <h5 class="subtitle">Module {{forloop.counter}}</h5>
+                <p>{{module.description}}</p>
+                   <div class="row row-image">
+                    {% for file in module.files.all %}
+                        <div class="col-md-3 image">
+						{% if file.type == "I" %}
+                            <img class="img-thumbnail mw-100" src="{{ file.url }}"/>
+						{% endif %}
+                        {% if file.type == "F" %}
+							<button type="button" class="btn btn-primary btn-file" onclick="window.location='{{file.url}}'">{{file.local_name}}</button>
+                        {% endif %}
+                      	{% if file.type == "V" %}
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <video class="embed-responsive-item" src="{{file.url}}" controls preload="none"></video>
+							</div>
+                        {% endif %}
+					    </div>
+						<div class="col-md-1"> </div>
+                    {% endfor %}
+                    </div> 
+                <button class="btn btn-primary" onclick="window.location = '/editmodule/{{ module.id }}'">Edit</button>
+                {% if oldcapsule.modules.all.count != 1 %}
+                    <button class="btn btn-danger" onclick="window.location='/deletemodule/{{ module.id }}'">Delete</a>
+                {% endif %}                
+            </div>
+            <hr>
         {% endfor %}
     <a href="/newmodule/{{ oldcapsule.id }}">Create module</a>
 
     </div>
+
+    <script>
+    function deadman_switch_activated(){
+            var checkbox = document.getElementById("id_deadman_switch");
+            if(checkbox.checked == true){
+                document.getElementById("input_deadman").style.display = "block";
+            } else {
+                document.getElementById("input_deadman").style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
 {% endblock %}

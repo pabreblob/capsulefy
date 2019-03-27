@@ -84,7 +84,7 @@ class Module(models.Model):
     description=models.CharField(max_length=250)
     release_date=models.DateTimeField()
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
-    
+    release_notify=models.BooleanField(default=False)
     @property
     def is_released(self):
         return datetime.datetime.now(timezone.utc) >= self.release_date

@@ -28,7 +28,7 @@
 		        
 		          <h5 class="card-title">{{mod.description}}</h5>
 		          <blockquote class="blockquote">
-		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date}}</cite></p>
+		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date|date:'Y-m-d H:i'}}</cite></p>
 		          </blockquote>
 		        
 	        {% endfor %}

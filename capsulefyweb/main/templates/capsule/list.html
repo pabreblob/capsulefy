@@ -9,19 +9,21 @@
 
 <form method="GET" action="#">
   <div class="form-group row">
+		<label class="col-form-label col-sm-1" for="form_search">Search: </label>
     <div class="col-sm-11">
       <input type="text" class="form-control" name="search" id="form_search" placeholder="Search">
-    </div>
-    <div class="col-sm-1">
-      <button class="btn btn-primary">Submit</button>
     </div>
   </div>
 </form>
 
-  
+<div id="data">  
   {% for cap in capsules %}
 	  {% if cap.is_released %}
-	    <div class="card">
+			{% if cap.capsule_type == "F"%}
+		    <div class="card">
+			{% else %}
+				<div class="card premium">
+			{% endif %}
 	      <div class="card-header">
 	        {{cap.title}}
 	      </div>
@@ -30,17 +32,35 @@
 		        	{% if mod.is_released %}
 		          <h5 class="card-title">{{mod.description}}</h5>
 		          <blockquote class="blockquote">
-		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date}}</cite></p>
+		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date|date:'Y-m-d H:i'}}</cite></p>
 		          </blockquote>
 		        {% endif %}
 	        {% endfor %}
 	        <button class="btn btn-primary" onclick="window.location='/displaycapsule/{{cap.id}}'">Display capsule</button>
+					{% if cap.capsule_type != "F"%}
+		    		<p class="lower-right">Premium</p>
+					{% endif %}
 	      </div>
 	    </div>
 	    <br>
 	   {% endif %}
   {% endfor %}
 </div>
+</div>
+
+<script>
+	$("#form_search").on("input", function(){
+		$.ajax({
+			url:"/ajaxlist",
+			data: {"query":$("#form_search").val()}
+		}).done(function(result){	
+			$("#data").empty();
+			$("#data").append(result);
+		});
+	});
+</script>
+
+
 {% endblock %}
 
 {% block styles %}

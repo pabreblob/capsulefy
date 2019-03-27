@@ -141,6 +141,8 @@ FIXTURE_DIRS = (
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL='/login'
 
+FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
+
 FIREBASE_CREDENTIALS = {
     'type': 'service_account',
     'project_id': 'capsulefy',

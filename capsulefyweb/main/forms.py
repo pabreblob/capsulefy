@@ -29,6 +29,15 @@ class ModuleForm(forms.Form):
     release_date = forms.DateTimeField()
     file = forms.FileField(required=False)
 
+    def clean_release_date(self):
+        data = self.cleaned_data['release_date']
+        if data <= datetime.now(timezone.utc):
+            raise forms.ValidationError('The release date must be in the future')
+        yearafter = datetime.now(timezone.utc) + timedelta(days=365)
+        return data
+
+
+
 class NewFreeCapsuleForm(forms.Form):
     title = forms.CharField(max_length=250)
     description = forms.CharField(max_length=250)

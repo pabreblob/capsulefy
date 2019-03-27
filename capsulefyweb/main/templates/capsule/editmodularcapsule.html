@@ -30,10 +30,31 @@
             <p><label for="id_deadman_counter">Deadman timer:</label><input type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}"></p>
             <p><label for="id_deadman_time_unit">Deadman time unit:</label>
                 <select name="deadman_time_unit" id="id_deadman_time_unit">
+                    {% if oldcapsule.time_unit == 0 %}
                     <option value=0 selected>Minutes</option>
                     <option value=1>Days</option>
                     <option value=2>Months</option>
                     <option value=3>Years</option></select></p>
+                    {% else %}
+                        {% if oldcapsule.time_unit == 1 %}
+                            <option value=0>Minutes</option>
+                            <option value=1 selected>Days</option>
+                            <option value=2>Months</option>
+                            <option value=3>Years</option></select></p>
+                            {% else %}
+                                {% if oldcapsule.time_unit == 2 %}
+                                <option value=0>Minutes</option>
+                                <option value=1>Days</option>
+                                <option value=2 selected>Months</option>
+                                <option value=3>Years</option></select></p>
+                                {% else %}
+                                    <option value=0>Minutes</option>
+                                    <option value=1>Days</option>
+                                    <option value=2>Months</option>
+                                    <option value=3 selected>Years</option></select></p>
+                                {% endif %}
+                            {% endif %}
+                    {% endif %}
             <p><input type="submit" value="Update capsule"></p>
 
         </form>

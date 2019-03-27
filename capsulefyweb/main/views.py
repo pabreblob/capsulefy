@@ -143,10 +143,14 @@ def checkModularCapsule(request):
             errors.append("Release date " + str(i + 1) + " can not be empty")
         else:
             try:
-                datetime.strptime(release_date, '%Y-%m-%d %H:%M')
+                date = datetime.strptime(release_date, '%Y-%m-%d %H:%M')
+                if date < datetime.now():
+                    errors.append("The release date must be in future")
             except:
                 try:
-                    datetime.strptime(release_date, '%Y-%m-%d')
+                    date = datetime.strptime(release_date, '%Y-%m-%d')
+                    if date < datetime.now():
+                        errors.append("The release date must be in future")
                 except:
                     errors.append("Invalid release date")
         if files is not None:

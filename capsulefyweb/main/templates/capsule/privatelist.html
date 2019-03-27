@@ -4,7 +4,7 @@
 
 {% block contenido %}
 <div class="container main-list">
-  <h3>List Capsule</h3>
+  <h3>My Capsules</h3>
 
 
 <form method="GET" action="#">
@@ -19,8 +19,12 @@
 <div id="data">  
   {% for cap in capsules %}
 	  
-	    <div class="card">
-	      <div class="card-header">
+			{% if cap.capsule_type == "F"%}
+		    <div class="card">
+			{% else %}
+				<div class="card premium">
+			{% endif %}	      
+			  <div class="card-header">
 	        {{cap.title}}
 	      </div>
 	      <div class="card-body">
@@ -33,6 +37,9 @@
 		        
 	        {% endfor %}
 	        <button class="btn btn-primary" onclick="window.location='/displaycapsule/{{cap.id}}'">Display capsule</button>
+					{% if cap.capsule_type != "F"%}
+		    		<p class="lower-right">Premium</p>
+					{% endif %}
 	      </div>
 	    </div>
 	    <br>

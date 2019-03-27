@@ -106,6 +106,8 @@ def createModularCapsule(request):
                         filename, fileext = os.path.splitext(file.name)
                         blob = bucket.blob(capsule.title + str(idrand) + fileext)
                         filetype = mimetypes.guess_type(file.name)[0]
+                        if filetype is None:
+                            filetype = 'application/octet-stream'
                         filetypedb = 'F'
                         if filetype.split('/')[0] == 'image':
                             filetypedb = 'I'
@@ -236,6 +238,8 @@ def createModule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(capsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
@@ -297,6 +301,8 @@ def editModule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(oldmodule.capsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'

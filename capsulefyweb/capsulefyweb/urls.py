@@ -40,4 +40,6 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
     path('select_capsule/', views.select_capsule),
     path('refresh/<int:id>/', views.refresh_deadman, name='refreshdeadman'),
+    path('ajaxlist/', views.ajaxlist),
+    path('ajaxprivatelist/', views.ajaxprivatelist),
 ]

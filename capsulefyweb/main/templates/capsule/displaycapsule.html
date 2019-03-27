@@ -30,9 +30,14 @@
     {% for module in modules %}
         <div class="card">
             <div class="card-header">
-                {{ module.description }}
+            {% if forloop.counter0 == 0 %}
+                    Capsule
+                {% else %}
+                    Module {{ forloop.counter0 }}
+                {% endif %}
             </div>
             <div class="card-body">
+                <h4 class="description">{{ module.description }}</h4><br>
                 {% if module.files %}
                 <div class="container">
                 <div class="row">
@@ -59,6 +64,7 @@
                 {% endif %}
             </div>
         </div>
+        <br>
     {% endfor %}
 
 

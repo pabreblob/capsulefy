@@ -9,7 +9,7 @@ before_script:
 - python manage.py collectstatic
 script:
 - python manage.py test
-after_script:
+after_success:
 - cd ..
 notifications:
   email: false

@@ -527,5 +527,3 @@ def refresh_deadman(request, id):
         capsule.dead_man_counter=capsule.dead_man_initial_counter
         capsule.save()
     return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
-
-run_deadman()

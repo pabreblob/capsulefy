@@ -142,3 +142,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL='/login'
 
 FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
+
+FIREBASE_CREDENTIALS = {
+    'type': 'service_account',
+    'project_id': 'capsulefy',
+    'private_key_id': '043f8492d5a11f837bd91b330ee2758f004db6cc',
+    'private_key': os.environ.get('FIREBASE_PRIVATE_KEY'),
+    'client_email': 'firebase-adminsdk-5edj7@capsulefy.iam.gserviceaccount.com',
+    'client_id': '117130244008637990118',
+    'auth_uri': 'https://accounts.google.com/o/oauth2/auth',
+    'token_uri': 'https://oauth2.gooleapis.com/token',
+    'auth_provider_x509_cert_url': 'https://www.googleapis.com/oauth2/v1/certs',
+    'client_x509_cert_url': 'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-5edj7%40capsulefy.iam.gserviceaccount.com'
+}

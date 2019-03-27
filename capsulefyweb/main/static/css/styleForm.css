@@ -37,6 +37,7 @@ label {
 .image-delete .btn-file{
 	width: 50%;
 	margin-top: 25%;
+	margin-bottom: 25%;
 }
 
 .image-delete .button-delete{
@@ -49,4 +50,15 @@ label {
 
 .row-image-delete div{
 	margin-bottom: 2%;
+}
+
+.row-image div{
+	margin-bottom: 2%;
+}
+.image {
+	text-align: center;
+	padding: 2%;
+	border: 1px #cccccc solid;
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

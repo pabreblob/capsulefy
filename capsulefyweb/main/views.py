@@ -423,6 +423,8 @@ def createFreeCapsule(request):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
@@ -480,6 +482,8 @@ def editFreeCapsule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(oldcapsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'

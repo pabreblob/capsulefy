@@ -45,6 +45,8 @@ class Capsule(models.Model):
     price=models.DecimalField(null=True,max_digits=7, decimal_places=2)
     dead_man_switch=models.BooleanField()
     dead_man_counter=models.BigIntegerField()
+    dead_man_initial_counter=models.BigIntegerField()
+    time_unit=models.IntegerField(null=True,choices=((0,'minutes'),(1,'days'),(2,'months'),(3,'years')))
     twitter=models.BooleanField()
     facebook=models.BooleanField()
     
@@ -62,7 +64,22 @@ class Capsule(models.Model):
                 res=True
                 break
         return res
-    
+
+    def seconds_to_unit(self):
+        conversion_to_seconds = [60, 86400, 2592000, 31536000]
+        if self.time_unit!=None:
+            res=self.dead_man_counter/conversion_to_seconds[int(self.time_unit)]
+        else:
+            res=0
+        return res
+
+    def unit_to_seconds(self,unit):
+        conversion_to_seconds = [60, 86400, 2592000, 31536000]
+        if unit!=None:
+            res=self.dead_man_counter*conversion_to_seconds[unit]
+        else:
+            res=0
+        return res
 class Module(models.Model):
     description=models.CharField(max_length=250)
     release_date=models.DateTimeField()

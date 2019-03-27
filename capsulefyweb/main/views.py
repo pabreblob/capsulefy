@@ -567,7 +567,7 @@ def ajaxlist(request):
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
         for m in c.modules.all():
             res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
-		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+str(m.release_date)+'''</cite></p></blockquote>'''
+		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
 		
         res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+'''">Display capsule</button></div></div><br>'''
     return HttpResponse(res)
@@ -581,7 +581,7 @@ def ajaxprivatelist(request):
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
         for m in c.modules.all():
             res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
-		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+str(m.release_date)+'''</cite></p></blockquote>'''
+		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
 		
         res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+'''">Display capsule</button></div></div><br>'''
     return HttpResponse(res)

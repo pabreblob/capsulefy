@@ -76,7 +76,7 @@ def createModularCapsule(request):
             try:
                 time_unit = int(capsuleFormulario['deadman_time_unit'])
                 dead_man_switch = capsuleFormulario['deadman_switch']
-                dead_man_counter = capsuleFormulario['deadman_counter']*conversion_to_seconds[time_unit]
+                dead_man_counter = capsuleFormulario['deadman_counter'] * conversion_to_seconds[time_unit]
             except:
                 dead_man_switch = False
                 dead_man_counter = 0
@@ -87,14 +87,16 @@ def createModularCapsule(request):
             totalSize = 0
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
-                                             dead_man_initial_counter=dead_man_counter,time_unit=time_unit,twitter=twitter, facebook=facebook,
+                                             dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
+                                             twitter=twitter, facebook=facebook,
                                              creator_id=user.id, price=price)
 
             for i in range(int(modulesSize)):
                 description = request.POST['description' + str(i)]
                 release_date = request.POST['release_date' + str(i)]
                 files = request.FILES.getlist('file' + str(i))
-                module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
+                module = Module.objects.create(description=description, release_date=release_date,
+                                               capsule_id=capsule.id)
                 if files is not None:
                     for file in files:
                         credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
@@ -111,13 +113,13 @@ def createModularCapsule(request):
                             filetypedb = 'V'
                         blob.upload_from_file(file, size=file.size, content_type=filetype)
                         url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
-                        idrand) + \
-                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
+                            idrand) + \
+                              fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
                         filesize = file.size / 1048576
                         File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=capsule.title + str(idrand) + fileext,
-                                        local_name=file.name, module_id=module.id)
-            return HttpResponseRedirect('/displaycapsule/'+ str(capsule.id))
+                                            remote_name=capsule.title + str(idrand) + fileext,
+                                            local_name=file.name, module_id=module.id)
+            return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
     return render(request, 'capsule/createmodularcapsule.html', {"errors": errors})
 
@@ -136,9 +138,17 @@ def checkModularCapsule(request):
         release_date = request.POST['release_date' + str(i)]
         files = request.FILES.getlist('file' + str(i))
         if description is None:
-            errors.append("Description "+ str(i+1) + " can not be empty")
+            errors.append("Description " + str(i + 1) + " can not be empty")
         if release_date is None:
             errors.append("Release date " + str(i + 1) + " can not be empty")
+        else:
+            try:
+                datetime.strptime(release_date, '%Y-%m-%d %H:%M')
+            except:
+                try:
+                    datetime.strptime(release_date, '%Y-%m-%d')
+                except:
+                    errors.append("Invalid release date")
         if files is not None:
             for file in files:
                 print(file.size)
@@ -146,6 +156,7 @@ def checkModularCapsule(request):
     if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
+
 
 def editModularCapsule(request, pk):
     oldcapsule = get_object_or_404(Capsule, id=pk)
@@ -163,9 +174,9 @@ def editModularCapsule(request, pk):
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook,
         'private': oldcapsule.private,
-        'deadman_switch':oldcapsule.dead_man_switch,
-        'deadman_counter':oldcapsule.dead_man_counter,
-        'deadman_time_unit':0
+        'deadman_switch': oldcapsule.dead_man_switch,
+        'deadman_counter': oldcapsule.dead_man_counter,
+        'deadman_time_unit': 0
     }
 
     if request.method == 'POST':
@@ -188,7 +199,7 @@ def editModularCapsule(request, pk):
                 dead_man_counter = 0
                 time_unit = 0
             oldcapsule.save()
-            return HttpResponseRedirect('/displaycapsule/'+ str(pk))
+            return HttpResponseRedirect('/displaycapsule/' + str(pk))
     else:
         capsule_editing=oldcapsule
         capsule_editing.dead_man_counter=capsule_editing.seconds_to_unit()
@@ -227,16 +238,19 @@ def createModule(request, pk):
                     elif filetype.split('/')[0] == 'video':
                         filetypedb = 'V'
                     blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(idrand) +\
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
+                        idrand) + \
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
                     filesize = file.size / 1048576
 
-                    File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=capsule.title + str(idrand) + fileext,
-                                    local_name=file.name, module_id=module.id)
-            return HttpResponseRedirect('/editmodularcapsule/'+ str(pk))
+                    File.objects.create(url=url, size=filesize, type=filetypedb,
+                                        remote_name=capsule.title + str(idrand) + fileext,
+                                        local_name=file.name, module_id=module.id)
+            return HttpResponseRedirect('/editmodularcapsule/' + str(pk))
     else:
         moduleForm = ModuleForm()
     return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
+
 
 def checkModule(request):
     errors = []
@@ -248,6 +262,7 @@ def checkModule(request):
     if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
+
 
 def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
@@ -284,17 +299,20 @@ def editModule(request, pk):
                     elif filetype.split('/')[0] == 'video':
                         filetypedb = 'V'
                     blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldmodule.capsule.title + str(idrand) +\
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldmodule.capsule.title + str(
+                        idrand) + \
                           fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
                     filesize = file.size / 1048576
 
-                    File.objects.create(url=url, size=filesize, type=filetypedb, remote_name=oldmodule.capsule.title + str(idrand) + fileext,
-                                    local_name=file.name, module_id=oldmodule.id)
+                    File.objects.create(url=url, size=filesize, type=filetypedb,
+                                        remote_name=oldmodule.capsule.title + str(idrand) + fileext,
+                                        local_name=file.name, module_id=oldmodule.id)
             oldmodule.save()
-            return HttpResponseRedirect('/editmodularcapsule/'+ str(oldmodule.capsule.id))
+            return HttpResponseRedirect('/editmodularcapsule/' + str(oldmodule.capsule.id))
 
     return render(request, 'capsule/editmodule.html',
                   {'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
+
 
 def checkEditModule(request, pk):
     errors = []
@@ -313,19 +331,21 @@ def checkEditModule(request, pk):
         errors.append("The total size of files can not be more than 500mb ")
     return errors
 
+
 def deleteModule(request, pk):
     module = get_object_or_404(Module, id=pk)
     user = request.user
     if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     module.delete()
-    return HttpResponseRedirect('/editmodularcapsule/'+ str(module.capsule.id))
+    return HttpResponseRedirect('/editmodularcapsule/' + str(module.capsule.id))
 
 
 @login_required
@@ -364,21 +384,23 @@ class login(LoginView):
 
 
 def list(request):
-    capsules=Capsule.objects.filter(private=False)
-    return render(request, 'capsule/list.html',{'capsules':capsules})
+    capsules = Capsule.objects.filter(private=False)
+    return render(request, 'capsule/list.html', {'capsules': capsules})
+
 
 def private_list(request):
-    
     user = main.models.User.objects.get(pk=request.user.id)
     request.user
-    capsules=user.capsuls.all()
+    capsules = user.capsuls.all()
 
-    return render(request, 'capsule/privatelist.html',{'capsules':capsules})
+    return render(request, 'capsule/privatelist.html', {'capsules': capsules})
+
 
 @login_required
 def createFreeCapsule(request):
     if request.method == 'POST':
-        form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user, upfiles=request.FILES.getlist('files'))
+        form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user,
+                                  upfiles=request.FILES.getlist('files'))
         if form.is_valid():
             formulario = form.cleaned_data
             title = formulario['title']
@@ -392,7 +414,8 @@ def createFreeCapsule(request):
             description = formulario['description']
             release_date = formulario['release_date']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
-                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,dead_man_initial_counter=dead_man_counter,
+                                             dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
+                                             dead_man_initial_counter=dead_man_counter,
                                              twitter=twitter, facebook=facebook, creator_id=request.user.id)
             module = Module.objects.create(description=description, release_date=release_date, capsule_id=capsule.id)
             files = request.FILES.getlist('files')
@@ -405,17 +428,19 @@ def createFreeCapsule(request):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
                     elif filetype.split('/')[0] == 'video':
                         filetypedb = 'V'
                     blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title +\
+                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + \
                           str(idrand) + fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
                     filesize = file.size / 1000000
                     File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=title + str(idrand) +fileext, local_name=file.name,
+                                        remote_name=title + str(idrand) + fileext, local_name=file.name,
                                         module_id=module.id)
             return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
@@ -440,7 +465,8 @@ def editFreeCapsule(request, pk):
         'facebook': oldcapsule.facebook
     }
     if request.method == 'POST':
-        form = EditFreeCapsuleForm(request.POST, request.FILES, user=request.user, upfiles=request.FILES.getlist('files'))
+        form = EditFreeCapsuleForm(request.POST, request.FILES, user=request.user,
+                                   upfiles=request.FILES.getlist('files'))
         if form.is_valid():
             formulario = form.cleaned_data
             oldcapsule.title = formulario['title']
@@ -461,6 +487,8 @@ def editFreeCapsule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(oldcapsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
@@ -484,12 +512,13 @@ def deleteCapsule(request, pk):
     capsule = get_object_or_404(Capsule, id=pk)
     if capsule.creator_id != request.user.id:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
     files = File.objects.filter(module__capsule_id=pk)
-    for file in files:
-        bucket.delete_blob(file.remote_name)
+    if len(files) != 0:
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
+        client = storage.Client(credentials=credentials, project='capsulefy')
+        bucket = client.get_bucket('capsulefy.appspot.com')
+        for file in files:
+            bucket.delete_blob(file.remote_name)
     capsule.delete()
     return HttpResponseRedirect('/list')
 
@@ -498,8 +527,9 @@ def deleteCapsule(request, pk):
 def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
 
+
 def check_deadman_switch():
-    capsules=Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
+    capsules = Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
         capsule.dead_man_counter-=3600
@@ -512,6 +542,7 @@ def check_deadman_switch():
                     module.save()
             capsule.dead_man_switch=False
         capsule.save()
+
 
 def run_deadman():
     scheduler = BackgroundScheduler()

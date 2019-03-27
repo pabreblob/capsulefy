@@ -2,67 +2,90 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
-    <a name="index"></a>
-    <div class="bg-1 container-fluid">
-        {% for error in errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
+    <div class="container">
         <form id="form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+            <h3 class="title"> Creating a premium capsule</h3>
+            <hr>
             <input type="hidden" id="modulesSize" name="modulesSize" value="1">
-            <p>
-                <label for="id_title">Title:</label>
-                <input type="text" name="title" maxlength="250" required="" id="id_title">
-            </p>
-            <p>
+            
+            <div class="form-group">
+                <label for="id_title"><span class="red">* </span>Title:</label>
+                <input type="text" name="title" class="form-control" maxlength="250" required id="id_title">
+            </div>
+            <div class="form-group">
                 <label for="id_emails">Emails:</label>
-                <input type="text" name="emails" maxlength="2500" id="id_emails">
-            </p>
-            <p>
-                <label for="id_twitter">Twitter:</label>
-                <input type="checkbox" name="twitter" id="id_twitter">
-            </p>
-            <p>
-                <label for="id_facebook">Facebook:</label>
-                <input type="checkbox" name="facebook" id="id_facebook">
-            </p>
-            <p>
-                <label for="id_private">Private capsule:</label>
-                <input type="checkbox" name="private" id="id_private">
-            </p>
-            <p>
-                <label for="id_deadman_switch">Activate deadman switch:</label>
-                <input type="checkbox" name="deadman_switch" id="id_deadman_switch">
-            </p>
-            <p>
-                <label for="id_deadman_counter">Deadman timer:</label>
-                <input type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter">
-            </p>
-            <p>
-                <label for="id_deadman_time_unit">Deadman time unit:</label>
-                <select name="deadman_time_unit" id="id_deadman_time_unit">
-                    <option value=0>Minutes</option><option value=1>Days</option><option value=2>Months</option><option value=3>Years</option></select>
-            </p>
-            <div class="modules" id="modules">
-                <div class="moduleform">
-                    <p>
-                        <label for="id_description0">Description:</label>
-                        <input type="text" name="description0" maxlength="250" required="" id="id_description0">
-                    </p>
-                    <p>
-                        <label for="id_release_date0">Release date:</label>
-                        <input type="text" name="release_date0" required="" id="id_release_date0"
-                               placeholder="YYYY-MM-DD HH:MM">
-                    </p>
-                    <p>
-                        <label for="id_file0">File:</label>
-                        <input type="file" name="file0" id="id_file0" multiple>
-                    </p>
+                <input type="text" name="emails" class="form-control" maxlength="2500" id="id_emails">
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter">
+                <label for="id_twitter" class="form-check-label">
+                    Twitter
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook">
+                <label for="id_facebook" class="form-check-label">
+                    Facebook
+                </label>
+            </div>
+            <hr>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="private" id="id_private">
+                <label for="id_private" class="form-check-label">
+                    Private capsule
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="deadman_switch" onclick="deadman_switch_activated()" id="id_deadman_switch">
+                <label class="form-check-label" for="id_deadman_switch">
+                    Activate deadman switch
+                </label>
+            </div>
+            <hr>
+            <div id="input_deadman" style="display: none;">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter">
+                </div>
+                <div class="col-sm-2">
+                <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
+                    <option value=0>Minutes</option>
+                    <option value=1>Days</option>
+                    <option value=2>Months</option>
+                    <option value=3>Years</option>
+                </select>
                 </div>
             </div>
-            <input type="button" value="Add module" onclick="addModule()">
+            <hr>
+            </div>
 
-            <p><input type="submit" value="Save capsule"></p>
+            <div class="modules" id="modules">
+                <div class="moduleform">
+                    <div class="form-group">
+                        <label for="id_description0"><span class="red">* </span>Description:</label>
+                        <textarea name="description0" rows="5" maxlength="250" required class="form-control" id="id_description0"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_release_date0"><span class="red">* </span>Release date:</label>
+                        <input type="text" name="release_date0" required class="form-control" id="id_release_date0"
+                               placeholder="YYYY-MM-DD HH:MM">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_file0">File:</label>
+                        <input type="file" class="form-control-file" name="file0" id="id_file0" multiple>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <button class="btn btn-success" value="Add module" onclick="addModule()">Add module</button>
+            <hr>
+            <button class="btn btn-primary" type="submit" value="Save capsule">Submit</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
         </form>
 
     </div>
@@ -73,13 +96,23 @@
             var modulesSize = parseInt(document.getElementById('modulesSize').value);
             div.className = 'moduleform';
 
-            div.innerHTML =
-                ' <p><label for="id_description'+modulesSize+'">Description:</label>' +
-                '<input type="text" name="description'+modulesSize+'" maxlength="250" required="" id="id_description'+modulesSize+'"></p>' +
-                '<p><label for="id_release_date'+modulesSize+'">Release date:</label>' +
-                '<input type="text" name="release_date'+modulesSize+'" required="" id="id_release_date'+modulesSize+'" placeholder="YYYY-MM-DD HH:MM"></p>' +
-                '<p><label for="id_file'+modulesSize+'">File:</label><input type="file" name="file'+modulesSize+'" id="id_file'+modulesSize+'"></p>' +
-                '<input type="button" value="-" onclick="removeRow(this)">';
+            div.innerHTML = `
+                <h5 class="subtitle">Module `+modulesSize+`</h5>
+                <div class="form-group">
+                    <label for="id_description`+modulesSize+`"><span class="red">* </span>Description:</label>
+                    <input type="text" name="description`+modulesSize+`" maxlength="250" required class="form-control" id="id_description`+modulesSize+`">
+                </div>
+                <div class="form-group">
+                    <label for="id_description`+modulesSize+`"><span class="red">* </span>Release date:</label>
+                    <input type="text" name="release_date`+modulesSize+`" required class="form-control" id="id_release_date`+modulesSize+`" placeholder="YYYY-MM-DD HH:MM">
+                </div>
+                <div class="form-group">
+                    <label for="id_file`+modulesSize+`">File:</label>
+                    <input type="file" name="file`+modulesSize+`" class="form-group-file" id="id_file`+modulesSize+`">
+                </div>
+                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Delete this module</button>
+                <hr>
+            `;
 
             document.getElementById('modules').appendChild(div);
             document.getElementById('modulesSize').value = modulesSize + 1;
@@ -90,5 +123,17 @@
             var modulesSize = parseInt(document.getElementById('modulesSize').value);
             document.getElementById('modulesSize').value = modulesSize - 1;
         }
+
+        function deadman_switch_activated(){
+            var checkbox = document.getElementById("id_deadman_switch");
+            if(checkbox.checked == true){
+                document.getElementById("input_deadman").style.display = "block";
+            } else {
+                document.getElementById("input_deadman").style.display = "none";
+            }
+        }
     </script>
 {% endblock %}
+{% block styles%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+{% endblock%}

@@ -68,7 +68,7 @@ class Capsule(models.Model):
     def seconds_to_unit(self):
         conversion_to_seconds = [60, 86400, 2592000, 31536000]
         if self.time_unit!=None:
-            res=self.dead_man_counter/conversion_to_seconds[int(self.time_unit)]
+            res=round(self.dead_man_counter/conversion_to_seconds[int(self.time_unit)])
         else:
             res=0
         return res

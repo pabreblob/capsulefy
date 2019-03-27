@@ -515,7 +515,7 @@ def deleteCapsule(request, pk):
         for file in files:
             bucket.delete_blob(file.remote_name)
     capsule.delete()
-    return HttpResponseRedirect('/list')
+    return HttpResponseRedirect('/privatelist')
 
 
 @login_required

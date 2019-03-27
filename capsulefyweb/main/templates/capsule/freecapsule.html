@@ -46,14 +46,14 @@
 		{% if '/editfreecapsule/' in request.path %}
 		
 		<div class="form-group">
-    	<label for="id_file">Files {{form.files.errors}}</label>
+    	<label for="id_file">Add more files {{form.files.errors}}</label>
 	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
   	</div>
 		<hr>
 
 		{% else %}
 		<div class="form-group">
-    	<label for="id_file">Add more files {{form.files.errors}}</label>
+    	<label for="id_file">Files {{form.files.errors}}</label>
 	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
   	</div>
 		<hr>
@@ -61,7 +61,7 @@
 
 
 		{% if '/editfreecapsule/' in request.path %}
-          {% if oldmodule.files%}
+          {% if oldmodule.files.all|length > 0 %}
 					<div class="row row-image-delete">
             {% for file in oldmodule.files.all %}
               <div class="col-md-3 image-delete">

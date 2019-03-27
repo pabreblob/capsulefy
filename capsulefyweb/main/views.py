@@ -562,7 +562,7 @@ def refresh_deadman(request, id):
 def ajaxlist(request):
     res = ''
     searched = request.GET.get("query", '')
-    capsules = None #=======================
+    capsules = Capsule.objects.filter(private=False).filter(title__contains=searched).filter(modules__release_date__lte=datetime.now())
     for c in capsules:
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
         for m in c.modules.all():
@@ -572,10 +572,11 @@ def ajaxlist(request):
         res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+'''">Display capsule</button></div></div><br>'''
     return HttpResponse(res)
 
+@login_required
 def ajaxprivatelist(request):
     res = ''
     searched = request.GET.get("query", '')
-    capsules = None#=================
+    capsules = Capsule.objects.filter(creator_id=request.user.id).filter(title__contains=searched)
     print(len(capsules))
     for c in capsules:
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''

@@ -2,34 +2,55 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
-    <div class="container-fluid">
+    <div class="container">
         {% for error in errors %}
-            <p>{{ error }}</p>
+            <p><span class="red">{{ error }}</span></p>
         {% endfor %}
         <form id="form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="250" required="" id="id_description" value="{{ oldmodule.description }}"></p>
-            <p><label for="id_release_date">Release date:</label> <input type="text" name="release_date" required="" id="id_release_date" value="{{ oldmodule.release_date|date:"Y-m-d H:i"}}"></p>
-            <p><label for="id_file">Files:</label> <input type="file" name="file" id="id_file" multiple></p>
-            <p><input type="submit" value="Save"></p>
+            <div class="form-group">
+                <label for="id_description">Description</label>
+                <textarea type="text" class="form-control" rows="3" name="description" maxlength="250" required="" id="id_description">{{ oldmodule.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="id_release_date">Release date</label>
+                <input type="text" class="form-control" name="release_date" required id="id_release_date" value="{{ oldmodule.release_date|date:"Y-m-d H:i"}}">
+            </div>
+            <div class="form-group">
+                <label for="id_file">Files</label>
+                <input type="file" name="file" class="form-control-file" id="id_file" multiple>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{oldmodule.capsule.id}}'">Cancel</button>
         </form>
+        <hr>
+
 
         {% if oldmodule.files%}
-            {% for file in oldmodule.files.all %}
-                 {% if file.type == "I" %}
-                           <img class="module-img" src="{{ file.url }}"/>
-                        {% endif %}
+            <div class="row row-image-delete">
+                {% for file in oldmodule.files.all %}
+                    <div class="col-md-3 image-delete">
+			    	    {% if file.type == "I" %}
+			    			<img class="img-thumbnail mw-100" src="{{ file.url }}"/>
+			    		{% endif %}
                         {% if file.type == "F" %}
-                            <a href="{{ file.url }}">File</a>
+                            <button type="button" class="btn btn-primary btn-file" onclick="window.location='{{file.url}}'">{{file.local_name}}</button>
                         {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
+                  	    {% if file.type == "V" %}
+                            <div class="embed-responsive embed-responsive-4by3">
+  			    				<video class="embed-responsive-item" src="{{file.url}}" controls preload="none"></video>
+			    			</div>
                         {% endif %}
-                        <a href="/deletefile/{{ file.id }}">Delete</a>
-            {% endfor %}
+			    			<button type="button" class="btn btn-danger button-delete" onclick="window.location='/deletefile/{{ file.id }}/'">Delete</button>
+			    	</div>
+			    	<div class="col-md-1"> </div>
+                {% endfor %}
+			    </div>
         {% endif %}
-
     </div>
+{% endblock %}
+
+{% block styles%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
 {% endblock %}

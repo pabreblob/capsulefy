@@ -528,11 +528,11 @@ def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
 
 
-def check_deadman_switch(request):
+def check_deadman_switch():
     capsules = Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter-=3600
+        capsule.dead_man_counter-=86400
         if capsule.dead_man_counter<=0:
             capsule.dead_man_counter=0
             modules=capsule.modules.all()
@@ -542,7 +542,6 @@ def check_deadman_switch(request):
                     module.save()
             capsule.dead_man_switch=False
         capsule.save()
-    return HttpResponse("")
 
 def run_deadman():
     scheduler = BackgroundScheduler()

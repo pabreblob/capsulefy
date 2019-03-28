@@ -574,7 +574,7 @@ def ajaxlist(request):
             res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
 		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
 		
-        res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+'''">Display capsule</button></div></div><br>'''
+        res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
     return HttpResponse(res)
 
 @login_required
@@ -591,5 +591,5 @@ def ajaxprivatelist(request):
             res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
 		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
 		
-        res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+'''">Display capsule</button></div></div><br>'''
+        res += '''<button type="button" class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
     return HttpResponse(res)

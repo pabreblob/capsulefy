@@ -562,7 +562,12 @@ def refresh_deadman(request, id):
 def ajaxlist(request):
     res = ''
     searched = request.GET.get("query", '')
-    capsules = Capsule.objects.filter(private=False).filter(title__icontains=searched).filter(modules__release_date__lte=datetime.now())
+    capsulesT = Capsule.objects.filter(private=False).filter(title__icontains=searched).filter(modules__release_date__lte=datetime.now())
+    capsulesDate = Capsule.objects.filter(private=False).filter(modules__release_date__icontains=searched).filter(
+        modules__release_date__lte=datetime.now())
+    capsulesDesc = Capsule.objects.filter(private=False).filter(modules__description__icontains=searched).filter(
+        modules__release_date__lte=datetime.now())
+    capsules=capsulesT|capsulesDate|capsulesDesc
     for c in capsules:
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
         for m in c.modules.all():
@@ -576,8 +581,10 @@ def ajaxlist(request):
 def ajaxprivatelist(request):
     res = ''
     searched = request.GET.get("query", '')
-    capsules = Capsule.objects.filter(creator_id=request.user.id).filter(title__icontains=searched)
-    print(len(capsules))
+    capsulesT = Capsule.objects.filter(creator_id=request.user.id).filter(title__icontains=searched)
+    capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
+    capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
+    capsules=capsulesT|capsulesDate|capsulesDesc
     for c in capsules:
         res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
         for m in c.modules.all():

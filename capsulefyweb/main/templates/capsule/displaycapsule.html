@@ -21,7 +21,7 @@
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
             {% if capsule.dead_man_switch and editable%}
-                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
+                <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
     </div>
     {% endif %}
@@ -81,7 +81,7 @@
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
             {% if capsule.dead_man_switch and editable %}
-                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
+                <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
     </div>
     {% endif %}

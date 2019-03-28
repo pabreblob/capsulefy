@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'a3=q@vu4@s^xdpxmbomgg_ku624)lmcf#517o+bol+2z4w$*1%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -142,3 +142,11 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL='/login'
 
 FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'capsulefy.communications@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_USE_SSL = True
+
+

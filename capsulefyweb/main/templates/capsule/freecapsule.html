@@ -27,6 +27,7 @@
 			    <label for="id_emails">Emails {{ form.emails.errors }}</label>
 			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{% if form.emails.value != None %}{{form.emails.value}}{% endif %}" maxlength="250">
 			</div>
+			<!--
 			<div class="form-check">
 			  <input class="form-check-input" type="checkbox" id="id_twitter" value="{% if form.twitter.value != None %}{{form.twitter.value}}{% endif %}" name="twitter">
 			  <label class="form-check-label" for="id_twitter">
@@ -40,18 +41,19 @@
 			  </label>
 			</div>
 			<br>
+			-->
 
 		{% if '/editfreecapsule/' in request.path %}
 		
 		<div class="form-group">
-    	<label for="id_file">Files {{form.files.errors}}</label>
+    	<label for="id_file">Add more files {{form.files.errors}}</label>
 	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
   	</div>
 		<hr>
 
 		{% else %}
 		<div class="form-group">
-    	<label for="id_file">Add more files {{form.files.errors}}</label>
+    	<label for="id_file">Files {{form.files.errors}}</label>
 	    <input type="file" name="files" id="id_file" class="form-control-file" multiple>
   	</div>
 		<hr>
@@ -59,7 +61,7 @@
 
 
 		{% if '/editfreecapsule/' in request.path %}
-          {% if oldmodule.files%}
+          {% if oldmodule.files.all|length > 0 %}
 					<div class="row row-image-delete">
             {% for file in oldmodule.files.all %}
               <div class="col-md-3 image-delete">
@@ -93,7 +95,6 @@
             {% endif %}
     </form>
 </div>
-<!--{{ form.as_p}}-->
 {% endblock %}
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

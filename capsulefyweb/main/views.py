@@ -106,6 +106,8 @@ def createModularCapsule(request):
                         filename, fileext = os.path.splitext(file.name)
                         blob = bucket.blob(capsule.title + str(idrand) + fileext)
                         filetype = mimetypes.guess_type(file.name)[0]
+                        if filetype is None:
+                            filetype = 'application/octet-stream'
                         filetypedb = 'F'
                         if filetype.split('/')[0] == 'image':
                             filetypedb = 'I'
@@ -143,10 +145,14 @@ def checkModularCapsule(request):
             errors.append("Release date " + str(i + 1) + " can not be empty")
         else:
             try:
-                datetime.strptime(release_date, '%Y-%m-%d %H:%M')
+                date = datetime.strptime(release_date, '%Y-%m-%d %H:%M')
+                if date < datetime.now():
+                    errors.append("The release date must be in future")
             except:
                 try:
-                    datetime.strptime(release_date, '%Y-%m-%d')
+                    date = datetime.strptime(release_date, '%Y-%m-%d')
+                    if date < datetime.now():
+                        errors.append("The release date must be in future")
                 except:
                     errors.append("Invalid release date")
         if files is not None:
@@ -232,6 +238,8 @@ def createModule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(capsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
@@ -293,6 +301,8 @@ def editModule(request, pk):
                     filename, fileext = os.path.splitext(file.name)
                     blob = bucket.blob(oldmodule.capsule.title + str(idrand) + fileext)
                     filetype = mimetypes.guess_type(file.name)[0]
+                    if filetype is None:
+                        filetype = 'application/octet-stream'
                     filetypedb = 'F'
                     if filetype.split('/')[0] == 'image':
                         filetypedb = 'I'
@@ -520,7 +530,7 @@ def deleteCapsule(request, pk):
         for file in files:
             bucket.delete_blob(file.remote_name)
     capsule.delete()
-    return HttpResponseRedirect('/list')
+    return HttpResponseRedirect('/privatelist')
 
 
 @login_required
@@ -528,11 +538,11 @@ def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
 
 
-def check_deadman_switch(request):
+def check_deadman_switch():
     capsules = Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter-=3600
+        capsule.dead_man_counter-=86400
         if capsule.dead_man_counter<=0:
             capsule.dead_man_counter=0
             modules=capsule.modules.all()
@@ -542,7 +552,6 @@ def check_deadman_switch(request):
                     module.save()
             capsule.dead_man_switch=False
         capsule.save()
-    return HttpResponse("")
 
 def run_deadman():
     scheduler = BackgroundScheduler()

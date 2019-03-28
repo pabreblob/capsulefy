@@ -42,5 +42,4 @@ urlpatterns = [
     path('refresh/<int:id>/', views.refresh_deadman, name='refreshdeadman'),
     path('ajaxlist/', views.ajaxlist),
     path('ajaxprivatelist/', views.ajaxprivatelist),
-    path('rundeadman/', views.check_deadman_switch),
 ]

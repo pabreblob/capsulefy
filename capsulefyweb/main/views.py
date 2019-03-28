@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm
 from .models import Capsule, Module, File
 from gcloud import storage
@@ -190,15 +190,20 @@ def editModularCapsule(request, pk):
             oldcapsule.private = formulario['private']
             try:
                 time_unit = int(formulario['deadman_time_unit'])
+                oldcapsule.time_unit=time_unit
                 oldcapsule.dead_man_switch = formulario['deadman_switch']
-                oldcapsule.dead_man_counter = formulario['deadman_counter'] * conversion_to_seconds[time_unit]
+                oldcapsule.dead_man_counter = formulario['deadman_counter']*conversion_to_seconds[time_unit]
+                oldcapsule.dead_man_initial_counter = formulario['deadman_counter'] * conversion_to_seconds[time_unit]
             except:
                 dead_man_switch = False
                 dead_man_counter = 0
+                time_unit = 0
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/' + str(pk))
     else:
-        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': oldcapsule})
+        capsule_editing=oldcapsule
+        capsule_editing.dead_man_counter=capsule_editing.seconds_to_unit()
+        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': capsule_editing})
 
 
 def createModule(request, pk):
@@ -527,21 +532,63 @@ def check_deadman_switch():
     capsules = Capsule.objects.filter(dead_man_switch=True).filter(dead_man_counter__gt=0)
 
     for capsule in capsules:
-        capsule.dead_man_counter-=3600
+        capsule.dead_man_counter-=86400
         if capsule.dead_man_counter<=0:
             capsule.dead_man_counter=0
             modules=capsule.modules.all()
             for module in modules:
-                module.release_date = datetime.now(timezone.utc)
-                module.save()
-            capsule.dead_man_switch = False
+                if module.release_date>datetime.now(timezone.utc):
+                    module.release_date=datetime.now(timezone.utc)
+                    module.save()
+            capsule.dead_man_switch=False
         capsule.save()
-
 
 def run_deadman():
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_deadman_switch, 'interval', minutes=60)
     scheduler.start()
 
+@login_required
+def refresh_deadman(request, id):
+    capsule = get_object_or_404(Capsule, id=id)
+    if capsule.creator_id != request.user.id:
+        return HttpResponseNotFound()
+    if capsule.dead_man_switch==True:
+        capsule.dead_man_counter=capsule.dead_man_initial_counter
+        capsule.save()
+    return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
-run_deadman()
+def ajaxlist(request):
+    res = ''
+    searched = request.GET.get("query", '')
+    capsulesT = Capsule.objects.filter(private=False).filter(title__icontains=searched).filter(modules__release_date__lte=datetime.now())
+    capsulesDate = Capsule.objects.filter(private=False).filter(modules__release_date__icontains=searched).filter(
+        modules__release_date__lte=datetime.now())
+    capsulesDesc = Capsule.objects.filter(private=False).filter(modules__description__icontains=searched).filter(
+        modules__release_date__lte=datetime.now())
+    capsules=capsulesT|capsulesDate|capsulesDesc
+    for c in capsules:
+        res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
+        for m in c.modules.all():
+            res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
+		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
+		
+        res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
+    return HttpResponse(res)
+
+@login_required
+def ajaxprivatelist(request):
+    res = ''
+    searched = request.GET.get("query", '')
+    capsulesT = Capsule.objects.filter(creator_id=request.user.id).filter(title__icontains=searched)
+    capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
+    capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
+    capsules=capsulesT|capsulesDate|capsulesDesc
+    for c in capsules:
+        res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
+        for m in c.modules.all():
+            res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
+		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
+		
+        res += '''<button type="button" class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
+    return HttpResponse(res)

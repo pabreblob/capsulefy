@@ -1,0 +1,43 @@
+
+
+{% for cap in capsules %}
+	  {% if cap.is_released %}
+			{% if cap.capsule_type == "F"%}
+		    <div id="card_{{cap.id}}" class="card">
+			{% else %}
+				<div id="card_{{cap.id}}" class="card premium">
+			{% endif %}
+	      <div class="card-header">
+	        {{cap.title}}
+	      </div>
+	      <div class="card-body">
+	        {% for mod in cap.modules.all %}
+		        	{% if mod.is_released %}
+		          <h5 class="card-title">{{mod.description}}</h5>
+		          <blockquote class="blockquote">
+		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date|date:'Y-m-d H:i'}}</cite></p>
+		          </blockquote>
+		        {% endif %}
+	        {% endfor %}
+	        <button class="btn btn-primary" onclick="window.location='/displaycapsule/{{cap.id}}'">Display capsule</button>
+					{% if cap.capsule_type != "F"%}
+		    		<p class="lower-right">Premium</p>
+					{% endif %}
+	      </div>
+	    </div>
+	    <br>
+	    
+	    {% if forloop.last %}
+	    {% if capsules.has_next %}
+	    <div class="card" id="nextbt">
+	    		<div class="card-body">
+	    			<center>
+	    			<button class="btn btn-primary" type="button" onclick="load_capsules({{ capsules.next_page_number }},del=false)" >Show more</a>
+	    			</center>
+	    		</div>
+	    </div>
+	    {% endif %}
+	    {% endif %}
+	   {% endif %}
+  {% endfor %}
+  

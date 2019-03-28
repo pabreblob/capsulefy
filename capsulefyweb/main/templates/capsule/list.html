@@ -1,68 +1,54 @@
 
 {% extends 'base.html' %}
 {% load static %}
-
+{% block styles %}
+	<script type="text/javascript" src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleList.css' %}"/>
+{% endblock %}
 {% block contenido %}
+ <!-- Your regular body -->
+
 <div class="container main-list">
   <h3>List Capsule</h3>
 
 
-<form method="GET" action="#">
+
   <div class="form-group row">
 		<label class="col-form-label col-sm-1" for="form_search">Search: </label>
     <div class="col-sm-11">
       <input type="text" class="form-control" name="search" id="form_search" placeholder="Search">
     </div>
   </div>
-</form>
+
 
 <div id="data">  
-  {% for cap in capsules %}
-	  {% if cap.is_released %}
-			{% if cap.capsule_type == "F"%}
-		    <div class="card">
-			{% else %}
-				<div class="card premium">
-			{% endif %}
-	      <div class="card-header">
-	        {{cap.title}}
-	      </div>
-	      <div class="card-body">
-	        {% for mod in cap.modules.all %}
-		        	{% if mod.is_released %}
-		          <h5 class="card-title">{{mod.description}}</h5>
-		          <blockquote class="blockquote">
-		            <p class="blockquote-footer">Release in <cite title="Source Title">{{mod.release_date|date:'Y-m-d H:i'}}</cite></p>
-		          </blockquote>
-		        {% endif %}
-	        {% endfor %}
-	        <button class="btn btn-primary" onclick="window.location='/displaycapsule/{{cap.id}}'">Display capsule</button>
-					{% if cap.capsule_type != "F"%}
-		    		<p class="lower-right">Premium</p>
-					{% endif %}
-	      </div>
-	    </div>
-	    <br>
-	   {% endif %}
-  {% endfor %}
+  <input id="page" type="hidden" value=""/>
 </div>
 </div>
 
 <script>
-	$("#form_search").on("input", function(){
-		$.ajax({
-			url:"/ajaxlist",
-			data: {"query":$("#form_search").val()}
-		}).done(function(result){	
+	function load_capsules(page,del){
+		if(del==true){
 			$("#data").empty();
-			$("#data").append(result);
+		}	
+		$.ajax({
+				url:"/ajaxlist",
+				data: {"query":$("#form_search").val(),
+						"page":page}
+			}).done(function(result){
+				
+				
+				$("#nextbt").remove()
+				$("#data").append(result);
+			});
+	}
+	$("#form_search").on('change', function(){
+		load_capsules(1,del=true)
+		
 		});
-	});
+	//$( document ).ready(load_capsules(1))
 </script>
 
 
 {% endblock %}
 
-{% block styles %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/styleList.css' %}"/>
-{% endblock %}

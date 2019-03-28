@@ -20,7 +20,7 @@
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
-            {% if capsule.dead_man_switch and editable%}
+            {% if capsule.dead_man_switch%}
                 <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
     </div>

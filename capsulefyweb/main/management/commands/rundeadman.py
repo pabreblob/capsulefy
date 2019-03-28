@@ -10,6 +10,6 @@ sched = BlockingScheduler()
 def run_deadman():
     check_deadman_switch()
     
-    check_modules_release()
+    #check_modules_release()
 
 sched.start()

@@ -19,11 +19,7 @@
 <div id="data">  
   {% for cap in capsules %}
 	  {% if cap.is_released %}
-			{% if cap.capsule_type == "F"%}
 		    <div class="card">
-			{% else %}
-				<div class="card premium">
-			{% endif %}
 	      <div class="card-header">
 	        {{cap.title}}
 	      </div>
@@ -37,9 +33,6 @@
 		        {% endif %}
 	        {% endfor %}
 	        <button class="btn btn-primary" onclick="window.location='/displaycapsule/{{cap.id}}'">Display capsule</button>
-					{% if cap.capsule_type != "F"%}
-		    		<p class="lower-right">Premium</p>
-					{% endif %}
 	      </div>
 	    </div>
 	    <br>

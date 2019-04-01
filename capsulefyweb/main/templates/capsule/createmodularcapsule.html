@@ -12,7 +12,7 @@
             {% endfor %}
 
             <input type="hidden" id="modulesSize" name="modulesSize" value="1">
-            
+
             <div class="form-group">
                 <label for="id_title"><span class="red">* </span>Title:</label>
                 <input type="text" name="title" class="form-control" maxlength="250" required id="id_title">
@@ -43,35 +43,38 @@
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="deadman_switch" onclick="deadman_switch_activated()" id="id_deadman_switch">
+                <input class="form-check-input" type="checkbox" name="deadman_switch"
+                       onclick="deadman_switch_activated()" id="id_deadman_switch">
                 <label class="form-check-label" for="id_deadman_switch">
                     Activate deadman switch
                 </label>
             </div>
             <hr>
             <div id="input_deadman" style="display: none;">
-            <div class="form-group row">
-                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
-                <div class="col-sm-2">
-                    <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter" id="id_deadman_counter">
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter"
+                               id="id_deadman_counter">
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
+                            <option value=0>Minutes</option>
+                            <option value=1>Days</option>
+                            <option value=2>Months</option>
+                            <option value=3>Years</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-sm-2">
-                <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
-                    <option value=0>Minutes</option>
-                    <option value=1>Days</option>
-                    <option value=2>Months</option>
-                    <option value=3>Years</option>
-                </select>
-                </div>
-            </div>
-            <hr>
+                <hr>
             </div>
 
             <div class="modules" id="modules">
                 <div class="moduleform">
                     <div class="form-group">
                         <label for="id_description0"><span class="red">* </span>Description:</label>
-                        <textarea name="description0" rows="5" maxlength="250" required class="form-control" id="id_description0"></textarea>
+                        <textarea name="description0" rows="5" maxlength="250" required class="form-control"
+                                  id="id_description0"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="id_release_date0"><span class="red">* </span>Release date:</label>
@@ -87,8 +90,10 @@
             </div>
             <button class="btn btn-success" value="Add module" onclick="addModule()">Add module</button>
             <hr>
-            <button class="btn btn-primary" type="submit" value="Save capsule">Submit</button>
+            <button class="btn btn-primary" type="submit" value="Pay capsule">Submit</button>
             <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
+
+            <div id="paypal-button-container"></div>
         </form>
 
     </div>
@@ -100,18 +105,18 @@
             div.className = 'moduleform';
 
             div.innerHTML = `
-                <h5 class="subtitle">Module `+modulesSize+`</h5>
+                <h5 class="subtitle">Module ` + modulesSize + `</h5>
                 <div class="form-group">
-                    <label for="id_description`+modulesSize+`"><span class="red">* </span>Description:</label>
-                    <input type="text" name="description`+modulesSize+`" maxlength="250" required class="form-control" id="id_description`+modulesSize+`">
+                    <label for="id_description` + modulesSize + `"><span class="red">* </span>Description:</label>
+                    <input type="text" name="description` + modulesSize + `" maxlength="250" required class="form-control" id="id_description` + modulesSize + `">
                 </div>
                 <div class="form-group">
-                    <label for="id_description`+modulesSize+`"><span class="red">* </span>Release date:</label>
-                    <input type="text" name="release_date`+modulesSize+`" required class="form-control" id="id_release_date`+modulesSize+`" placeholder="YYYY-MM-DD HH:MM">
+                    <label for="id_description` + modulesSize + `"><span class="red">* </span>Release date:</label>
+                    <input type="text" name="release_date` + modulesSize + `" required class="form-control" id="id_release_date` + modulesSize + `" placeholder="YYYY-MM-DD HH:MM">
                 </div>
                 <div class="form-group">
-                    <label for="id_file`+modulesSize+`">File:</label>
-                    <input type="file" name="file`+modulesSize+`" class="form-group-file" id="id_file`+modulesSize+`">
+                    <label for="id_file` + modulesSize + `">File:</label>
+                    <input type="file" name="file` + modulesSize + `" class="form-group-file" id="id_file` + modulesSize + `">
                 </div>
                 <button type="button" class="btn btn-danger" onclick="removeRow(this)">Delete this module</button>
                 <hr>
@@ -127,16 +132,40 @@
             document.getElementById('modulesSize').value = modulesSize - 1;
         }
 
-        function deadman_switch_activated(){
+        function deadman_switch_activated() {
             var checkbox = document.getElementById("id_deadman_switch");
-            if(checkbox.checked == true){
+            if (checkbox.checked == true) {
                 document.getElementById("input_deadman").style.display = "block";
             } else {
                 document.getElementById("input_deadman").style.display = "none";
             }
         }
     </script>
+
+    <script
+    src="https://www.paypal.com/sdk/js?client-id=sb">
+  </script>
+
+ <script>
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '0.01'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Transaction completed by ' + details.payer.name.given_name);
+        document.getElementById("form").submit();
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
 {% endblock %}
-{% block styles%}
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
-{% endblock%}
+{% endblock %}

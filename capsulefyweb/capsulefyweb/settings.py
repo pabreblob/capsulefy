@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'a3=q@vu4@s^xdpxmbomgg_ku624)lmcf#517o+bol+2z4w$*1%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -82,11 +82,11 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'capsulefybd',
-        'USER': 'capsulefyu',
-        'PASSWORD':'capsulefy',
-        'HOST':'localhost',
-        'PORT':'',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
 
     }
 }
@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-BASEURL = 'https://capsulefy01.herokuapp.com/'
+BASEURL = 'https://capsulefy.herokuapp.com/'
 APIS = {}
 import django_heroku
 django_heroku.settings(locals())
@@ -140,3 +140,16 @@ FIXTURE_DIRS = (
 )
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL='/login'
+
+#FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'capsulefy.communications@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_USE_SSL = True
+
+try:
+    from local_settings import *
+except ImportError:
+    print("local_settings.py not found")

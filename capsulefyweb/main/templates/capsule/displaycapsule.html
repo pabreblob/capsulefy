@@ -10,18 +10,18 @@
 
     {% if user.id == capsule.creator.id %}
     <div class="module-btn-top">
-            {% if capsule.capsule_type == "F" %}
+            {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "P" %}
+            {% if capsule.capsule_type == "P" and editable%}
                 <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "M" %}
+            {% if capsule.capsule_type == "M" and editable%}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
-            {% if capsule.dead_man_switch %}
-                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
+            {% if capsule.dead_man_switch%}
+                <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
     </div>
     {% endif %}
@@ -30,50 +30,58 @@
     {% for module in modules %}
         <div class="card">
             <div class="card-header">
-                {{ module.description }}
+            {% if forloop.counter0 == 0 %}
+                    Capsule
+                {% else %}
+                    Module {{ forloop.counter0 }}
+                {% endif %}
             </div>
             <div class="card-body">
-                {{ module.description }}
+                <h4 class="description">{{ module.description }}</h4><br>
                 {% if module.files %}
+                <div class="container">
+                <div class="row">
                     {% for file in module.files.all %}
-                        {% if file.type == "I" %}
-                            <img class="img-fluid rounded module-img" src="{{ file.url }}"/>
-                        {% endif %}
-                        {% if file.type == "F" %}
-                            <a href="{{ file.url }}">File</a>
-                        {% endif %}
-                        {% if file.type == "V" %}
-                            <video width="320" height="240" controls>
-                                <source src="{{ file.url }}"/>
-                            </video>
-                            <!--
-                            <div class="embed-responsive embed-responsive-4by3">
-                                <iframe class="embed-responsive-item" src="{{file.url}}"></iframe>
-                            </div>
-                            -->
-                        {% endif %}
+                        <div class="col-sm-12 col-md-5 elem-display">
+                            {% if file.type == "I" %}
+                                <img class="img-fluid rounded" src="{{ file.url }}"/>
+                            {% endif %}
+                            {% if file.type == "F" %}
+                                <div class="button_div">
+                                    <button type="button" class="btn btn-primary" onclick="window.location='{{file.url}}'">{{file.local_name}}</button>
+                                </div>
+                            {% endif %}
+                            {% if file.type == "V" %}
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    <video class="embed-responsive-item" controls preload="none" src="{{file.url}}"></video>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-1"> </div>
                     {% endfor %}
+                </div>
+                </div>
                 {% endif %}
             </div>
         </div>
+        <br>
     {% endfor %}
 
 
     {% if user.id == capsule.creator.id %}
     <div class="module-btn-bottom">
-            {% if capsule.capsule_type == "F" %}
-
+            {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "P" %}
+            {% if capsule.capsule_type == "P" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "M" %}
+            {% if capsule.capsule_type == "M" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="window.location='/deletecapsule/{{capsule.id}}'">Delete capsule</button>
-            {% if capsule.dead_man_switch %}
-                <button class="btn btn-warning" onclick="window.location='refresh'">Refresh capsule</button>
+            {% if capsule.dead_man_switch and editable %}
+                <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
     </div>
     {% endif %}

@@ -90,6 +90,83 @@
     }
   },
   {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "username": "testuser1",
+      "password": "pbkdf2_sha256$100000$qizr9xt5dAED$L3LmHZtVurLuxfe4xqk6eUq+YKx6ZRkojZvYNsLASh8=",
+      "email":"test1@test.com",
+      "first_name":"Test",
+      "last_name":"One"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "username": "testuser2",
+      "password": "pbkdf2_sha256$100000$XVwAByXg2NMc$3YCJe32PRhRw5AidjqFkIs8SI5j7DejnxPTffs0FvPs=",
+      "email":"test2@test.com",
+      "first_name":"Test",
+      "last_name":"Two"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "username": "testuser3",
+      "password": "pbkdf2_sha256$100000$iiKMpRTBaSSN$gQaymAwcHTimFU0/vtTpetQbD1wxAugPZd34L06wDRc=",
+      "email":"test3@test.com",
+      "first_name":"Test",
+      "last_name":"Three"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+      "username": "testuser4",
+      "password": "pbkdf2_sha256$100000$rRNUwX05n7tN$pYhRQ9URV4NDqutjeuuElrkCfDWjnJvNbqtcKEI5H70=",
+      "email":"test4@test.com",
+      "first_name":"Test",
+      "last_name":"Four"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+      "username": "testuser5",
+      "password": "pbkdf2_sha256$100000$b3yA33Hb8uvf$fnLMmEUfttk0QG5qzSeuLKjG/HyQFfi+s2sC66gulsA=",
+      "email":"test5@test.com",
+      "first_name":"Test",
+      "last_name":"Five"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 14,
+    "fields": {
+      "username": "testuser6",
+      "password": "pbkdf2_sha256$100000$lJtLmfQcz71q$1ZLVtL0xY/7LnerAKoaf105f+YsXJWW876iMDWEf1nI=",
+      "email":"test6@test.com",
+      "first_name":"Test",
+      "last_name":"Six"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
+      "username": "testuser7",
+      "password": "pbkdf2_sha256$100000$4G1B6iQdgKe4$V0kQrjFyGNcwDDOlCKfyUXPNJVt/oq55XadzrisZSV0=",
+      "email":"test7@test.com",
+      "first_name":"Test",
+      "last_name":"Seven"
+    }
+  },
+  {
     "model": "main.admin",
     "pk": 1,
     "fields": {
@@ -146,6 +223,55 @@
   {
     "model": "main.user",
     "pk": 8,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 9,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 10,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 11,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 12,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 13,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 14,
+    "fields": {
+      "birthdate":"1977-01-01"
+    }
+  },
+  {
+    "model": "main.user",
+    "pk": 15,
     "fields": {
       "birthdate":"1977-01-01"
     }
@@ -341,7 +467,7 @@
       "private":"False",
       "price":11.99,
       "dead_man_switch":"True",
-      "dead_man_counter":31536000,
+      "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
       "time_unit":0,
       "twitter":"True",
@@ -361,7 +487,7 @@
       "private":"True",
       "price":11.99,
       "dead_man_switch":"True",
-      "dead_man_counter":31536000,
+      "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
       "time_unit":1,
       "twitter":"False",
@@ -381,7 +507,7 @@
       "private":"False",
       "price":11.99,
       "dead_man_switch":"True",
-      "dead_man_counter":31536000,
+      "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
       "time_unit":2,
       "twitter":"False",

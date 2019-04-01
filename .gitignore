@@ -108,3 +108,5 @@ venv.bak/
 
 .idea
 staticfiles
+
+local_settings.py

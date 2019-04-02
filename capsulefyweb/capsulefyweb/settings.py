@@ -141,8 +141,6 @@ FIXTURE_DIRS = (
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL='/login'
 
-#FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'capsulefy.communications@gmail.com'
@@ -152,4 +150,5 @@ EMAIL_USE_SSL = True
 try:
     from local_settings import *
 except ImportError:
+    FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
     print("local_settings.py not found")

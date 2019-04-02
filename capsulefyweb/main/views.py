@@ -1,4 +1,7 @@
+import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
+
+from main import paypal
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm
 from .models import Capsule, Module, File
 from gcloud import storage
@@ -68,6 +71,7 @@ def createModularCapsule(request):
         capsuleForm = ModularCapsuleForm(request.POST)
         errors = checkModularCapsule(request)
         if capsuleForm.is_valid() and len(errors) == 0:
+            #Si el formulario es válido creamos el pago de la cápsula
             capsuleFormulario = capsuleForm.cleaned_data
             title = capsuleFormulario['title']
             emails = capsuleFormulario['emails']
@@ -121,7 +125,10 @@ def createModularCapsule(request):
                         File.objects.create(url=url, size=filesize, type=filetypedb,
                                             remote_name=capsule.title + str(idrand) + fileext,
                                             local_name=file.name, module_id=module.id)
-            return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
+
+            request.session['capsuleId'] = capsule.id
+            approval_url = paypal.payment(capsule.id)
+            return HttpResponseRedirect(approval_url)
 
     return render(request, 'capsule/createmodularcapsule.html', {"errors": errors})
 
@@ -131,7 +138,7 @@ def checkModularCapsule(request):
     if request.POST['title'] is None:
         errors.append("Title can not be empty")
 
-    if request.POST['emails'] is None and not request.POST['email'].contains("@"):
+    if request.POST['emails'] is None and not request.POST['emails'].contains("@"):
         errors.append("Email not valid")
 
     totalSize = 0
@@ -162,6 +169,16 @@ def checkModularCapsule(request):
     if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
+
+
+def paymentExecute(request):
+    paymentId = request.GET["paymentId"]
+    PayerID = request.GET["PayerID"]
+    payment = paypalrestsdk.Payment.find(paymentId)
+    paypal.execute(payment, PayerID)
+    capsuleId = request.session['capsuleId']
+    print(payment)
+    return HttpResponseRedirect('/displaycapsule/' + str(capsuleId))
 
 
 def editModularCapsule(request, pk):

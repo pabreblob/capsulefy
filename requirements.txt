@@ -5,3 +5,4 @@ psycopg2
 gcloud
 oauth2client
 apscheduler
+paypalrestsdk

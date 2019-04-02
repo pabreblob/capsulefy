@@ -2,8 +2,9 @@ from django.test import TestCase
 from .models import User, Capsule
 from django.test.client import RequestFactory
 from .views import *
-
-
+from .logic import remove_expired_capsules
+from dateutil.relativedelta import relativedelta
+import  datetime
 class SimpleTest(TestCase):
     def setUp(self):
         self.request_factory = RequestFactory()
@@ -318,3 +319,28 @@ class SimpleTest(TestCase):
         request.user = self.test_user
         deleteCapsule(request, capsule.id)
         self.assertIs(Capsule.objects.filter(title='TestModular').first(), None)
+
+    def test_remove_expired(self):
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            'file': None,
+            'capsule_type':'F'
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertIsNotNone(capsule)
+        module = Module.objects.filter(capsule_id=capsule.id).first()
+        module.release_date=datetime.datetime.now(timezone.utc)-relativedelta(months=6)
+        module.save()
+        remove_expired_capsules()
+        delcapsule = Capsule.objects.filter(id=capsule.id).first()
+        self.assertIsNone(delcapsule)

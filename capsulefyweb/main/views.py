@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 import mimetypes
 import main
 from apscheduler.schedulers.background import BackgroundScheduler
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -393,17 +395,7 @@ class login(LoginView):
         super(LoginView, self).__init__(*args, **kwargs)
 
 
-def list(request):
-    capsules = Capsule.objects.filter(private=False)
-    return render(request, 'capsule/list.html', {'capsules': capsules})
 
-
-def private_list(request):
-    user = main.models.User.objects.get(pk=request.user.id)
-    request.user
-    capsules = user.capsuls.all()
-
-    return render(request, 'capsule/privatelist.html', {'capsules': capsules})
 
 
 @login_required
@@ -551,37 +543,34 @@ def refresh_deadman(request, id):
         capsule.save()
     return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
-def ajaxlist(request):
-    res = ''
-    searched = request.GET.get("query", '')
-    capsulesT = Capsule.objects.filter(private=False).filter(title__icontains=searched).filter(modules__release_date__lte=datetime.now())
-    capsulesDate = Capsule.objects.filter(private=False).filter(modules__release_date__icontains=searched).filter(
-        modules__release_date__lte=datetime.now())
-    capsulesDesc = Capsule.objects.filter(private=False).filter(modules__description__icontains=searched).filter(
-        modules__release_date__lte=datetime.now())
-    capsules=capsulesT|capsulesDate|capsulesDesc
-    for c in capsules:
-        res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
-        for m in c.modules.all():
-            res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
-		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
-		
-        res += '''<button class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
-    return HttpResponse(res)
+def list(request,type):
+    
+    return render(request, 'capsule/list.html',{'type':type})
 
-@login_required
-def ajaxprivatelist(request):
-    res = ''
+
+def ajaxlist(request,type):
     searched = request.GET.get("query", '')
-    capsulesT = Capsule.objects.filter(creator_id=request.user.id).filter(title__icontains=searched)
-    capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
-    capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
-    capsules=capsulesT|capsulesDate|capsulesDesc
-    for c in capsules:
-        res += '''<div class="card"><div class="card-header">'''+str(c.title)+'''</div><div class="card-body">'''
-        for m in c.modules.all():
-            res += '''<h5 class="card-title">'''+str(m.description)+'''</h5><blockquote class="blockquote">
-		        <p class="blockquote-footer">Release in <cite title="Source Title">'''+datetime.strftime(m.release_date, '%Y-%m-%d %H:%M')+'''</cite></p></blockquote>'''
-		
-        res += '''<button type="button" class="btn btn-primary" onclick="window.location='/displaycapsule/'''+str(c.id)+''''">Display capsule</button></div></div><br>'''
-    return HttpResponse(res)
+    
+    if(type=='private'):
+        capsulesT = Capsule.objects.filter(creator_id=request.user.id).filter(title__icontains=searched)
+        capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
+        capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
+        capsules_list=capsulesT|capsulesDate|capsulesDesc
+    else:
+        capsules_list = Capsule.objects.filter(private=False).filter(title__icontains=searched).order_by('id')
+
+    
+    page = request.GET.get('page', 1)
+    paginator = Paginator(capsules_list, 4)
+    
+    try:
+        capsules = paginator.page(page)
+    except PageNotAnInteger:
+        capsules = paginator.page(1)
+    except EmptyPage:
+        capsules = paginator.page(paginator.num_pages)
+    
+    response=render_to_string('capsule/list_content.html', {'capsules': capsules,'type':type})
+
+    return HttpResponse(response)
+

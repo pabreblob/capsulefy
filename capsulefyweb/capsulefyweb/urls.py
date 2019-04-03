@@ -22,8 +22,7 @@ from main import views, views_user
 urlpatterns = [
     path('', views.index),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
-    path('list/', views.list,  name='list'),
-    path('privatelist/', views.private_list,  name='list'),
+    path('list/<str:type>', views.list,  name='list'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
     path('newmodule/<int:pk>/', login_required(views.createModule), name='createmodule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
@@ -40,7 +39,6 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
     path('select_capsule/', views.select_capsule),
     path('refresh/<int:id>/', views.refresh_deadman, name='refreshdeadman'),
-    path('ajaxlist/', views.ajaxlist),
-    path('ajaxprivatelist/', views.ajaxprivatelist),
+    path('ajaxlist/<str:type>', views.ajaxlist),
     path('register/', views_user.register),
 ]

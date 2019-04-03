@@ -343,7 +343,6 @@ class SimpleTest(TestCase):
             'emails': 'test@test.com',
             'twitter': False,
             'facebook': False,
-            'file': None,
             'capsule_type':'F'
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)

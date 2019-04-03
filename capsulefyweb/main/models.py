@@ -20,7 +20,7 @@ class User(Actor):
 class Social_network(models.Model):
     social_type=models.CharField(max_length=1,choices=(('F','FACEBOOK'),('T','TWITTER')))
     token=models.CharField(max_length=100)
-    secret=models.CharField(max_length=100,default="123")
+    secret=models.CharField(max_length=100,null=True)
     user=models.ForeignKey(User,related_name='social_networks', on_delete=CASCADE)
     
     

@@ -282,7 +282,8 @@
     "fields": {
       "social_type":"F",
       "user_id":2,
-      "token":"142154"
+      "token":"142154",
+      "secret":"178221"
     }
   },
   {
@@ -291,7 +292,8 @@
     "fields": {
       "social_type":"T",
       "user_id":2,
-      "token":"204746"
+      "token":"204746",
+      "secret":"148429"
     }
   },
   {
@@ -300,7 +302,8 @@
     "fields": {
       "social_type":"F",
       "user_id":3,
-      "token":"219077"
+      "token":"219077",
+      "secret":"108201"
     }
   },
   {
@@ -309,7 +312,8 @@
     "fields": {
       "social_type":"T",
       "user_id":3,
-      "token":"152889"
+      "token":"152889",
+      "secret":"174261"
     }
   },
   {
@@ -318,7 +322,8 @@
     "fields": {
       "social_type":"F",
       "user_id":4,
-      "token":"187003"
+      "token":"187003",
+      "secret":"128257"
     }
   },
   {
@@ -327,7 +332,8 @@
     "fields": {
       "social_type":"T",
       "user_id":4,
-      "token":"130901"
+      "token":"130901",
+      "secret":"138326"
     }
   },
   {
@@ -336,7 +342,8 @@
     "fields": {
       "social_type":"F",
       "user_id":5,
-      "token":"139808"
+      "token":"139808",
+      "secret":"278231"
     }
   },
   {
@@ -345,7 +352,8 @@
     "fields": {
       "social_type":"T",
       "user_id":6,
-      "token":"258212"
+      "token":"258212",
+      "secret":"176241"
     }
   },
   {
@@ -435,7 +443,7 @@
       "twitter":"True",
       "facebook":"False",
       "creator_id":6,
-      "credit_card_id":1
+      "payment_id":"138798"
     }
   },
   {
@@ -454,7 +462,7 @@
       "twitter":"False",
       "facebook":"False",
       "creator_id":7,
-      "credit_card_id":2
+      "payment_id":"148738"
     }
   },
   {
@@ -473,7 +481,7 @@
       "twitter":"True",
       "facebook":"True",
       "creator_id":3,
-      "credit_card_id":3
+      "payment_id":"148636"
     }
   },
   {
@@ -493,7 +501,7 @@
       "twitter":"False",
       "facebook":"False",
       "creator_id":8,
-      "credit_card_id":4
+      "payment_id":"138336"
     }
   },
   {
@@ -513,7 +521,7 @@
       "twitter":"False",
       "facebook":"True",
       "creator_id":4,
-      "credit_card_id":5
+      "payment_id":"102630"
     }
   },
   {
@@ -531,7 +539,7 @@
       "twitter":"False",
       "facebook":"False",
       "creator_id":8,
-      "credit_card_id":4
+      "payment_id":"128945"
     }
   },
   {
@@ -729,66 +737,6 @@
       "module_id":11,
       "local_name":"3VeniceForKids.jpg",
       "remote_name":"test563.jpg"
-    }
-  },
-  {
-    "model": "main.credit_card",
-    "pk": 1,
-    "fields": {
-      "holder_name":"Angela Miller",
-      "brand_name":"Visa",
-      "number":"4532141227142594",
-      "expiration_month":9,
-      "expiration_year":2022,
-      "cvv":350
-    }
-  },
-  {
-    "model": "main.credit_card",
-    "pk": 2,
-    "fields": {
-      "holder_name":"Carl Smith",
-      "brand_name":"MasterCard",
-      "number":"5585772338232057",
-      "expiration_month":5,
-      "expiration_year":2023,
-      "cvv":688
-    }
-  },
-  {
-    "model": "main.credit_card",
-    "pk": 3,
-    "fields": {
-      "holder_name":"Paul Jones",
-      "brand_name":"VISA",
-      "number":"4716372972806483",
-      "expiration_month":8,
-      "expiration_year":2022,
-      "cvv":521
-    }
-  },
-  {
-    "model": "main.credit_card",
-    "pk": 4,
-    "fields": {
-      "holder_name":"Joe Smith",
-      "brand_name":"MasterCard",
-      "number":"5489125482785742",
-      "expiration_month":5,
-      "expiration_year":2022,
-      "cvv":191
-    }
-  },
-  {
-    "model": "main.credit_card",
-    "pk": 5,
-    "fields": {
-      "holder_name":"Henry Brownson",
-      "brand_name":"VISA",
-      "number":"4929046786851058",
-      "expiration_month":9,
-      "expiration_year":2020,
-      "cvv":660
     }
   }
 ]

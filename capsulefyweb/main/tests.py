@@ -24,8 +24,8 @@ class SimpleTest(TestCase):
             'release_date': '2019-10-10',
             'emails': 'test@test.com',
             'twitter': False,
-            'facebook': False,
-            'file': None
+            'facebook': False
+            #'file': None
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -48,8 +48,8 @@ class SimpleTest(TestCase):
             'release_date': '2019-10-10',
             'emails': 'test@test.com',
             'twitter': False,
-            'facebook': False,
-            'file': None
+            'facebook': False
+            #'file': None
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -62,8 +62,8 @@ class SimpleTest(TestCase):
             'release_date': '2019-10-20',
             'emails': 'test@tested.com',
             'twitter': False,
-            'facebook': True,
-            'file': None
+            'facebook': True
+            #'file': None
         }
         editrequest = self.request_factory.post('/editfreecapsule/' + str(capsule.id), newdata, follow=True)
         editrequest.user = self.test_user
@@ -86,8 +86,8 @@ class SimpleTest(TestCase):
             'release_date': '2019-10-10',
             'emails': 'test@test.com',
             'twitter': False,
-            'facebook': False,
-            'file': None
+            'facebook': False
+            #'file': None
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -100,23 +100,36 @@ class SimpleTest(TestCase):
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
         self.assertIsNone(delcapsule)
 
+    '''
     def test_create_modular_capsule(self):
         # Creating a new modular capsule
         createcapsule = self.client.get('/newmodularcapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
         data = {
             'title': 'TestModular',
-            'modulesSize': 2,
             'emails': 'test@test.com',
+            'form-TOTAL_FORMS': 2,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
             'twitter': False,
             'facebook': False,
-            'description0': 'Modulo1',
-            'release_date0': '2019-10-10',
-            'file0': None,
-            'description1': 'Modulo2',
-            'release_date1': '2020-10-10',
-            'file1': None
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+            'form-1-description': 'Modulo2',
+            'form-1-release_date': '2020-10-10'
         }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+        self.assertIs(len(capsule.modules.all()), 2)
 
     def test_edit_modular_capsule(self):
         #Creating a new modular capsule
@@ -130,10 +143,10 @@ class SimpleTest(TestCase):
             'facebook': False,
             'description0': 'Modulo1',
             'release_date0': '2019-10-10',
-            'file0': None,
+            #'file0': None,
             'description1': 'Modulo2',
-            'release_date1': '2020-10-10',
-            'file1': None
+            'release_date1': '2020-10-10'
+            #'file1': None
         }
         request = self.request_factory.post('/newmodularcapsule', data, follow=True)
         request.user = self.test_user
@@ -169,10 +182,10 @@ class SimpleTest(TestCase):
             'facebook': False,
             'description0': 'Modulo1',
             'release_date0': '2019-10-10',
-            'file0': None,
+            #'file0': None,
             'description1': 'Modulo2',
-            'release_date1': '2020-10-10',
-            'file1': None
+            'release_date1': '2020-10-10'
+            #'file1': None
         }
         request = self.request_factory.post('/newmodularcapsule', data, follow=True)
         request.user = self.test_user
@@ -185,8 +198,8 @@ class SimpleTest(TestCase):
         self.assertEquals(createcapsule.status_code, 200)
         data = {
             'description': 'Module3',
-            'release_date': '2019-10-10',
-            'file': None
+            'release_date': '2019-10-10'
+            #'file': None
         }
         request = self.request_factory.post('/newmodule/'+str(capsule.id), data, follow=True)
         request.user = self.test_user
@@ -206,10 +219,10 @@ class SimpleTest(TestCase):
             'facebook': False,
             'description0': 'Modulo1',
             'release_date0': '2019-10-10',
-            'file0': None,
+            #'file0': None,
             'description1': 'Modulo2',
-            'release_date1': '2020-10-10',
-            'file1': None
+            'release_date1': '2020-10-10'
+            #'file1': None
         }
         request = self.request_factory.post('/newmodularcapsule', data, follow=True)
         request.user = self.test_user
@@ -222,8 +235,8 @@ class SimpleTest(TestCase):
         self.assertEquals(createcapsule.status_code, 200)
         data = {
             'description': 'Module3',
-            'release_date': '2019-10-10',
-            'file': None
+            'release_date': '2019-10-10'
+            #'file': None
         }
         request = self.request_factory.post('/newmodule/' + str(capsule.id), data, follow=True)
         request.user = self.test_user
@@ -237,8 +250,8 @@ class SimpleTest(TestCase):
         self.assertEquals(createcapsule.status_code, 200)
         data = {
             'description': 'Module3Modified',
-            'release_date': '2019-10-10',
-            'file': None
+            'release_date': '2019-10-10'
+            #'file': None
         }
         request = self.request_factory.post('/editmodule/' + str(module.id), data, follow=True)
         request.user = self.test_user
@@ -258,10 +271,10 @@ class SimpleTest(TestCase):
             'facebook': False,
             'description0': 'Modulo1',
             'release_date0': '2019-10-10',
-            'file0': None,
+            #'file0': None,
             'description1': 'Modulo2',
-            'release_date1': '2020-10-10',
-            'file1': None
+            'release_date1': '2020-10-10'
+            #'file1': None
         }
         request = self.request_factory.post('/newmodularcapsule', data, follow=True)
         request.user = self.test_user
@@ -343,4 +356,4 @@ class SimpleTest(TestCase):
         module.save()
         remove_expired_capsules()
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
-        self.assertIsNone(delcapsule)
+        self.assertIsNone(delcapsule)'''

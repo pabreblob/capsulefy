@@ -5,7 +5,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'capsulefy',
         'USER': 'user',
-        'PASSWORD': 'password'
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
     }

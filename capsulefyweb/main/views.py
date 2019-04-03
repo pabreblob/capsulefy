@@ -65,10 +65,14 @@ conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
 def createModularCapsule(request):
     user = request.user
+    errors = []
     if request.method == 'POST':
         capsuleForm = ModularCapsuleForm(request.POST)
         moduleFormSet = ModulesFormSet(request.POST,  request.FILES)
-        if capsuleForm.is_valid() and moduleFormSet.is_valid():
+        size = checkSize(request, moduleFormSet)
+        if size > 524288000:
+            errors.append("The total size of files can not be more than 500mb ")
+        if capsuleForm.is_valid() and moduleFormSet.is_valid() and len(errors) == 0:
             title = capsuleForm.cleaned_data['title']
             emails = capsuleForm.cleaned_data['emails']
             capsule_type = 'M'
@@ -128,28 +132,19 @@ def createModularCapsule(request):
     else:
         capsuleForm = ModularCapsuleForm()
         moduleFormSet = ModulesFormSet()
-    return render(request, 'capsule/createmodularcapsule.html', {"capsuleForm": capsuleForm, "moduleFormSet": moduleFormSet})
+    return render(request, 'capsule/createmodularcapsule.html', {"capsuleForm": capsuleForm, "moduleFormSet": moduleFormSet, "errors": errors})
 
-#TODO: Comprobar el tamaño total de los ficheros
 
-def checkModularCapsule(request):
-    errors = []
-    if request.POST['title'] is None:
-        errors.append("Title can not be empty")
-
-    if request.POST['emails'] is None and not request.POST['emails'].contains("@"):
-        errors.append("Email not valid")
-
+def checkSize(request, moduleFormSet):
     totalSize = 0
-    for i in range(int(request.POST['modulesSize'])):
-        files = request.FILES.getlist('file' + str(i))
+    modulesCount = 0
+    for moduleForm in moduleFormSet:
+        files = request.FILES.getlist('form-' + str(modulesCount) + '-file')
         if files is not None:
             for file in files:
                 print(file.size)
                 totalSize += file.size
-    if totalSize > 524288000:
-        errors.append("The total size of files can not be more than 500mb ")
-    return errors
+    return totalSize
 
 
 def paymentExecute(request):

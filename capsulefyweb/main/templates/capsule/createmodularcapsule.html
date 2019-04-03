@@ -7,38 +7,49 @@
             {% csrf_token %}
             <h3 class="title"> Creating a premium capsule</h3>
             <hr>
+            {% for error in errors %}
+                <p><b><span class="red">{{ error }}</span></b></p>
+            {% endfor %}
             <div class="form-group">
                 <label for="id_title"><span class="red">* </span>Title: {{ capsuleForm.title.errors }}</label>
-                <input type="text" name="title" class="form-control" value="{% if capsuleForm.title.value != None %}{{ capsuleForm.title.value }}{% endif %}"maxlength="250" required id="id_title">
+                <input type="text" name="title" class="form-control"
+                       value="{% if capsuleForm.title.value != None %}{{ capsuleForm.title.value }}{% endif %}"
+                       maxlength="250" required id="id_title">
             </div>
             <div class="form-group">
                 <label for="id_emails">Emails:{{ capsuleForm.emails.errors }}</label>
-                <input type="text" name="emails" class="form-control" value="{% if capsuleForm.emails.value != None %}{{ capsuleForm.emails.value }}{% endif %}" maxlength="2500" id="id_emails">
+                <input type="text" name="emails" class="form-control"
+                       value="{% if capsuleForm.emails.value != None %}{{ capsuleForm.emails.value }}{% endif %}"
+                       maxlength="2500" id="id_emails">
             </div>
-            <!--
+
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter">
+                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
+                       {% if capsuleForm.twitter.value == True %}checked{% endif %}>
                 <label for="id_twitter" class="form-check-label">
                     Twitter
                 </label>
             </div>
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook">
+                <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook"
+                       {% if capsuleForm.facebook.value == True %}checked{% endif %}>
                 <label for="id_facebook" class="form-check-label">
                     Facebook
                 </label>
             </div>
             <hr>
-            -->
+
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="{% if capsuleForm.private.value != None %}{{ capsuleForm.private.value }}{% endif %}"name="private" id="id_private">
+                <input type="checkbox" class="form-check-input" name="private" id="id_private"
+                       {% if capsuleForm.private.value == True %}checked{% endif %}>
                 <label for="id_private" class="form-check-label">
                     Private capsule
                 </label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="deadman_switch"
-                       onclick="deadman_switch_activated()" id="id_deadman_switch">
+                       onclick="deadman_switch_activated()" id="id_deadman_switch"
+                       {% if capsuleForm.deadman_switch.value == True %}checked{% endif %}>
                 <label class="form-check-label" for="id_deadman_switch">
                     Activate deadman switch
                 </label>
@@ -49,14 +60,18 @@
                     <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
                     <div class="col-sm-2">
                         <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter"
-                               id="id_deadman_counter">
+                               id="id_deadman_counter"
+                               value="{% if capsuleForm.deadman_counter.value != None %}checked{% endif %}">
                     </div>
                     <div class="col-sm-2">
                         <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
-                            <option value=0>Minutes</option>
-                            <option value=1>Days</option>
-                            <option value=2>Months</option>
-                            <option value=3>Years</option>
+                            <option value=0 {% if capsuleForm.deadman_time_unit == 0 %}selected{% endif %}>Minutes
+                            </option>
+                            <option value=1 {% if capsuleForm.deadman_time_unit == 1 %}selected{% endif %}>Days</option>
+                            <option value=2 {% if capsuleForm.deadman_time_unit == 2 %}selected{% endif %}>Months
+                            </option>
+                            <option value=3 {% if capsuleForm.deadman_time_unit == 3 %}selected{% endif %}>Years
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -67,21 +82,29 @@
                 {% for formModule in moduleFormSet %}
                     <div class="moduleform">
                         <div class="form-group">
-                            <label for="id_form-0-description"><span class="red">* </span>Description: {{ formModule.description.errors }}</label>
-                            <textarea name="form-0-description" rows="5" maxlength="250" required class="form-control"
-                                      id="id_form-0-description">{% if formModule.description.value != None %}{{ formModule.description.value }}{% endif %}</textarea>
+                            <label for="id_form-{{ forloop.counter0 }}-description"><span class="red">* </span>Description: {{ formModule.description.errors }}
+                            </label>
+                            <textarea name="form-{{ forloop.counter0 }}-description" rows="5" maxlength="250" required
+                                      class="form-control"
+                                      id="id_form-{{ forloop.counter0 }}-description">{% if formModule.description.value != None %}{{ formModule.description.value }}{% endif %}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="id_form-0-release_date"><span class="red">* </span>Release date: {{ formModule.release_date.errors }}</label>
-                            <input type="text" name="form-0-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}" class="form-control"
-                                   id="id_form-0-release_date"
+                            <label for="id_form-{{ forloop.counter0 }}-release_date"><span class="red">* </span>Release
+                                date: {{ formModule.release_date.errors }}</label>
+                            <input type="text" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
+                                   class="form-control"
+                                   id="id_form-{{ forloop.counter0 }}-release_date"
                                    placeholder="YYYY-MM-DD HH:MM">
                         </div>
                         <div class="form-group">
-                            <label for="id_form-0-file">File: {{ formModule.file.errors }}</label>
-                            <input type="file" class="form-control-file" name="form-0-file" id="id_form-0-file"
+                            <label for="id_form-{{ forloop.counter0 }}-file">File: {{ formModule.file.errors }}</label>
+                            <input type="file" class="form-control-file" name="form-{{ forloop.counter0 }}-file"
+                                   id="id_form-{{ forloop.counter0 }}-file"
                                    multiple>
                         </div>
+                        {% if forloop.counter0 != 0 %}
+                            <button type="button" class="btn btn-danger" onclick="removeModule(this)">Delete this module</button>
+                        {% endif %}
                         <hr>
                     </div>
                 {% endfor %}

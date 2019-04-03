@@ -213,9 +213,7 @@ def createModule(request, pk):
     errors = []
     if request.method == 'POST':
         moduleForm = ModuleForm(request.POST, request.FILES)
-        errors = checkModule(request)
-        if moduleForm.is_valid() == False:
-            errors.append(moduleForm.errors)
+        errors = checkModuleFiles(request, capsule)
         if moduleForm.is_valid() and len(errors) == 0:
             moduleFormulario = moduleForm.cleaned_data
             description = moduleFormulario['description']
@@ -253,18 +251,6 @@ def createModule(request, pk):
     return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
 
 
-def checkModule(request):
-    errors = []
-    files = request.FILES.getlist('file')
-    totalSize = 0
-    if files is not None:
-        for file in files:
-            totalSize += file.size
-    if totalSize > 524288000:
-        errors.append("The total size of files can not be more than 500mb ")
-    return errors
-
-
 def editModule(request, pk):
     oldmodule = get_object_or_404(Module, id=pk)
     errors = []
@@ -275,9 +261,13 @@ def editModule(request, pk):
     user = request.user
     if user.id != oldmodule.capsule.creator.id:
         return HttpResponseNotFound()
+    olddata = {
+        'description': oldmodule.description,
+        'release_date': oldmodule.release_date,
+    }
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
-        errors = checkEditModule(request, pk)
+        errors = checkModuleFiles(request, oldmodule.capsule)
         if form.is_valid() == False:
             errors.append(form.errors)
         if form.is_valid() and len(errors) == 0:
@@ -312,27 +302,26 @@ def editModule(request, pk):
                                         local_name=file.name, module_id=oldmodule.id)
             oldmodule.save()
             return HttpResponseRedirect('/editmodularcapsule/' + str(oldmodule.capsule.id))
-
+    else:
+        form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
-                  {'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
+                  {'form': form, 'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
 
 
-def checkEditModule(request, pk):
+def checkModuleFiles(request, capsule):
     errors = []
     files = request.FILES.getlist('file')
-    module = get_object_or_404(Module, id=pk)
     totalSize = 0
-    for module in module.capsule.modules.all():
-        if len(module.files.all()) != 0:
-            for file in module.files.all():
-                totalSize += file.size
-
     if files is not None:
         for file in files:
             totalSize += file.size
+    for module in capsule.modules.all():
+        for file in module.files.all():
+            totalSize += (file.size * 1048576)
     if totalSize > 524288000:
         errors.append("The total size of files can not be more than 500mb ")
     return errors
+
 
 
 def deleteModule(request, pk):

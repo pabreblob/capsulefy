@@ -174,7 +174,7 @@ def editModularCapsule(request, pk):
         'facebook': oldcapsule.facebook,
         'private': oldcapsule.private,
         'deadman_switch': oldcapsule.dead_man_switch,
-        'deadman_counter': oldcapsule.dead_man_counter,
+        'deadman_counter': oldcapsule.seconds_to_unit(),
         'deadman_time_unit': 0
     }
 
@@ -200,9 +200,8 @@ def editModularCapsule(request, pk):
             oldcapsule.save()
             return HttpResponseRedirect('/displaycapsule/' + str(pk))
     else:
-        capsule_editing=oldcapsule
-        capsule_editing.dead_man_counter=capsule_editing.seconds_to_unit()
-        return render(request, 'capsule/editmodularcapsule.html', {'oldcapsule': capsule_editing})
+        form = ModularCapsuleForm(initial=olddata)
+        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
 
 
 def createModule(request, pk):

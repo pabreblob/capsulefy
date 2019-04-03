@@ -2,7 +2,8 @@
 import datetime
 from datetime import timezone
 from django.core.mail import send_mail
-from main.models import Module
+from main.models import Module,Capsule
+from dateutil.relativedelta import relativedelta
 import smtplib
 
 def send_email(module):
@@ -50,3 +51,22 @@ def check_modules_release():
     for mod in modules:
         send_email(mod)
 
+def check_deadman_switch():
+    capsules = Capsule.objects.filter(dead_man_switch=True)
+
+    for capsule in capsules:
+        capsule.dead_man_counter-=86400
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
+            for module in modules:
+                if module.release_date>datetime.now(timezone.utc):
+                    module.release_date=datetime.now(timezone.utc)
+                    module.save()
+            capsule.dead_man_switch=False
+        capsule.save()
+
+def remove_expired_capsules():
+    capsules=Capsule.objects.filter(capsule_type='F').filter(modules__release_date__lt=datetime.datetime.now(timezone.utc)-relativedelta(months=6))
+    for capsule in capsules:
+        capsule.delete()

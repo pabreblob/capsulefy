@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from main import views
+from main import views, views_user
 
 urlpatterns = [
     path('', views.index),
@@ -42,5 +42,6 @@ urlpatterns = [
     path('refresh/<int:id>/', views.refresh_deadman, name='refreshdeadman'),
     path('ajaxlist/', views.ajaxlist),
     path('ajaxprivatelist/', views.ajaxprivatelist),
+    path('register/', views_user.register),
     path('payment/execute/', views.paymentExecute),
 ]

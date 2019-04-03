@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+{% load static %}
+{% load crispy_forms_tags %}
+<div class="container">
+    <form action="" method="post"  novalidate >
+    {% csrf_token %}
+		<div class="form-group">
+		    <label for="id_first_name"><span class="red"></span> 
+		    		First name {{ form.first_name.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="first_name" 
+		    	id="id_first_name" maxlength="250" 
+		    	value="{% if form.first_name.value != None %}{{form.first_name.value}}{% endif %}" required placeholder="First name">
+		</div>
+    		<div class="form-group">
+		    <label for="id_last_name"><span class="red"></span> 
+		    		Last name {{ form.last_name.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="last_name" 
+		    	id="id_last_name" maxlength="250" 
+		    	value="{% if form.last_name.value != None %}{{form.last_name.value}}{% endif %}" required placeholder="Last name">
+		</div>
+    		<div class="form-group">
+		    <label for="id_username"><span class="red">*</span> 
+		    		User name {{ form.username.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="username" 
+		    	id="id_username" maxlength="250" 
+		    	value="{% if form.username.value != None %}{{form.username.value }}{% endif %}" required placeholder="User name">
+		</div>
+		<div class="form-group">
+		    <label for="id_password"><span class="red">*</span> 
+		    		Password {{ form.password.errors }}
+		    	</label>
+		    <input type="password" class="form-control" name="password" 
+		    	id="id_password" maxlength="250" 
+		    	value="" required placeholder="Password">
+		</div>
+		<div class="form-group">
+		    <label for="id_birthdate"><span class="red">*</span> 
+		    		Birthdate {{ form.birthdate.errors }}
+		    	</label>
+		    <input type="date" class="form-control" name="birthdate" 
+		    	id="id_birthdate" maxlength="250" 
+		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="Birthdate">
+		</div>
+		<div class="form-group">
+		    <label for="id_email"><span class="red"></span> 
+		    		Email {{ form.email.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="email" 
+		    	id="id_email" maxlength="250" 
+		    	value="{% if form.email.value != None %}{{form.email.value}}{% endif %}" required placeholder="Email">
+		</div>
+		<div class="form-group">
+		    <label for="id_email_notification"><span class="red">*</span> 
+		    		Email for notifications {{ form.email_notification.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="email_notification" 
+		    	id="id_email_notification" maxlength="250" 
+		    	value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email for notifications">
+		</div>
+		<button type="submit" value="submit" class="btn btn-primary">Submit</button>
+    </form>
+    
+<div>
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+{% endblock %}

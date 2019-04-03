@@ -2,7 +2,7 @@ import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 
 from main import paypal
-from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm
+from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
 from .models import Capsule, Module, File
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
@@ -65,42 +65,38 @@ conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
 def createModularCapsule(request):
     user = request.user
-    errors = []
     if request.method == 'POST':
-        modulesSize = request.POST['modulesSize']
         capsuleForm = ModularCapsuleForm(request.POST)
-        errors = checkModularCapsule(request)
-        if capsuleForm.is_valid() and len(errors) == 0:
-            #Si el formulario es válido creamos el pago de la cápsula
-            capsuleFormulario = capsuleForm.cleaned_data
-            title = capsuleFormulario['title']
-            emails = capsuleFormulario['emails']
+        moduleFormSet = ModulesFormSet(request.POST,  request.FILES)
+        if capsuleForm.is_valid() and moduleFormSet.is_valid():
+            title = capsuleForm.cleaned_data['title']
+            emails = capsuleForm.cleaned_data['emails']
             capsule_type = 'M'
-            private = capsuleFormulario['private']
+            private = capsuleForm.cleaned_data['private']
             try:
-                time_unit = int(capsuleFormulario['deadman_time_unit'])
-                dead_man_switch = capsuleFormulario['deadman_switch']
-                dead_man_counter = capsuleFormulario['deadman_counter'] * conversion_to_seconds[time_unit]
+                time_unit = int(capsuleForm.cleaned_data['deadman_time_unit'])
+                dead_man_switch = capsuleForm.cleaned_data['deadman_switch']
+                dead_man_counter = capsuleForm.cleaned_data['deadman_counter'] * conversion_to_seconds[time_unit]
             except:
                 dead_man_switch = False
                 dead_man_counter = 0
                 time_unit = 0
             price = 11.99
-            twitter = capsuleFormulario['twitter']
-            facebook = capsuleFormulario['facebook']
-            totalSize = 0
+            twitter = capsuleForm.cleaned_data['twitter']
+            facebook = capsuleForm.cleaned_data['facebook']
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
                                              twitter=twitter, facebook=facebook,
                                              creator_id=user.id, price=price)
-
-            for i in range(int(modulesSize)):
-                description = request.POST['description' + str(i)]
-                release_date = request.POST['release_date' + str(i)]
-                files = request.FILES.getlist('file' + str(i))
+            modulesCount = 0;
+            for moduleForm in moduleFormSet:
+                description = moduleForm.cleaned_data['description']
+                release_date = moduleForm.cleaned_data['release_date']
+                files = request.FILES.getlist('form-' + str(modulesCount) + '-file')
                 module = Module.objects.create(description=description, release_date=release_date,
                                                capsule_id=capsule.id)
+                modulesCount += 1
                 if files is not None:
                     for file in files:
                         credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
@@ -129,9 +125,12 @@ def createModularCapsule(request):
             request.session['capsuleId'] = capsule.id
             approval_url = paypal.payment(capsule.id)
             return HttpResponseRedirect(approval_url)
+    else:
+        capsuleForm = ModularCapsuleForm()
+        moduleFormSet = ModulesFormSet()
+    return render(request, 'capsule/createmodularcapsule.html', {"capsuleForm": capsuleForm, "moduleFormSet": moduleFormSet})
 
-    return render(request, 'capsule/createmodularcapsule.html', {"errors": errors})
-
+#TODO: Comprobar el tamaño total de los ficheros
 
 def checkModularCapsule(request):
     errors = []
@@ -143,25 +142,7 @@ def checkModularCapsule(request):
 
     totalSize = 0
     for i in range(int(request.POST['modulesSize'])):
-        description = request.POST['description' + str(i)]
-        release_date = request.POST['release_date' + str(i)]
         files = request.FILES.getlist('file' + str(i))
-        if description is None:
-            errors.append("Description " + str(i + 1) + " can not be empty")
-        if release_date is None:
-            errors.append("Release date " + str(i + 1) + " can not be empty")
-        else:
-            try:
-                date = datetime.strptime(release_date, '%Y-%m-%d %H:%M')
-                if date < datetime.now():
-                    errors.append("The release date must be in future")
-            except:
-                try:
-                    date = datetime.strptime(release_date, '%Y-%m-%d')
-                    if date < datetime.now():
-                        errors.append("The release date must be in future")
-                except:
-                    errors.append("Invalid release date")
         if files is not None:
             for file in files:
                 print(file.size)
@@ -177,7 +158,7 @@ def paymentExecute(request):
     payment = paypalrestsdk.Payment.find(paymentId)
     paypal.execute(payment, PayerID)
     capsuleId = request.session['capsuleId']
-    print(payment)
+    #TODO: Guardar el paymentId
     return HttpResponseRedirect('/displaycapsule/' + str(capsuleId))
 
 

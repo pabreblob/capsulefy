@@ -7,19 +7,13 @@
             {% csrf_token %}
             <h3 class="title"> Creating a premium capsule</h3>
             <hr>
-            {% for error in errors %}
-                <p><b><span class="red">{{ error }}</span></b></p>
-            {% endfor %}
-
-            <input type="hidden" id="modulesSize" name="modulesSize" value="1">
-
             <div class="form-group">
-                <label for="id_title"><span class="red">* </span>Title:</label>
-                <input type="text" name="title" class="form-control" maxlength="250" required id="id_title">
+                <label for="id_title"><span class="red">* </span>Title: {{ capsuleForm.title.errors }}</label>
+                <input type="text" name="title" class="form-control" value="{% if capsuleForm.title.value != None %}{{ capsuleForm.title.value }}{% endif %}"maxlength="250" required id="id_title">
             </div>
             <div class="form-group">
-                <label for="id_emails">Emails:</label>
-                <input type="text" name="emails" class="form-control" maxlength="2500" id="id_emails">
+                <label for="id_emails">Emails:{{ capsuleForm.emails.errors }}</label>
+                <input type="text" name="emails" class="form-control" value="{% if capsuleForm.emails.value != None %}{{ capsuleForm.emails.value }}{% endif %}" maxlength="2500" id="id_emails">
             </div>
             <!--
             <div class="form-check">
@@ -37,7 +31,7 @@
             <hr>
             -->
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="private" id="id_private">
+                <input type="checkbox" class="form-check-input" value="{% if capsuleForm.private.value != None %}{{ capsuleForm.private.value }}{% endif %}"name="private" id="id_private">
                 <label for="id_private" class="form-check-label">
                     Private capsule
                 </label>
@@ -68,25 +62,29 @@
                 </div>
                 <hr>
             </div>
-
+            {{ moduleFormSet.management_form }}
             <div class="modules" id="modules">
-                <div class="moduleform">
-                    <div class="form-group">
-                        <label for="id_description0"><span class="red">* </span>Description:</label>
-                        <textarea name="description0" rows="5" maxlength="250" required class="form-control"
-                                  id="id_description0"></textarea>
+                {% for formModule in moduleFormSet %}
+                    <div class="moduleform">
+                        <div class="form-group">
+                            <label for="id_form-0-description"><span class="red">* </span>Description: {{ formModule.description.errors }}</label>
+                            <textarea name="form-0-description" rows="5" maxlength="250" required class="form-control"
+                                      id="id_form-0-description">{% if formModule.description.value != None %}{{ formModule.description.value }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_form-0-release_date"><span class="red">* </span>Release date: {{ formModule.release_date.errors }}</label>
+                            <input type="text" name="form-0-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}" class="form-control"
+                                   id="id_form-0-release_date"
+                                   placeholder="YYYY-MM-DD HH:MM">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_form-0-file">File: {{ formModule.file.errors }}</label>
+                            <input type="file" class="form-control-file" name="form-0-file" id="id_form-0-file"
+                                   multiple>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="form-group">
-                        <label for="id_release_date0"><span class="red">* </span>Release date:</label>
-                        <input type="text" name="release_date0" required class="form-control" id="id_release_date0"
-                               placeholder="YYYY-MM-DD HH:MM">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_file0">File:</label>
-                        <input type="file" class="form-control-file" name="file0" id="id_file0" multiple>
-                    </div>
-                    <hr>
-                </div>
+                {% endfor %}
             </div>
             <button class="btn btn-success" value="Add module" onclick="addModule()">Add module</button>
             <hr>
@@ -100,35 +98,33 @@
     <script>
         function addModule() {
             var div = document.createElement('div');
-            var modulesSize = parseInt(document.getElementById('modulesSize').value);
+            var totalForms = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
             div.className = 'moduleform';
-
             div.innerHTML = `
-                <h5 class="subtitle">Module ` + modulesSize + `</h5>
+                <h5 class="subtitle">Module ` + totalForms + `</h5>
                 <div class="form-group">
-                    <label for="id_description` + modulesSize + `"><span class="red">* </span>Description:</label>
-                    <input type="text" name="description` + modulesSize + `" maxlength="250" required class="form-control" id="id_description` + modulesSize + `">
+                    <label for="id_form-` + totalForms + `-description"><span class="red">* </span>Description:</label>
+                    <textarea name="form-` + totalForms + `-description" rows="5" maxlength="250" required class="form-control" id="id_form-` + totalForms + `-description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="id_description` + modulesSize + `"><span class="red">* </span>Release date:</label>
-                    <input type="text" name="release_date` + modulesSize + `" required class="form-control" id="id_release_date` + modulesSize + `" placeholder="YYYY-MM-DD HH:MM">
+                    <label for="id_form-` + totalForms + `-release_date"><span class="red">* </span>Release date:</label>
+                    <input type="text" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
                 </div>
                 <div class="form-group">
-                    <label for="id_file` + modulesSize + `">File:</label>
-                    <input type="file" name="file` + modulesSize + `" class="form-group-file" id="id_file` + modulesSize + `">
+                    <label for="id_form-` + totalForms + `-file">File:</label>
+                    <input type="file" class="form-control-file" name="form-` + totalForms + `-file" class="form-group-file" id="id_form-` + totalForms + `-file" multiple>
                 </div>
-                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Delete this module</button>
+                <button type="button" class="btn btn-danger" onclick="removeModule(this)">Delete this module</button>
                 <hr>
             `;
-
             document.getElementById('modules').appendChild(div);
-            document.getElementById('modulesSize').value = modulesSize + 1;
+            document.getElementById('id_form-TOTAL_FORMS').value = totalForms + 1;
         }
 
-        function removeRow(input) {
+        function removeModule(input) {
             document.getElementById('modules').removeChild(input.parentNode);
-            var modulesSize = parseInt(document.getElementById('modulesSize').value);
-            document.getElementById('modulesSize').value = modulesSize - 1;
+            var totalForms = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+            document.getElementById('id_form-TOTAL_FORMS').value = totalForms - 1;
         }
 
         function deadman_switch_activated() {

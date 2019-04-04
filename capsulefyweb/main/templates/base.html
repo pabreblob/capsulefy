@@ -35,7 +35,7 @@
           </li>
             {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="/list">Search capsules</a>
+            <a class="nav-link" href="/list/public">Search capsules</a>
           </li> 
           {% if user.username %}
             <li class="nav-item dropdown dmenu">
@@ -43,7 +43,7 @@
                 My Capsules
               </a>
               <div class="dropdown-menu sm-menu dropdown-menu-right">
-                <a class="dropdown-item" href="/privatelist">List my capsules</a>
+                <a class="dropdown-item" href="/list/private">List my capsules</a>
                 <a class="dropdown-item" href="/select_capsule">Create a capsule</a>
               </div>
             </li>
@@ -58,9 +58,13 @@
               </div>
             </li>
             {% else %}
+            	  <li class="nav-item">
+	            <a class="nav-link" href="/register">Sign up</a>
+	          </li> 
               <li class="nav-item">
                 <button class="btn btn-primary" onclick="window.location='/login'">Login</button>
               </li>
+               
             {% endif %}
             </li>
           </ul>
@@ -68,7 +72,20 @@
       </nav>
 
             		
-
+	<div id="ctnMsgs" >
+		 {% if messages %}
+		    {% for message in messages %}
+		        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+		       
+		        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				  </button>
+				   {{ message|safe  }}
+		        </div>
+		    
+		    {% endfor %}
+		{% endif %}
+		</div>
     {% block contenido %}{% endblock %}
     <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
       <div class="container text-center">

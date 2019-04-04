@@ -2,8 +2,10 @@
 import datetime
 from datetime import timezone
 from django.core.mail import send_mail
-from main.models import Module
+from main.models import Module,Capsule
+from dateutil.relativedelta import relativedelta
 import smtplib
+import capsulefyweb.settings
 
 def send_email(module):
     
@@ -50,3 +52,46 @@ def check_modules_release():
     for mod in modules:
         send_email(mod)
 
+def send_deadman_notification(capsule):
+    days=round(capsule.dead_man_counter/86400)
+    mail_list=[capsule.creator.email,capsule.creator.email_notification]
+    html_message = "<p>Your capsule titled: " \
+                   + capsule.title +" is about to expire in "+str(days)+" days!</p>" \
+                   + "<p>If you don't want it to be released yet, go to your capsule and press the Refresh button " \
+                   + capsulefyweb.settings.BASEURL + "</p>"
+    try:
+        send_mail(subject="Capsule timer is about to expire",
+                  message="",
+                  html_message=html_message,
+                  from_email="capsulefy.communications@gmail.com",
+                  recipient_list=mail_list,
+                  fail_silently=False)
+        capsule.expiration_notify=True
+        capsule.save()
+    except Exception as e:
+        pass
+
+def check_deadman_switch():
+    capsules = Capsule.objects.filter(dead_man_switch=True)
+
+    for capsule in capsules:
+        capsule.dead_man_counter-=86400
+        if capsule.dead_man_counter<=0:
+            capsule.dead_man_counter=0
+            modules=capsule.modules.all()
+            for module in modules:
+                if module.release_date>datetime.datetime.now(timezone.utc):
+                    module.release_date=datetime.datetime.now(timezone.utc)
+                    module.save()
+            capsule.dead_man_switch=False
+        elif capsule.dead_man_counter<=604800 and capsule.expiration_notify==False:
+            try:
+                send_deadman_notification(capsule)
+            except Exception as e:
+                pass
+        capsule.save()
+
+def remove_expired_capsules():
+    capsules=Capsule.objects.filter(capsule_type='F').filter(modules__release_date__lt=datetime.datetime.now(timezone.utc)-relativedelta(months=6))
+    for capsule in capsules:
+        capsule.delete()

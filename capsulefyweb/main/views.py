@@ -542,7 +542,7 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False).filter(title__icontains=searched).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).filter(title__icontains=searched).order_by('id')
 
     
     page = request.GET.get('page', 1)

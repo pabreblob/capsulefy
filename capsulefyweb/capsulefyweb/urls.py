@@ -18,9 +18,11 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from main import views, views_user
+from main.admin import admin_site
 
 urlpatterns = [
     path('', views.index),
+    path('admin/', admin_site.urls),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
     path('list/<str:type>', views.list,  name='list'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
@@ -28,7 +30,6 @@ urlpatterns = [
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
     path('editmodule/<int:pk>/', login_required(views.editModule), name='editmodule'),
     path('deletemodule/<int:pk>/', login_required(views.deleteModule), name='deletemodule'),
-    path('admin/', admin.site.urls),
     path('newfreecapsule/', views.createFreeCapsule, name='createfreecapsule'),
     path('editfreecapsule/<int:pk>/', views.editFreeCapsule, name='editfreecapsule'),
     path('deletecapsule/<int:pk>/', views.deleteCapsule, name='deletecapsule'),

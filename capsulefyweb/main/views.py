@@ -127,6 +127,7 @@ def createModularCapsule(request):
                                             local_name=file.name, module_id=module.id)
 
             request.session['capsuleId'] = capsule.id
+            request.session.modified = True
             approval_url = paypal.payment(capsule.id)
             return HttpResponseRedirect(approval_url)
     else:
@@ -153,7 +154,9 @@ def paymentExecute(request):
     payment = paypalrestsdk.Payment.find(paymentId)
     paypal.execute(payment, PayerID)
     capsuleId = request.session['capsuleId']
-    #TODO: Guardar el paymentId
+    capsule = Capsule.objects.filter(id = capsuleId).first()
+    capsule.payment_id = paymentId
+    capsule.save()
     return HttpResponseRedirect('/displaycapsule/' + str(capsuleId))
 
 

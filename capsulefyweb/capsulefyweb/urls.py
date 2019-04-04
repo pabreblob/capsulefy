@@ -43,4 +43,7 @@ urlpatterns = [
     path('ajaxlist/<str:type>', views.ajaxlist),
     path('register/', views_user.register),
     path('payment/execute/', views.paymentExecute),
+    path('user/myaccount/', views.my_account, name='myaccount'),
+    path('user/logintwitter', views.login_twitter, name='logintwitter'),
+    path('user/successtwitter', views.success_twitter, name='successtwitter'),
 ]

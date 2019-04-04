@@ -61,16 +61,16 @@
                     <div class="col-sm-2">
                         <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter"
                                id="id_deadman_counter"
-                               value="{% if capsuleForm.deadman_counter.value != None %}checked{% endif %}">
+                               value="{% if capsuleForm.deadman_counter.value != None %}{{capsuleForm.deadman_counter.value}}{% endif %}">
                     </div>
                     <div class="col-sm-2">
                         <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
-                            <option value=0 {% if capsuleForm.deadman_time_unit == 0 %}selected{% endif %}>Minutes
+                            <option value=0 {% if capsuleForm.deadman_time_unit.value == 0 %}selected{% endif %}>Minutes
                             </option>
-                            <option value=1 {% if capsuleForm.deadman_time_unit == 1 %}selected{% endif %}>Days</option>
-                            <option value=2 {% if capsuleForm.deadman_time_unit == 2 %}selected{% endif %}>Months
+                            <option value=1 {% if capsuleForm.deadman_time_unit.value == 1 %}selected{% endif %}>Days</option>
+                            <option value=2 {% if capsuleForm.deadman_time_unit.value == 2 %}selected{% endif %}>Months
                             </option>
-                            <option value=3 {% if capsuleForm.deadman_time_unit == 3 %}selected{% endif %}>Years
+                            <option value=3 {% if capsuleForm.deadman_time_unit.value == 3 %}selected{% endif %}>Years
                             </option>
                         </select>
                     </div>
@@ -158,6 +158,7 @@
                 document.getElementById("input_deadman").style.display = "none";
             }
         }
+        deadman_switch_activated();
     </script>
 {% endblock %}
 {% block styles %}

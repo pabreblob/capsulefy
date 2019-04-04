@@ -5,8 +5,10 @@
 {% block contenido %}
 {% load static %}
 <div class="container">
-    <form action="" method="post"  novalidate >
+		<form action="" method="post"  novalidate >
     {% csrf_token %}
+		<h3 class="title">Signing up</h3>
+		<hr>
 		<div class="form-group">
 		    <label for="id_first_name"><span class="red"></span> 
 		    		First name {{ form.first_name.errors }}
@@ -45,7 +47,7 @@
 		    	</label>
 		    <input type="date" class="form-control" name="birthdate" 
 		    	id="id_birthdate" maxlength="250" 
-		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="Birthdate">
+		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="yyyy-mm-dd">
 		</div>
 		<div class="form-group">
 		    <label for="id_email"><span class="red"></span> 
@@ -64,7 +66,8 @@
 		    	value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email for notifications">
 		</div>
 		<button type="submit" value="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
+		</form>
     
 <div>
 {% endblock %}

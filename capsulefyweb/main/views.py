@@ -90,6 +90,7 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleForm.cleaned_data['twitter']
             facebook = capsuleForm.cleaned_data['facebook']
+            print(time_unit)
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
@@ -180,9 +181,9 @@ def editModularCapsule(request, pk):
         'private': oldcapsule.private,
         'deadman_switch': oldcapsule.dead_man_switch,
         'deadman_counter': oldcapsule.seconds_to_unit(),
-        'deadman_time_unit': 0
+        'deadman_time_unit': oldcapsule.time_unit
     }
-
+    print(oldcapsule.time_unit)
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST)
         if form.is_valid():

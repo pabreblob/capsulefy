@@ -65,12 +65,12 @@
                     </div>
                     <div class="col-sm-2">
                         <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
-                            <option value=0 {% if capsuleForm.deadman_time_unit.value == 0 %}selected{% endif %}>Minutes
+                            <option value=0 {% if capsuleForm.deadman_time_unit.value == '0' %}selected{% endif %}>Minutes
                             </option>
-                            <option value=1 {% if capsuleForm.deadman_time_unit.value == 1 %}selected{% endif %}>Days</option>
-                            <option value=2 {% if capsuleForm.deadman_time_unit.value == 2 %}selected{% endif %}>Months
+                            <option value=1 {% if capsuleForm.deadman_time_unit.value == '1' %}selected{% endif %}>Days</option>
+                            <option value=2 {% if capsuleForm.deadman_time_unit.value == '2' %}selected{% endif %}>Months
                             </option>
-                            <option value=3 {% if capsuleForm.deadman_time_unit.value == 3 %}selected{% endif %}>Years
+                            <option value=3 {% if capsuleForm.deadman_time_unit.value == '3' %}selected{% endif %}>Years
                             </option>
                         </select>
                     </div>
@@ -159,6 +159,7 @@
             }
         }
         deadman_switch_activated();
+
     </script>
 {% endblock %}
 {% block styles %}

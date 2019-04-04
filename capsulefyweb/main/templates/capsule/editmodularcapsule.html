@@ -8,99 +8,68 @@
             <h3 class="title">Editing the capsule</h3>
             <hr>
             <div class="form-group">
-                <label for="id_title"><span class="red">* </span>Title:</label>
-                <input type="text" class="form-control" name="title"value="{{ oldcapsule.title }}" maxlength="250" required="" id="id_title">
+                <label for="id_title"><span class="red">* </span>Title: {{ form.title.errors }}</label>
+                <input type="text" class="form-control" name="title"value="{% if form.title.value != None %}{{ form.title.value }}{% endif %}" maxlength="250" required="" id="id_title">
             </div>
             <div class="form-group">
-                <label for="id_emails">Emails:</label>
-                <input type="text" class="form-control" name="emails" value="{{ oldcapsule.emails }}" maxlength="2500" id="id_emails">
+                <label for="id_emails">Emails: {{ form.emails.errors }}</label>
+                <input type="text" class="form-control" name="emails" value="{% if form.emails.value != None %}{{ form.emails.value }}{% endif %}" maxlength="2500" id="id_emails">
             </div>
-            <!--
-            <hr>
-            {% if oldcapsule.twitter == True %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="twitter" checked id="id_twitter">
-                    <label class="form-check-label" for="id_twitter">Twitter</label>
-                </div>
-            {% else %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter">
-                    <label class="form-check-label" for="id_twitter">Twitter</label>
-                </div>            
-            {% endif %}
-            {% if oldcapsule.facebook == True %}
-                <div class="form-check">
-                    <input type="checkbox" name="facebook" class="form-check-input" checked id="id_facebook">
-                    <label for="id_facebook" class="form-check-label">Facebook</label>
-                </div>
-            {% else %}
-                <div class="form-check">
-                    <input type="checkbox" name="facebook" class="form-check-input" id="id_facebook">
-                    <label for="id_facebook" class="form-check-label">Facebook</label>
-                </div>
-            {% endif %}
-            <hr>
-            -->
-            {% if oldcapsule.private == True %}
-                <div class="form-check">
-                    <input type="checkbox" name="private" class="form-check-input" checked id="id_private">
-                    <label for="id_private" class="form-check-label">Private</label>
-                </div>
-            {% else %}
-                <div class="form-check">
-                    <input type="checkbox" name="private" class="form-check-input" id="id_private">
-                    <label for="id_private" class="form-check-label">Private</label>
-                </div>
-            {% endif %}
 
-
-            {% if oldcapsule.dead_man_switch == True %}
-                <div class="form-check">
-                    <input type="checkbox" checked name="deadman_switch" onclick="deadman_switch_activated()" class="form-check-input" id="id_deadman_switch">
-                    <label for="id_deadman_switch" class="form-check-label">Activate deadman switch</label>
-                </div>
-                <div id="input_deadman">
-                <hr>
-            <div class="form-group row">
-                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
-                <div class="col-sm-2">
-                    <input type="number" min="0" class="form-control" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}">
-                </div>
-                <div class="col-sm-2">        
-                <select name="deadman_time_unit" class="form-control" id="id_deadman_time_unit">                   
-                    <option value=0 {% if oldcapsule.time_unit == 0 %}selected{%endif%}>Minutes</option>
-                    <option value=1 {% if oldcapsule.time_unit == 1 %}selected{%endif%}>Days</option>
-                    <option value=2 {% if oldcapsule.time_unit == 2 %}selected{%endif%}>Months</option>
-                    <option value=3 {% if oldcapsule.time_unit == 3 %}selected{%endif%}>Years</option>
-                </select>
-                </div>
+            <hr>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
+                       {% if form.twitter.value == True %}checked{% endif %}>
+                <label for="id_twitter" class="form-check-label">
+                    Twitter
+                </label>
             </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook"
+                       {% if form.facebook.value == True %}checked{% endif %}>
+                <label for="id_facebook" class="form-check-label">
+                    Facebook
+                </label>
             </div>
-            {% else %}
-                <div class="form-check">
-                    <input type="checkbox" name="deadman_switch" onclick="deadman_switch_activated()" class="form-check-input" id="id_deadman_switch">
-                    <label for="id_deadman_switch" class="form-check-label">Activate deadman switch</label>
-                </div>
-                <div id="input_deadman" style="display:none">
-                <hr>
+            <hr>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="private" id="id_private"
+                       {% if form.private.value == True %}checked{% endif %}>
+                <label for="id_private" class="form-check-label">
+                    Private capsule
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="deadman_switch"
+                       onclick="deadman_switch_activated()" id="id_deadman_switch"
+                       {% if form.deadman_switch.value == True %}checked{% endif %}>
+                <label class="form-check-label" for="id_deadman_switch">
+                    Activate deadman switch
+                </label>
+            </div>
+            <hr>
+            <div id="input_deadman" style="display: none;">
                 <div class="form-group row">
-                <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
-                <div class="col-sm-2">
-                    <input type="number" min="0" class="form-control" max="5000000000" name="deadman_counter" id="id_deadman_counter" value="{{ oldcapsule.dead_man_counter}}">
+                    <label class="col-form-label col-sm-2" for="id_deadman_counter">Deadman timer:</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" min="0" max="5000000000" name="deadman_counter"
+                               id="id_deadman_counter"
+                               value="{% if form.deadman_counter.value != None %}checked{% endif %}">
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
+                            <option value=0 {% if form.deadman_time_unit == 0 %}selected{% endif %}>Minutes
+                            </option>
+                            <option value=1 {% if form.deadman_time_unit == 1 %}selected{% endif %}>Days</option>
+                            <option value=2 {% if form.deadman_time_unit == 2 %}selected{% endif %}>Months
+                            </option>
+                            <option value=3 {% if form.deadman_time_unit == 3 %}selected{% endif %}>Years
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-sm-2">        
-                <select name="deadman_time_unit" class="form-control" id="id_deadman_time_unit">
-                    <option value=0 selected>Minutes</option>
-                    <option value=1>Days</option>
-                    <option value=2>Months</option>
-                    <option value=3>Years</option>
-                </select>
-                </div>
+                <hr>
             </div>
-            </div>            
-            {% endif %}
-            <hr>
-
             <button type="submit" class="btn btn-primary" value="submit">Update</button>
             <button type="button" class="btn btn-secondary" onclick="window.location = '/displaycapsule/{{oldcapsule.id}}'">Cancel</button>
         </form>
@@ -130,7 +99,7 @@
                     </div> 
                 <button class="btn btn-primary" onclick="window.location = '/editmodule/{{ module.id }}'">Edit module</button>
                 {% if oldcapsule.modules.all.count != 1 %}
-                    <button class="btn btn-danger" onclick="window.location='/deletemodule/{{ module.id }}'">Delete module</a>
+                    <button class="btn btn-danger" onclick="window.location='/deletemodule/{{ module.id }}'">Delete module</button>
                 {% endif %}                
             </div>
             <hr>

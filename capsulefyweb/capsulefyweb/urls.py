@@ -41,4 +41,5 @@ urlpatterns = [
     path('refresh/<int:id>/', views.refresh_deadman, name='refreshdeadman'),
     path('ajaxlist/<str:type>', views.ajaxlist),
     path('register/', views_user.register),
+    path('payment/execute/', views.paymentExecute),
 ]

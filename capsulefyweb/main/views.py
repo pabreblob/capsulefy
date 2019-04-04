@@ -524,6 +524,7 @@ def refresh_deadman(request, id):
         return HttpResponseNotFound()
     if capsule.dead_man_switch==True:
         capsule.dead_man_counter=capsule.dead_man_initial_counter
+        capsule.expiration_notify=False
         capsule.save()
     return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 

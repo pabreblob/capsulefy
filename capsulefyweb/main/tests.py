@@ -332,7 +332,7 @@ class SimpleTest(TestCase):
         request.user = self.test_user
         deleteCapsule(request, capsule.id)
         self.assertIs(Capsule.objects.filter(title='TestModular').first(), None)
-
+'''
     def test_remove_expired(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
@@ -355,4 +355,4 @@ class SimpleTest(TestCase):
         module.save()
         remove_expired_capsules()
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
-        self.assertIsNone(delcapsule)'''
+        self.assertIsNone(delcapsule)

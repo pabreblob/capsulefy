@@ -4,6 +4,7 @@ from django import forms
 from datetime import datetime, timedelta, timezone
 from .models import File
 from django.db.models import Sum
+from django.forms import formset_factory
 
 
 class ContactForm(forms.Form):
@@ -33,9 +34,10 @@ class ModuleForm(forms.Form):
         data = self.cleaned_data['release_date']
         if data <= datetime.now(timezone.utc):
             raise forms.ValidationError('The release date must be in the future')
-        yearafter = datetime.now(timezone.utc) + timedelta(days=365)
         return data
 
+
+ModulesFormSet = formset_factory(ModuleForm, extra=1)
 
 
 class NewFreeCapsuleForm(forms.Form):

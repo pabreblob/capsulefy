@@ -42,7 +42,7 @@ class Capsule(models.Model):
     facebook=models.BooleanField()
     creator=models.ForeignKey(User,related_name='capsuls', on_delete=CASCADE)
     payment_id=models.CharField(max_length=60,null=True)
-    
+    expiration_notify = models.BooleanField(default=False)
     ''' Una capsula es liberada si tiene algún 
     modulo que este liberado '''
     @property

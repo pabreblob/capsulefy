@@ -3,19 +3,25 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
-import datetime
-from datetime import timezone
+
+from datetime import timezone, datetime
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
-
+def birthdate_validator(value):
+        
+        if value >= datetime.now(timezone.utc).date():
+            raise ValidationError('The birthdate must be in the past')
+       
 class Actor(User):
-    birthdate=models.DateField()
+     
+    birthdate=models.DateField(validators=[birthdate_validator,])
     class Meta:
         abstract = True
 
 class User(Actor):
-    email_notification=models.EmailField()
+    email_notification=models.EmailField(blank=True)
 
 class Social_network(models.Model):
     social_type=models.CharField(max_length=1,choices=(('F','FACEBOOK'),('T','TWITTER')))

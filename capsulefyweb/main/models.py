@@ -82,7 +82,7 @@ class Module(models.Model):
     release_notify=models.BooleanField(default=False)
     @property
     def is_released(self):
-        return datetime.datetime.now(timezone.utc) >= self.release_date
+        return datetime.now(timezone.utc) >= self.release_date
     
 class File(models.Model):
     url=models.URLField()

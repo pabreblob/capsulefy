@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, Ht
 from django.db.models import Q
 from main import paypal
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
-from .models import Capsule, Module, File, Social_network
+from .models import Capsule, Module, File, Social_network, User, Admin
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
 from django.conf import settings
@@ -574,6 +574,13 @@ def ajaxlist(request,type):
 @login_required
 def my_account(request):
     hastwitter = False
+    emailNot = ""
+    try:
+        user_logged = User.objects.get(id=request.user.id)
+        if user_logged.email_notification != None and user_logged.email_notification != "":
+            emailNot = user_logged.email_notification.split(",")
+    except:
+        user_logged = Admin.objects.get(id=request.user.id)
     username = ''
     twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
     if twitteracc is not None:
@@ -588,7 +595,7 @@ def my_account(request):
         except:
             print('Twitter error, revoking credentials')
             twitteracc.delete()
-    return render(request, 'user/myaccount.html', {'hastwitter': hastwitter, 'username': username})
+    return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
 
 
 @login_required

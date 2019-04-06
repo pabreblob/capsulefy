@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from main import views, views_user
+from main import views, views_user, views_admin
 from main.admin import admin_site
 
 urlpatterns = [
@@ -46,5 +46,6 @@ urlpatterns = [
     path('user/myaccount/', views.my_account, name='myaccount'),
     path('user/logintwitter', views.login_twitter, name='logintwitter'),
     path('user/successtwitter', views.success_twitter, name='successtwitter'),
-    path('update/', views.update,name='update'),
+    path('adm/list', views_admin.list),
+    path('ajaxban', views_admin.ajax_ban),
 ]

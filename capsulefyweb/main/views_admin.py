@@ -7,7 +7,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def list(request):
     if not request.user.is_superuser:
         raise Http404("")
-    users_all = User.objects.all().order_by("username")
+    if request.GET.get("search") == None or request.GET.get("search") == "":
+        users_all = User.objects.all().order_by("username")
+    else:
+        users_all = User.objects.filter(username__icontains=request.GET.get("search")).order_by("username")
 
     page = request.GET.get('page', 1)
 

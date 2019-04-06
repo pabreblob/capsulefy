@@ -49,8 +49,6 @@ class Capsule(models.Model):
     creator=models.ForeignKey(User,related_name='capsuls', on_delete=CASCADE)
     payment_id=models.CharField(max_length=60,null=True)
     expiration_notify = models.BooleanField(default=False)
-    facebook_notify = models.BooleanField(default=False)
-    twitter_notify = models.BooleanField(default=False)
     ''' Una capsula es liberada si tiene algún 
     modulo que este liberado '''
     @property
@@ -82,6 +80,8 @@ class Module(models.Model):
     release_date=models.DateTimeField()
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
     release_notify=models.BooleanField(default=False)
+    facebook_notify = models.BooleanField(default=False)
+    twitter_notify = models.BooleanField(default=False)
     @property
     def is_released(self):
         return datetime.now(timezone.utc) >= self.release_date

@@ -2,10 +2,11 @@
 import datetime
 from datetime import timezone
 from django.core.mail import send_mail
-from main.models import Module,Capsule
+from main.models import Module, Capsule, Social_network
 from dateutil.relativedelta import relativedelta
 import smtplib
 import capsulefyweb.settings
+import tweepy
 
 def send_email(module):
     
@@ -44,13 +45,39 @@ def send_email(module):
         pass
 
 
+def publish_twitter(module):
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=module.capsule.creator_id).first()
+    if twitteracc is not None:
+        try:
+            consumer_secret = capsulefyweb.settings.TWITTER_CREDENTIALS['consumer_secret']
+            consumer_key = capsulefyweb.settings.TWITTER_CREDENTIALS['consumer_key']
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(twitteracc.token, twitteracc.secret)
+            api = tweepy.API(auth)
+            api.update_status('A time capsule module I created has just been released! Check it out at https://capsul' +
+                              'efy.herokuapp.com/displaycapsule/' + str(module.capsule_id))
+            module.twitter_notify = True
+            module.save()
+        except:
+            print('Twitter error, revoking credentials')
+            twitteracc.delete()
+    else:
+        pass
+
+
 def check_modules_release():
-    
-    modules=Module.objects.filter(release_date__lte=datetime.datetime.now(timezone.utc), 
-                          release_notify=False)
-    
+    modules=Module.objects.filter(release_date__lte=datetime.datetime.now(timezone.utc), release_notify=False)
+    twittercapsules = Capsule.objects.filter(twitter=True)
+    twittermodules = []
+    for twcapsule in twittercapsules:
+        twmodules = twcapsule.modules.filter(release_date__lte=datetime.datetime.now(timezone.utc),
+                                             twitter_notify=False)
+        twittermodules.extend(twmodules)
+
     for mod in modules:
         send_email(mod)
+    for mod in twittermodules:
+        publish_twitter(mod)
 
 def send_deadman_notification(capsule):
     days=round(capsule.dead_man_counter/86400)

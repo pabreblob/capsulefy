@@ -582,12 +582,11 @@ def my_account(request):
             auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(twitteracc.token, twitteracc.secret)
             api = tweepy.API(auth)
-            print(api.me())
             username = api.me()._json['screen_name']
             hastwitter = True
         except:
             print('Twitter error, revoking credentials')
-            Social_network.delete(twitteracc)
+            twitteracc.delete()
     return render(request, 'user/myaccount.html', {'hastwitter': hastwitter, 'username': username})
 
 
@@ -620,7 +619,6 @@ def success_twitter(request):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     token = request.session['request_token']
     del request.session['request_token']
-    print(token)
     verifier = request.GET.get('oauth_verifier')
     auth.request_token = token
     try:

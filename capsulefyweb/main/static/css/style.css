@@ -37,11 +37,22 @@ header.masthead {
     text-align: left;
     color: white;
     background-image: url("/static/image/background.png");
+    -webkit-background-size: 100%; 
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: center center;
 }
+@media only screen and (max-width : 480px) {
+  header.masthead{
+    background-image: url("/static/image/background-mobile.png")
+  }
+}
 
+@media only screen and (min-width : 481px) and (max-width : 800px) {
+  header.masthead{
+    background-image: url("/static/image/background-mobile.png")
+  }
+}
 
 header.masthead .intro-text {
     padding-top: 100px;

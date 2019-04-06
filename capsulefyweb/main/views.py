@@ -1,6 +1,6 @@
 import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
-
+from django.db.models import Q
 from main import paypal
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
 from .models import Capsule, Module, File, Social_network
@@ -20,6 +20,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.loader import render_to_string
 import tweepy
+from _functools import reduce
+import operator
 
 
 def index(request):
@@ -543,7 +545,14 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).filter(title__icontains=searched).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        if(searched!=""):
+            wds = searched.split()
+            tag_qs = reduce(operator.and_,
+                             (Q(title__icontains=x) | \
+                             Q(modules__release_date__icontains=x) | \
+                             Q(modules__description__icontains=x)  for x in wds))
+            capsules_list =capsules_list.filter(tag_qs)
 
     
     page = request.GET.get('page', 1)

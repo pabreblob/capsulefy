@@ -1,6 +1,6 @@
 from main.models import User
 from main.forms_user import UserForm
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 
 def register(request):
@@ -13,6 +13,7 @@ def register(request):
             user.save()
             messages.success(request, "Usuario registrado con exito."+
             " Ya puede iniciar sesión ")
+            return redirect('login')
     else:
         form=UserForm()
             

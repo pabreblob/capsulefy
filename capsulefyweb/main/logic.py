@@ -7,7 +7,8 @@ from dateutil.relativedelta import relativedelta
 import smtplib
 import capsulefyweb.settings
 import tweepy
-
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 def send_email(module):
     
     html_message="<p><b>Capsule title: </b>"\
@@ -17,32 +18,24 @@ def send_email(module):
     +"<br><br><p><b>Author: </b>"\
     +module.capsule.creator.first_name+" "\
     +module.capsule.creator.last_name+"</p>"
-    '''
-    enterpriseEmail = "capsulefy.communications@gmail.com"
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.login(enterpriseEmail, "aG7nOp4FhG")
-    msg = "Capsule title: "+module.capsule.title+"\n"\
-     + "Module content: "+module.description+"\n"\
-     + "Author: "+module.capsule.creator.first_name+" "\
-     +module.capsule.creator.last_name+"\n"
-     
-    msg = msg.encode('utf-8')
-    server.sendmail(msg=msg, from_addr=enterpriseEmail, 
-                    to_addrs=module.capsule.emails.split(','))
-           
-    ''' 
-    try:
-        send_mail(subject="Module of capsule is release",
-                    message="",
-                    html_message=html_message,
-                    from_email="capsulefy.communications@gmail.com",
-                    recipient_list=module.capsule.emails.split(','),
-                    fail_silently=False)
-        
-        module.release_notify=True
-        module.save()
-    except:
-        pass
+    mail_list=module.capsule.emails.split(',')
+    i=0
+    while i< len(mail_list):
+        print(mail_list[i])
+        message = Mail(
+            from_email='capsulefy.communications@gmail.com',
+            to_emails=mail_list[i],
+            subject='Module of capsule is released',
+            html_content=html_message)
+        try:
+            sg = SendGridAPIClient(capsulefyweb.settings.SENDGRID_KEY)
+            response = sg.send(message)
+            module.release_notify=True
+            module.save()
+
+        except Exception as e:
+            print(e)
+        i=i+1
 
 
 def publish_twitter(module):
@@ -76,8 +69,10 @@ def check_modules_release():
 
     for mod in modules:
         send_email(mod)
+
     for mod in twittermodules:
         publish_twitter(mod)
+
 
 def send_deadman_notification(capsule):
     days=round(capsule.dead_man_counter/86400)
@@ -86,17 +81,23 @@ def send_deadman_notification(capsule):
                    + capsule.title +" is about to expire in "+str(days)+" days!</p>" \
                    + "<p>If you don't want it to be released yet, go to your capsule and press the Refresh button " \
                    + capsulefyweb.settings.BASEURL + "</p>"
-    try:
-        send_mail(subject="Capsule timer is about to expire",
-                  message="",
-                  html_message=html_message,
-                  from_email="capsulefy.communications@gmail.com",
-                  recipient_list=mail_list,
-                  fail_silently=False)
-        capsule.expiration_notify=True
-        capsule.save()
-    except Exception as e:
-        pass
+    i = 0
+    while i < len(mail_list):
+        print(mail_list[i])
+        message = Mail(
+            from_email='capsulefy.communications@gmail.com',
+            to_emails=mail_list[i],
+            subject='Capsule timer is about to expire',
+            html_content=html_message)
+        try:
+            sg = SendGridAPIClient(capsulefyweb.settings.SENDGRID_KEY)
+            response = sg.send(message)
+            capsule.expiration_notify = True
+            capsule.save()
+
+        except:
+            pass
+        i = i + 1
 
 def check_deadman_switch():
     capsules = Capsule.objects.filter(dead_man_switch=True)

@@ -22,6 +22,7 @@ from django.template.loader import render_to_string
 import tweepy
 from _functools import reduce
 import operator
+from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
 
 
 def index(request):
@@ -630,4 +631,8 @@ def success_twitter(request):
         print(e.response)
         print('Error! Failed to get access token.')
         return HttpResponseRedirect('/user/myaccount')
-
+def update(request):
+    check_deadman_switch()
+    check_modules_release()
+    remove_expired_capsules()
+    return HttpResponse("")

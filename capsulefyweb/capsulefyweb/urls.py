@@ -46,4 +46,5 @@ urlpatterns = [
     path('user/myaccount/', views.my_account, name='myaccount'),
     path('user/logintwitter', views.login_twitter, name='logintwitter'),
     path('user/successtwitter', views.success_twitter, name='successtwitter'),
+    path('update/', views.update,name='update'),
 ]

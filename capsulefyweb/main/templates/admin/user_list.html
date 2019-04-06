@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+{% load static %}
+
+<div class="container">
+  <br>
+  <h3>Listing users</h3>
+  <br>
+  <table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First name</th>
+      <th scope="col">Last name</th>
+      <th scope="col">Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+        <tr>
+          <th scope="row">{{u.id}}</th>
+          <td>{{u.first_name}}</td>
+          <td>{{u.last_name}}</td>
+          {% if u.is_active %}
+          <td><button class="btn btn-success" onClick="ban(this, {{u.id}})">Active</button></td>
+          {% else %}
+          <td><button class="btn btn-danger" onClick="ban(this, {{u.id}})">Banned</button></td>
+          {% endif %}
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if users.has_other_pages %}
+  <p class="page_number">Showing {{users.start_index}}-{{users.end_index}} of {{users.paginator.count}}</p>
+  <p class="page_number">
+  {% if users.has_previous %}
+    <a href="?page={{users.previous_page_number}}">&laquo;</a>
+  {% endif %}
+  {% if users.number > 2 %}
+    <a href="?page=1">1</a>
+    <span>...</span>
+  {% endif %}
+  {% if users.has_previous %}
+    <a href="?page={{ users.previous_page_number }}">{{users.previous_page_number}}</a>
+  {% endif %}
+  <span>{{ users.number }} <span class="sr-only">(current)</span></span>
+  {% if users.has_next %}
+    <a href="?page={{ users.next_page_number }}">{{users.next_page_number}}</a>
+  {% endif %}
+
+  {% if users.number < users.paginator.num_pages|add:"-1" %}
+      <span>...</span>
+      <a href="?page={{users.paginator.num_pages}}">{{users.paginator.num_pages}}</a>
+  {% endif %}
+
+  {% if users.has_next%}
+      <a href="?page={{users.next_page_number}}">&raquo;</a>
+  {% endif %}
+
+{% endif %}
+</div>
+  <script>
+    function ban(element, id){
+      $.ajax({
+        url: "/ajaxban",
+        data: {"id": id}
+      }).done(function(data){
+        if(data == "True"){
+          if(element.innerHTML == "Active"){
+            element.classList.remove("btn-success");
+            element.classList.add("btn-danger");
+            element.innerHTML = "Banned";
+          } else {
+            element.classList.remove("btn-danger");
+            element.classList.add("btn-success");
+            element.innerHTML = "Active";
+          }
+        }
+      });
+    }
+  </script>
+{% endblock  %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleListUser.css' %}"/>
+{% endblock %}

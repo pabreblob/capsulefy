@@ -151,4 +151,5 @@ try:
     from local_settings import *
 except ImportError:
     FIREBASE_CREDENTIALS = eval(os.environ.get('FIREBASE_CREDENTIALS'))
+    TWITTER_CREDENTIALS = eval(os.environ.get('TWITTER_CREDENTIALS'))
     print("local_settings.py not found")

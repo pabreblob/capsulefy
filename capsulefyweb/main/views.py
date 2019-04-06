@@ -1,9 +1,9 @@
 import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
-
+from django.db.models import Q
 from main import paypal
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
-from .models import Capsule, Module, File
+from .models import Capsule, Module, File, Social_network
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
 from django.conf import settings
@@ -19,6 +19,9 @@ import main
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.loader import render_to_string
+import tweepy
+from _functools import reduce
+import operator
 
 
 def index(request):
@@ -542,7 +545,14 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).filter(title__icontains=searched).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        if(searched!=""):
+            wds = searched.split()
+            tag_qs = reduce(operator.and_,
+                             (Q(title__icontains=x) | \
+                             Q(modules__release_date__icontains=x) | \
+                             Q(modules__description__icontains=x)  for x in wds))
+            capsules_list =capsules_list.filter(tag_qs)
 
     
     page = request.GET.get('page', 1)
@@ -558,4 +568,68 @@ def ajaxlist(request,type):
     response=render_to_string('capsule/list_content.html', {'capsules': capsules,'type':type})
 
     return HttpResponse(response)
+
+
+@login_required
+def my_account(request):
+    hastwitter = False
+    username = ''
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        try:
+            consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+            consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(twitteracc.token, twitteracc.secret)
+            api = tweepy.API(auth)
+            print(api.me())
+            username = api.me()._json['screen_name']
+            hastwitter = True
+        except:
+            print('Twitter error, revoking credentials')
+            Social_network.delete(twitteracc)
+    return render(request, 'user/myaccount.html', {'hastwitter': hastwitter, 'username': username})
+
+
+@login_required
+def login_twitter(request):
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        return HttpResponseRedirect('/user/myaccount')
+    consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+    consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+    callback_url = request.build_absolute_uri('/user/successtwitter')
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret, callback_url)
+    try:
+        redirect_url = auth.get_authorization_url()
+        request.session['request_token'] = auth.request_token
+        return HttpResponseRedirect(redirect_url)
+    except tweepy.TweepError as e:
+        print('Error! Failed to get request token.')
+        print(e.response)
+        return HttpResponseRedirect('/user/myaccount')
+
+
+@login_required
+def success_twitter(request):
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        return HttpResponseRedirect('/user/myaccount')
+    consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+    consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    token = request.session['request_token']
+    del request.session['request_token']
+    print(token)
+    verifier = request.GET.get('oauth_verifier')
+    auth.request_token = token
+    try:
+        auth.get_access_token(verifier)
+        Social_network.objects.create(social_type='T', token=auth.access_token, secret=auth.access_token_secret,
+                                      user_id=request.user.id)
+        return HttpResponseRedirect('/user/myaccount')
+    except tweepy.TweepError as e:
+        print(e.response)
+        print('Error! Failed to get access token.')
+        return HttpResponseRedirect('/user/myaccount')
 

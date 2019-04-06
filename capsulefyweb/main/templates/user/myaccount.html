@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block contenido %}
+{% load static %}
+    {% if hastwitter %}
+    <p>Twitter: Logged in as {{ username }}</p>
+    {% else %}
+    <p>Twitter: <a href="/user/logintwitter">Log in</a></p>
+    {% endif %}
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+{% endblock %}

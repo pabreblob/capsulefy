@@ -23,20 +23,23 @@
                        maxlength="2500" id="id_emails">
             </div>
 
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
-                       {% if capsuleForm.twitter.value == True %}checked{% endif %}>
-                <label for="id_twitter" class="form-check-label">
-                    Twitter
-                </label>
-            </div>
+            <p><b>{{form.twitter.error}}</b></p>
+			{% if form.twitter.value != None and form.twitter.value == True %}
+				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
+			{% else %}
+				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to twitter?</button></p>
+			{% endif %}
+            <input style="display: none" type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
+                {% if capsuleForm.twitter.value == True %}checked{% endif %}>
+                
+            <!--
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook"
                        {% if capsuleForm.facebook.value == True %}checked{% endif %}>
                 <label for="id_facebook" class="form-check-label">
                     Facebook
                 </label>
-            </div>
+            </div>-->
             <hr>
 
             <div class="form-check">
@@ -159,6 +162,24 @@
             }
         }
         deadman_switch_activated();
+
+
+        if("{{form.twitter.value}}" == "True"){
+		    document.getElementById("id_twitter").setAttribute("checked", "checked");
+	    }
+    	function add_twitter(element){
+	    	if(!document.getElementById("id_twitter").hasAttribute("checked")){
+		    	document.getElementById("id_twitter").setAttribute("checked", "checked");
+			    element.classList.remove("btn-secondary");
+    			element.classList.add("btn-success");
+	    		element.innerHTML = "Connected to Twitter";
+		    }else{
+    			document.getElementById("id_twitter").removeAttribute("checked");
+	    		element.classList.remove("btn-success");
+		    	element.classList.add("btn-secondary");
+			    element.innerHTML = "Connect to Twitter?";
+    		}
+	    }
 
     </script>
 {% endblock %}

@@ -1,9 +1,9 @@
 import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
-
+from django.db.models import Q
 from main import paypal
 from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
-from .models import Capsule, Module, File
+from .models import Capsule, Module, File, Social_network, User, Admin
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
 from django.conf import settings
@@ -19,6 +19,10 @@ import main
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.loader import render_to_string
+import tweepy
+from _functools import reduce
+import operator
+from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
 
 
 def index(request):
@@ -69,7 +73,7 @@ def createModularCapsule(request):
     user = request.user
     errors = []
     if request.method == 'POST':
-        capsuleForm = ModularCapsuleForm(request.POST)
+        capsuleForm = ModularCapsuleForm(request.POST, user=request.user)
         moduleFormSet = ModulesFormSet(request.POST,  request.FILES)
         size = checkSize(request, moduleFormSet)
         if size > 524288000:
@@ -185,7 +189,7 @@ def editModularCapsule(request, pk):
     }
     print(oldcapsule.time_unit)
     if request.method == 'POST':
-        form = ModularCapsuleForm(request.POST)
+        form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():
             formulario = form.cleaned_data
             oldcapsule.title = formulario['title']
@@ -507,7 +511,7 @@ def deleteCapsule(request, pk):
         for file in files:
             bucket.delete_blob(file.remote_name)
     capsule.delete()
-    return HttpResponseRedirect('/privatelist')
+    return HttpResponseRedirect('/list/private')
 
 
 @login_required
@@ -543,7 +547,14 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).filter(title__icontains=searched).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        if(searched!=""):
+            wds = searched.split()
+            tag_qs = reduce(operator.and_,
+                             (Q(title__icontains=x) | \
+                             Q(modules__release_date__icontains=x) | \
+                             Q(modules__description__icontains=x)  for x in wds))
+            capsules_list =capsules_list.filter(tag_qs)
 
     
     page = request.GET.get('page', 1)
@@ -560,3 +571,76 @@ def ajaxlist(request,type):
 
     return HttpResponse(response)
 
+
+@login_required
+def my_account(request):
+    hastwitter = False
+    emailNot = ""
+    try:
+        user_logged = User.objects.get(id=request.user.id)
+        if user_logged.email_notification != None and user_logged.email_notification != "":
+            emailNot = user_logged.email_notification.split(",")
+    except:
+        user_logged = Admin.objects.get(id=request.user.id)
+    username = ''
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        try:
+            consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+            consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(twitteracc.token, twitteracc.secret)
+            api = tweepy.API(auth)
+            username = api.me()._json['screen_name']
+            hastwitter = True
+        except:
+            print('Twitter error, revoking credentials')
+            twitteracc.delete()
+    return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
+
+
+@login_required
+def login_twitter(request):
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        return HttpResponseRedirect('/user/myaccount')
+    consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+    consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+    callback_url = request.build_absolute_uri('/user/successtwitter')
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret, callback_url)
+    try:
+        redirect_url = auth.get_authorization_url()
+        request.session['request_token'] = auth.request_token
+        return HttpResponseRedirect(redirect_url)
+    except tweepy.TweepError as e:
+        print('Error! Failed to get request token.')
+        print(e.response)
+        return HttpResponseRedirect('/user/myaccount')
+
+
+@login_required
+def success_twitter(request):
+    twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
+    if twitteracc is not None:
+        return HttpResponseRedirect('/user/myaccount')
+    consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
+    consumer_key = settings.TWITTER_CREDENTIALS['consumer_key']
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    token = request.session['request_token']
+    del request.session['request_token']
+    verifier = request.GET.get('oauth_verifier')
+    auth.request_token = token
+    try:
+        auth.get_access_token(verifier)
+        Social_network.objects.create(social_type='T', token=auth.access_token, secret=auth.access_token_secret,
+                                      user_id=request.user.id)
+        return HttpResponseRedirect('/user/myaccount')
+    except tweepy.TweepError as e:
+        print(e.response)
+        print('Error! Failed to get access token.')
+        return HttpResponseRedirect('/user/myaccount')
+def update(request):
+    check_deadman_switch()
+    check_modules_release()
+    remove_expired_capsules()
+    return HttpResponse("")

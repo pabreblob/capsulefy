@@ -7,3 +7,5 @@ oauth2client
 apscheduler
 paypalrestsdk
 python-dateutil
+tweepy
+sendgrid

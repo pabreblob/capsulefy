@@ -17,14 +17,14 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from main import views, views_user
+from main import views, views_user, views_admin
 from main.admin import admin_site
 
 urlpatterns = [
     path('', views.index),
     path('admin/', admin_site.urls),
     path('displaycapsule/<int:id>/', views.displayCapsules, name='displaycapsule'),
-    path('list/<str:type>', views.list,  name='list'),
+    path('list/<str:type>/', views.list,  name='list'),
     path('newmodularcapsule/', login_required(views.createModularCapsule), name='createmodularcapsule'),
     path('newmodule/<int:pk>/', login_required(views.createModule), name='createmodule'),
     path('editmodularcapsule/<int:pk>/', login_required(views.editModularCapsule), name='editmodularcapsule'),
@@ -43,4 +43,10 @@ urlpatterns = [
     path('ajaxlist/<str:type>', views.ajaxlist),
     path('register/', views_user.register),
     path('payment/execute/', views.paymentExecute),
+    path('user/myaccount/', views.my_account, name='myaccount'),
+    path('user/logintwitter/', views.login_twitter, name='logintwitter'),
+    path('user/successtwitter/', views.success_twitter, name='successtwitter'),
+    path('adm/list/', views_admin.list),
+    path('ajaxban/', views_admin.ajax_ban),
+    path('update/', views.update,name='update'),
 ]

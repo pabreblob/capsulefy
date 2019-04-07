@@ -73,7 +73,7 @@ def createModularCapsule(request):
     user = request.user
     errors = []
     if request.method == 'POST':
-        capsuleForm = ModularCapsuleForm(request.POST)
+        capsuleForm = ModularCapsuleForm(request.POST, user=request.user)
         moduleFormSet = ModulesFormSet(request.POST,  request.FILES)
         size = checkSize(request, moduleFormSet)
         if size > 524288000:
@@ -188,7 +188,7 @@ def editModularCapsule(request, pk):
     }
 
     if request.method == 'POST':
-        form = ModularCapsuleForm(request.POST)
+        form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():
             formulario = form.cleaned_data
             oldcapsule.title = formulario['title']
@@ -510,7 +510,7 @@ def deleteCapsule(request, pk):
         for file in files:
             bucket.delete_blob(file.remote_name)
     capsule.delete()
-    return HttpResponseRedirect('/privatelist')
+    return HttpResponseRedirect('/list/private')
 
 
 @login_required

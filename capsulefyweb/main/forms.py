@@ -26,10 +26,15 @@ class ModularCapsuleForm(forms.Form):
     deadman_counter=forms.IntegerField(required=False)
     deadman_time_unit=forms.ChoiceField(required=False,choices=UNIT_CHOICES)
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.upfiles = kwargs.pop('upfiles', None)
+        super(ModularCapsuleForm, self).__init__(*args, **kwargs)
+
     def clean_twitter(self):
         data = self.cleaned_data['twitter']
         twitteracc = Social_network.objects.filter(social_type='T', user_id=self.user.id).first()
-        if True:
+        if data:
             if twitteracc is not None:
                 try:
                     consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']

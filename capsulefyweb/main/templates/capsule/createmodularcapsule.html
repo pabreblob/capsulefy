@@ -23,6 +23,7 @@
                        maxlength="2500" id="id_emails">
             </div>
 
+            <p><b>{{form.twitter.error}}</b></p>
 			{% if form.twitter.value != None and form.twitter.value == True %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
 			{% else %}
@@ -162,19 +163,22 @@
         }
         deadman_switch_activated();
 
-        function add_twitter(element){
-		if(!document.getElementById("id_twitter").hasAttribute("checked")){
-			document.getElementById("id_twitter").setAttribute("checked", "checked");
-			element.classList.remove("btn-secondary");
-			element.classList.add("btn-success");
-			element.innerHTML = "Connected to Twitter";
-		}else{
-			document.getElementById("id_twitter").removeAttribute("checked");
-			element.classList.remove("btn-success");
-			element.classList.add("btn-secondary");
-			element.innerHTML = "Connect to Twitter?";
-		}
-	}
+        if("{{form.twitter.value}}" == "True"){
+		    document.getElementById("id_twitter").setAttribute("checked", "checked");
+	    }
+    	function add_twitter(element){
+	    	if(!document.getElementById("id_twitter").hasAttribute("checked")){
+		    	document.getElementById("id_twitter").setAttribute("checked", "checked");
+			    element.classList.remove("btn-secondary");
+    			element.classList.add("btn-success");
+	    		element.innerHTML = "Connected to Twitter";
+		    }else{
+    			document.getElementById("id_twitter").removeAttribute("checked");
+	    		element.classList.remove("btn-success");
+		    	element.classList.add("btn-secondary");
+			    element.innerHTML = "Connect to Twitter?";
+    		}
+	    }
     </script>
 {% endblock %}
 {% block styles %}

@@ -22,6 +22,7 @@ from django.template.loader import render_to_string
 import tweepy
 from _functools import reduce
 import operator
+from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
 
 
 def index(request):
@@ -589,12 +590,11 @@ def my_account(request):
             auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(twitteracc.token, twitteracc.secret)
             api = tweepy.API(auth)
-            print(api.me())
             username = api.me()._json['screen_name']
             hastwitter = True
         except:
             print('Twitter error, revoking credentials')
-            Social_network.delete(twitteracc)
+            twitteracc.delete()
     return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
 
 
@@ -627,7 +627,6 @@ def success_twitter(request):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     token = request.session['request_token']
     del request.session['request_token']
-    print(token)
     verifier = request.GET.get('oauth_verifier')
     auth.request_token = token
     try:
@@ -639,4 +638,8 @@ def success_twitter(request):
         print(e.response)
         print('Error! Failed to get access token.')
         return HttpResponseRedirect('/user/myaccount')
-
+def update(request):
+    check_deadman_switch()
+    check_modules_release()
+    remove_expired_capsules()
+    return HttpResponse("")

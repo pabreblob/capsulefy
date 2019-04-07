@@ -93,7 +93,7 @@ class NewFreeCapsuleForm(forms.Form):
     def clean_twitter(self):
         data = self.cleaned_data['twitter']
         twitteracc = Social_network.objects.filter(social_type='T', user_id=self.user.id).first()
-        if True:
+        if data:
             if twitteracc is not None:
                 try:
                     consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']
@@ -151,7 +151,7 @@ class EditFreeCapsuleForm(forms.Form):
     def clean_twitter(self):
         data = self.cleaned_data['twitter']
         twitteracc = Social_network.objects.filter(social_type='T', user_id=self.user.id).first()
-        if True:
+        if data:
             if twitteracc is not None:
                 try:
                     consumer_secret = settings.TWITTER_CREDENTIALS['consumer_secret']

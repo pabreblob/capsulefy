@@ -146,6 +146,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'capsulefy.communications@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 EMAIL_USE_SSL = True
+SENDGRID_KEY=os.environ.get('SENDGRID_KEY')
 
 try:
     from local_settings import *

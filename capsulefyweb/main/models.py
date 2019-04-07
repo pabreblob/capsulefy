@@ -3,33 +3,30 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
-import datetime
-from datetime import timezone
+
+from datetime import timezone, datetime
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
-class Credit_card(models.Model):
-    holder_name = models.CharField(max_length=50)
-    brand_name = models.CharField(max_length=50)
-    number = models.CharField(max_length=24)
-    expiration_month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
-    expiration_year = models.IntegerField(validators=[MaxValueValidator(9999), MinValueValidator(2019)])
-    cvv = models.IntegerField(validators=[MaxValueValidator(999), MinValueValidator(100)])
-
-
-
+def birthdate_validator(value):
+        
+        if value >= datetime.now(timezone.utc).date():
+            raise ValidationError('The birthdate must be in the past')
+       
 class Actor(User):
-    birthdate=models.DateField()
+     
+    birthdate=models.DateField(validators=[birthdate_validator,])
     class Meta:
         abstract = True
 
 class User(Actor):
-    email_notification=models.EmailField()
+    email_notification=models.EmailField(blank=True)
 
 class Social_network(models.Model):
     social_type=models.CharField(max_length=1,choices=(('F','FACEBOOK'),('T','TWITTER')))
-    token=models.CharField(max_length=50)
-
+    token=models.CharField(max_length=100)
+    secret=models.CharField(max_length=100,null=True)
     user=models.ForeignKey(User,related_name='social_networks', on_delete=CASCADE)
     
     
@@ -49,11 +46,9 @@ class Capsule(models.Model):
     time_unit=models.IntegerField(null=True,choices=((0,'minutes'),(1,'days'),(2,'months'),(3,'years')))
     twitter=models.BooleanField()
     facebook=models.BooleanField()
-    
     creator=models.ForeignKey(User,related_name='capsuls', on_delete=CASCADE)
-    
-    credit_card=models.ForeignKey(Credit_card,related_name='capsuls', on_delete=CASCADE,null=True)
-    
+    payment_id=models.CharField(max_length=60,null=True)
+    expiration_notify = models.BooleanField(default=False)
     ''' Una capsula es liberada si tiene algún 
     modulo que este liberado '''
     @property
@@ -85,9 +80,11 @@ class Module(models.Model):
     release_date=models.DateTimeField()
     capsule=models.ForeignKey(Capsule,related_name='modules', on_delete=CASCADE)
     release_notify=models.BooleanField(default=False)
+    facebook_notify = models.BooleanField(default=False)
+    twitter_notify = models.BooleanField(default=False)
     @property
     def is_released(self):
-        return datetime.datetime.now(timezone.utc) >= self.release_date
+        return datetime.now(timezone.utc) >= self.release_date
     
 class File(models.Model):
     url=models.URLField()

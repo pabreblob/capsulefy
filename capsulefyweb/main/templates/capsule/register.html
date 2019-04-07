@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+{% load static %}
+<script>
+function checkPassword(){
+	p1=$("#id_password").val()
+	p2=$("#id_password2").val()
+	
+	
+	if(p1!=p2){
+		$("#id_error_p").html("Passwords don't match.")
+		return false;
+	}else{
+		$("#id_error_p").html("")
+		return true;
+	}
+}
+
+</script>
+<div class="container">
+		<form action="" method="post"  novalidate onsubmit="return checkPassword();">
+    {% csrf_token %}
+		<h3 class="title">Signing up</h3>
+		<hr>
+		<div class="form-group">
+		    <label for="id_first_name"><span class="red"></span> 
+		    		First name {{ form.first_name.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="first_name" 
+		    	id="id_first_name" maxlength="250" 
+		    	value="{% if form.first_name.value != None %}{{form.first_name.value}}{% endif %}" required placeholder="First name">
+		</div>
+    		<div class="form-group">
+		    <label for="id_last_name"><span class="red"></span> 
+		    		Last name {{ form.last_name.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="last_name" 
+		    	id="id_last_name" maxlength="250" 
+		    	value="{% if form.last_name.value != None %}{{form.last_name.value}}{% endif %}" required placeholder="Last name">
+		</div>
+    		<div class="form-group">
+		    <label for="id_username"><span class="red">*</span> 
+		    		User name {{ form.username.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="username" 
+		    	id="id_username" maxlength="250" 
+		    	value="{% if form.username.value != None %}{{form.username.value }}{% endif %}" required placeholder="User name">
+		</div>
+		<div class="form-group">
+		    <label for="id_password"><span class="red" >*</span> 
+		    		Password {{ form.password.errors }}
+		    		<span id="id_error_p" class="red"></span>
+		    	</label>
+		    <input type="password" onkeyup="checkPassword()" class="form-control" name="password" 
+		    	id="id_password" maxlength="250" 
+		    	value="" required placeholder="Password">
+		</div>
+		<div class="form-group">
+		    <label for="id_password"><span class="red">*</span> 
+		    		Repeat password {{ form.password.errors }}
+		    	</label>
+		    <input onkeyup="checkPassword()" type="password" class="form-control" name="password" 
+		    	id="id_password2" maxlength="250" 
+		    	value="" required placeholder="Password">
+		</div>
+		<div class="form-group">
+		    <label for="id_birthdate"><span class="red">*</span> 
+		    		Birthdate {{ form.birthdate.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="birthdate" 
+		    	id="id_birthdate"  placeholder="YYYY-MM-DD"
+		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="yyyy-mm-dd">
+		</div>
+		<div class="form-group">
+		    <label for="id_email"><span class="red">*</span> 
+		    		Email {{ form.email.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="email" 
+		    	id="id_email" maxlength="250" 
+		    	value="{% if form.email.value != None %}{{form.email.value}}{% endif %}" required placeholder="Email">
+		</div>
+		<div class="form-group">
+		    <label for="id_email_notification"><span class="red"></span> 
+		    		Email for notifications <div class="tooltiptext">(What is this?)<span class="tooltiptextappear">Insert here the email of another person you want to be notified if one of your deadman timers is about to expire</span></div></li>{{ form.email_notification.errors }}
+		    	</label>
+		    <input type="text" class="form-control" name="email_notification" 
+		    	id="id_email_notification" maxlength="250" 
+		    	value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email for notifications">
+		</div>
+		<button type="submit" value="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
+		</form>
+    
+<div>
+
+
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+{% endblock %}

@@ -5,3 +5,7 @@ psycopg2
 gcloud
 oauth2client
 apscheduler
+paypalrestsdk
+python-dateutil
+tweepy
+sendgrid

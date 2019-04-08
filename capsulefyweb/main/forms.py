@@ -2,7 +2,7 @@ import datetime
 
 from django import forms
 from datetime import datetime, timedelta, timezone
-from .models import File, Social_network
+from .models import File, Social_network, User
 from django.db.models import Sum
 from django.forms import formset_factory
 from django.conf import settings
@@ -181,3 +181,9 @@ class EditFreeCapsuleForm(forms.Form):
             if totalsum > 20.0:
                 raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
+
+
+class NotifEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email_notification',)

@@ -256,7 +256,7 @@ def createModule(request, pk):
             return HttpResponseRedirect('/editmodularcapsule/' + str(pk))
     else:
         moduleForm = ModuleForm()
-    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'capsuleID': capsule.id, 'type': 'create', 'errors': errors})
 
 
 def editModule(request, pk):
@@ -313,7 +313,7 @@ def editModule(request, pk):
     else:
         form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
-                  {'form': form, 'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
+                  {'form': form, 'oldmodule': oldmodule, 'capsuleID': oldmodule.capsule.id, 'type': 'edit', 'errors': errors})
 
 
 def checkModuleFiles(request, capsule):

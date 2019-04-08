@@ -306,7 +306,7 @@ class SimpleTest(TestCase):
         data = {
             'description': 'Module3',
             'release_date': '2019-10-10',
-            'file': None
+            #'file': None
         }
         request = self.request_factory.post('/newmodule/' + str(capsule.id), data, follow=True)
         request.user = self.test_user

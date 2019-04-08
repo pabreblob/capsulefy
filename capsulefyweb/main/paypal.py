@@ -1,5 +1,7 @@
 import paypalrestsdk
 
+from capsulefyweb import settings
+
 
 def payment(capsule_id):
     approval_url = ""
@@ -13,8 +15,8 @@ def payment(capsule_id):
         "payer": {
             "payment_method": "paypal"},
         "redirect_urls": {
-            "return_url": "http://localhost:8000/payment/execute",
-            "cancel_url": "http://localhost:8000/deletecapsule/" + str(capsule_id)},
+            "return_url": settings.BASEURL + "payment/execute",
+            "cancel_url": settings.BASEURL + "deletecapsule/" + str(capsule_id)},
         "transactions": [{
             "item_list": {
                 "items": [{

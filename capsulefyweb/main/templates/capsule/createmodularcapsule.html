@@ -94,10 +94,9 @@
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-release_date"><span class="red">* </span>Release
                                 date: {{ formModule.release_date.errors }}</label>
-                            <input type="text" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
+                            <input type="date" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
                                    class="form-control"
-                                   id="id_form-{{ forloop.counter0 }}-release_date"
-                                   placeholder="YYYY-MM-DD HH:MM">
+                                   id="id_form-{{ forloop.counter0 }}-release_date">
                         </div>
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-file">File: {{ formModule.file.errors }}</label>
@@ -134,7 +133,7 @@
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-release_date"><span class="red">* </span>Release date:</label>
-                    <input type="text" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
+                    <input type="date" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-file">File:</label>

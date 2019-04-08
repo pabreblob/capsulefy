@@ -14,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label for="id_release_date">Release date {{ form.release_date.errors }}</label>
-                <input type="text" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value|date:"Y-m-d H:i" }}{% endif %}">
+                <input type="date" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value }}{% endif %}">
             </div>
             <div class="form-group">
                 <label for="id_file">Files</label>

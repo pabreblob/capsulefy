@@ -68,7 +68,7 @@ def displayCapsules(request, id):
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
-
+testMode = False
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -133,10 +133,13 @@ def createModularCapsule(request):
                                             remote_name=capsule.title + str(idrand) + fileext,
                                             local_name=file.name, module_id=module.id)
 
-            request.session['capsuleId'] = capsule.id
-            request.session.modified = True
-            approval_url = paypal.payment(capsule.id)
-            return HttpResponseRedirect(approval_url)
+            if not testMode:
+                request.session['capsuleId'] = capsule.id
+                request.session.modified = True
+                approval_url = paypal.payment(capsule.id)
+                return HttpResponseRedirect(approval_url)
+            else:
+                return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         capsuleForm = ModularCapsuleForm()
         moduleFormSet = ModulesFormSet()

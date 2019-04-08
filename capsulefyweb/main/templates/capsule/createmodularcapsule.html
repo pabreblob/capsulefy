@@ -68,12 +68,12 @@
                     </div>
                     <div class="col-sm-2">
                         <select class="form-control" name="deadman_time_unit" id="id_deadman_time_unit">
-                            <option value=0 {% if capsuleForm.deadman_time_unit.value == 0 %}selected{% endif %}>Minutes
+                            <option value=0 {% if capsuleForm.deadman_time_unit.value == '0' %}selected{% endif %}>Minutes
                             </option>
-                            <option value=1 {% if capsuleForm.deadman_time_unit.value == 1 %}selected{% endif %}>Days</option>
-                            <option value=2 {% if capsuleForm.deadman_time_unit.value == 2 %}selected{% endif %}>Months
+                            <option value=1 {% if capsuleForm.deadman_time_unit.value == '1' %}selected{% endif %}>Days</option>
+                            <option value=2 {% if capsuleForm.deadman_time_unit.value == '2' %}selected{% endif %}>Months
                             </option>
-                            <option value=3 {% if capsuleForm.deadman_time_unit.value == 3 %}selected{% endif %}>Years
+                            <option value=3 {% if capsuleForm.deadman_time_unit.value == '3' %}selected{% endif %}>Years
                             </option>
                         </select>
                     </div>
@@ -94,10 +94,9 @@
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-release_date"><span class="red">* </span>Release
                                 date: {{ formModule.release_date.errors }}</label>
-                            <input type="text" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
+                            <input type="date" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
                                    class="form-control"
-                                   id="id_form-{{ forloop.counter0 }}-release_date"
-                                   placeholder="YYYY-MM-DD HH:MM">
+                                   id="id_form-{{ forloop.counter0 }}-release_date">
                         </div>
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-file">File: {{ formModule.file.errors }}</label>
@@ -134,7 +133,7 @@
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-release_date"><span class="red">* </span>Release date:</label>
-                    <input type="text" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
+                    <input type="date" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-file">File:</label>
@@ -163,6 +162,7 @@
         }
         deadman_switch_activated();
 
+
         if("{{form.twitter.value}}" == "True"){
 		    document.getElementById("id_twitter").setAttribute("checked", "checked");
 	    }
@@ -179,6 +179,7 @@
 			    element.innerHTML = "Connect to Twitter?";
     		}
 	    }
+
     </script>
 {% endblock %}
 {% block styles %}

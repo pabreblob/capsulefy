@@ -3,7 +3,7 @@ import re
 
 from django import forms
 from datetime import datetime, timedelta, timezone
-from .models import File, Social_network
+from .models import File, Social_network, User
 from django.db.models import Sum
 from django.forms import formset_factory
 from django.conf import settings
@@ -140,6 +140,22 @@ class NewFreeCapsuleForm(forms.Form):
                 raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
 
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
+        return emails
+
 
 class EditFreeCapsuleForm(forms.Form):
     title = forms.CharField(max_length=250)
@@ -197,3 +213,25 @@ class EditFreeCapsuleForm(forms.Form):
             if totalsum > 20.0:
                 raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
+
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
+        return emails
+
+
+class NotifEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email_notification',)

@@ -2,7 +2,8 @@ import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from django.db.models import Q
 from main import paypal
-from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
+from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm,\
+    ModulesFormSet, NotifEmailForm
 from .models import Capsule, Module, File, Social_network, User, Admin
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
@@ -23,7 +24,6 @@ import tweepy
 from _functools import reduce
 import operator
 from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
-
 
 
 def index(request):
@@ -523,9 +523,6 @@ def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
 
 
-
-
-
 @login_required
 def refresh_deadman(request, id):
     capsule = get_object_or_404(Capsule, id=id)
@@ -643,9 +640,24 @@ def success_twitter(request):
         print(e.response)
         print('Error! Failed to get access token.')
         return HttpResponseRedirect('/user/myaccount')
+
+
 def update(request):
     check_deadman_switch()
     check_modules_release()
     remove_expired_capsules()
     return HttpResponse("")
 
+
+@login_required
+def update_notifemail(request):
+    user = User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        form = NotifEmailForm(request.POST, instance=user)
+        if form.is_valid():
+            print(form.cleaned_data)
+            form.save()
+            return HttpResponseRedirect('/user/myaccount')
+    else:
+        form = NotifEmailForm(instance=user)
+    return render(request, 'user/notifemail.html', {'form': form})

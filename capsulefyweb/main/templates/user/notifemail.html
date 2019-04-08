@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block contenido %}
+{% load static %}
+
+<div class="container">
+    <form action="" method="post" class="needs-validation" novalidate>
+        <h3 class="title">Editing notification email</h3>
+		<hr>
+    	    {% csrf_token %}
+			<div class="form-group">
+			    <label for="id_title"><span class="red">*</span> Email {{ form.email_notification.errors }}</label>
+			    <input type="email" class="form-control" name="email_notification" id="id_email_notification" maxlength="250" value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email">
+			</div>
+
+			<button type="submit" value="submit" class="btn btn-primary">Submit</button>
+			<button type="button" class="btn btn-secondary" onclick="window.location = '/user/myaccount'">Cancel</button>
+    </form>
+</div>
+
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+{% endblock %}

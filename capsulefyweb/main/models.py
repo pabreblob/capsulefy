@@ -36,7 +36,7 @@ class Admin(Actor):
 class Capsule(models.Model):
     creation_date=models.DateTimeField(auto_now_add=True)
     title=models.CharField(max_length=250)
-    emails=models.CharField(blank=True,max_length=2500)
+    emails=models.CharField(blank=True, null=True, max_length=2500)
     capsule_type=models.CharField(max_length=1,choices=(('F','FREE'),('P','PREMIUM'),('M','MODULAR')))
     private=models.BooleanField()
     price=models.DecimalField(null=True,max_digits=7, decimal_places=2)

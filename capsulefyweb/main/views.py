@@ -69,7 +69,7 @@ def displayCapsules(request, id):
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
-
+testMode = False
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -95,6 +95,7 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleForm.cleaned_data['twitter']
             facebook = capsuleForm.cleaned_data['facebook']
+            print(time_unit)
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
@@ -133,10 +134,13 @@ def createModularCapsule(request):
                                             remote_name=capsule.title + str(idrand) + fileext,
                                             local_name=file.name, module_id=module.id)
 
-            request.session['capsuleId'] = capsule.id
-            request.session.modified = True
-            approval_url = paypal.payment(capsule.id)
-            return HttpResponseRedirect(approval_url)
+            if not testMode:
+                request.session['capsuleId'] = capsule.id
+                request.session.modified = True
+                approval_url = paypal.payment(capsule.id)
+                return HttpResponseRedirect(approval_url)
+            else:
+                return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         capsuleForm = ModularCapsuleForm()
         moduleFormSet = ModulesFormSet()
@@ -185,9 +189,9 @@ def editModularCapsule(request, pk):
         'private': oldcapsule.private,
         'deadman_switch': oldcapsule.dead_man_switch,
         'deadman_counter': oldcapsule.seconds_to_unit(),
-        'deadman_time_unit': 0
+        'deadman_time_unit': oldcapsule.time_unit
     }
-
+    print(oldcapsule.time_unit)
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():

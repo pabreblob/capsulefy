@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django import forms
 from datetime import datetime, timedelta, timezone
@@ -50,6 +51,22 @@ class ModularCapsuleForm(forms.Form):
             else:
                 raise forms.ValidationError('You have no valid Twitter account')
         return data
+
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        print(emails)
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
 
 
 class ModuleForm(forms.Form):

@@ -1,0 +1,22 @@
+- SoundGo
+Dar céntimos no merece la pena (en las presentaciones).
+Demo muy detallada.
+Cómo priorizar las tareas sacadas del feedback de los usuarios.
+Buena visualización de las presentaciones.
+Vídeo repetido en el inicio efectivo.
+Mejorar las medidas de las soluciones.
+
+- Roombit
+La aplicación se espera que sea mobile-first y no lo es.
+En la demo faltan zooms.
+No es recomendable que la aplicación es oscura para ese tipo de negocio.
+Comentar lo que está pasando en las demos, incluso si hay algún problema (como les ocurrió de que el ordenador no funcionaba). No quedarse callado todo el rato.
+
+- Capsulefy
+Hablar en futuro.
+Horrible forma de presentar los números. Alguna manera más visual. (Diap 20)
+Demo. Algunas partes son muy pequeñas.
+Falta resultado de pilotaje: qué vamos a tener en cuenta, qué no, etc.
+Otra vez lo de los usuarios pilotos.
+Centrarse en lo del feedback de que no ve la diferencia con la cápsula premium.
+Raro lo del ban o unban.

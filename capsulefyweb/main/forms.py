@@ -54,7 +54,6 @@ class ModularCapsuleForm(forms.Form):
 
     def clean_emails(self):
         emails = self.cleaned_data['emails']
-        print(emails)
         if emails != "":
             emailsList = emails.split(",")
             error = ""
@@ -67,7 +66,7 @@ class ModularCapsuleForm(forms.Form):
                         error += ", invalid email " + str(i + 1)
             if len(error) != 0:
                 raise forms.ValidationError(error)
-
+        return emails
 
 class ModuleForm(forms.Form):
     description = forms.CharField(max_length=250)

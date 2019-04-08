@@ -48,6 +48,8 @@ def index(request):
 
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
+    if capsule.capsule_type == 'M' and capsule.payment_id is None:
+        return HttpResponseNotFound()
     creator = False
     editable = True
     if request.user.is_authenticated:

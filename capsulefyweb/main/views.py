@@ -25,6 +25,7 @@ import operator
 from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
 
 
+
 def index(request):
     enterpriseEmail = "capsulefy.communications@gmail.com"
     if request.method == 'POST':
@@ -643,3 +644,4 @@ def update(request):
     check_modules_release()
     remove_expired_capsules()
     return HttpResponse("")
+

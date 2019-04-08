@@ -40,17 +40,18 @@
           <div class="container">
             <div class="row">
               <div style="padding-right:0" class="col-sm-3">
-                <img src="{% static '/image/twitter-icon.png '%}" class="img-fluid" alt="Twitter icon">
+                <img src="{% static 'image/twitter-icon.png '%}" class="img-fluid" alt="Twitter icon">
               </div>
               <div class="col-sm-9" style="margin:auto"> Logged in as {{username}}</div>
             </div>
           </div>
         {% else %}
-          <a href="/user/logintwitter"><img src="{% static '/image/twitter-login.png '%}" class="img-fluid" alt="Twitter login"></a>
+          <a href="/user/logintwitter"><img src="{% static 'image/twitter-login.png '%}" class="img-fluid" alt="Twitter login"></a>
         {% endif %}
       </div>
     </div>
   </div>
+  <div><a href="/deleteUser">Delete all my capsules and account data</a></div>
   </main>
 {% endblock %}
 {% block styles %}

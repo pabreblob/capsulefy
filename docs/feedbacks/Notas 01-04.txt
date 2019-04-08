@@ -1,0 +1,50 @@
+ - Casos de uso al principio no le gusta, mejor enfocarlo sobre la presentación deadman y demás
+ - Colores y la fuentes mejores pero el logo muy mal con la presentación. 
+ - Colores para el rendimiento de cada equipo
+ - Hablar en futuro está mal
+ - No detalles de los anuncios en los costes ahora mismo, es decir no es necesario tantos detalles
+ - Zoom en la demo
+ - Presentar los sprints de una manera un poco más visual 
+ - Fallo, en medir si las mejoras tiene un impacto aceptable o no.
+ - Algunas tareas como el front end podria dividirse más para evitar que sean muy grandes
+ - No solo medir las mejora usando el rendimiento.Propuesta de muller: Para las tareas estimar también
+   un margen de duración que se a considerado aceptable
+ - Los datos economicos darlos a mas groso modo, sin decimales
+
+FEEDBACK GENERAL
+Medir como de efectiva han sido las soluciones-Antes de aplicarlo se debe decir que se va a hacer, que se espera
+obtener y como se va a medir.Que es lo que se considera satisfactorio y qué no
+Cómo van a probar los revisores nuestro sistema, instrucciones de uso.
+Los revisores deben de ser capaces de probar el sistema.
+Ser conscientes de los recursos sobre UX y de protección de datos(los que queramos)
+Para la semana proxima:
+-Empecemos a desarrollar el mvp y podamos incorporar feedback del plan de pilotaje
+
+CHECKLIST
+Retrospectiva de la primera semana
+Feedback de los usuarios
+Introducción al proyecto(breve)(10-15% de la presentación):
+	-Inicio efectivo, explorar distintos inicios efectivos(para inversores, por ejemplo)
+	-Informacion fundamental para una idea global:Costes y competidores.En algunos casos
+	 puede estar al principio, en otros al final.Si es novedoso quizas se pueda poner mas al final
+	-Equipo
+	-El uso de términos debe ser preciso y riguroso
+	
+El grueso tiene que estar en la retrospectiva, demo y pilotaje
+Retrospectiva:Nucleo de la presentacion.No es necesario comparar con el sprint 1 salvo para algo muy
+concreto.Mostrar el estado del sprint, va bien o va mal, cómo se está asegurando la calidad.
+Poner lecciones aprendidas que tengan sentido, deben materializarse en acciones concretas para resolver
+problemas concretos. Explicitar cómo se ha reaccionado ante el problema. Análisis de la mejora, cómo se 
+mide y cómo sabemos si se cumple o no.Las medidas tienen que ser numéricas.
+Para la transparencias de planning, se debe saber si se ha cumplido o no, dependencia de las tareas, esfuerzo
+dedicado...Una buena transparencia debería servir al project manager para conocer el estado del proyecto y
+tomar decisiones.
+Estado del plan de pilotaje:Se ha recibido feedback? Se ha producido una reacción frente a ese feedback?
+Se va a replanificar el pilot plan? Versión preliminar de cómo va a evolucionar ese plan.
+La demo deber
+
+La pasarela de pago debe estar implementada, interactuando con la aplicacion utilizada, aunque se puede usar
+el sandbox de esa aplicacion para que el pago que se realice sea ficticio
+
+
+

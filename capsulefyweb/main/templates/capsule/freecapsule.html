@@ -27,13 +27,14 @@
 			    <label for="id_emails">Emails {{ form.emails.errors }}</label>
 			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{% if form.emails.value != None %}{{form.emails.value}}{% endif %}" maxlength="250">
 			</div>
-			
+
+			<p><b>{{ form.twitter.errors }}</b></p>
 			{% if form.twitter.value != None and form.twitter.value == True %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
 			{% else %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to twitter?</button></p>
 			{% endif %}
-			<input style="display: none" class="form-check-input" type="checkbox" id="id_twitter" value="{% if form.twitter.value != None %}{{form.twitter.value}}{% endif %}" name="twitter">
+			<input style="display: none" class="form-check-input" type="checkbox" id="id_twitter" {% if form.twitter.value != None %}{{checked}}{% endif %} name="twitter">
 			
 			<!--
 			<div class="form-check">
@@ -99,6 +100,9 @@
 </div>
 
 <script>
+	if("{{form.twitter.value}}" == "True"){
+		document.getElementById("id_twitter").setAttribute("checked", "checked");
+	}
 	function add_twitter(element){
 		if(!document.getElementById("id_twitter").hasAttribute("checked")){
 			document.getElementById("id_twitter").setAttribute("checked", "checked");

@@ -278,13 +278,12 @@ def editModule(request, pk):
         return HttpResponseNotFound()
     olddata = {
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
     }
+    print(str(oldmodule.release_date.date()))
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkModuleFiles(request, oldmodule.capsule)
-        if form.is_valid() == False:
-            errors.append(form.errors)
         if form.is_valid() and len(errors) == 0:
             formulario = form.cleaned_data
             oldmodule.description = formulario['description']
@@ -456,7 +455,7 @@ def editFreeCapsule(request, pk):
     olddata = {
         'title': oldcapsule.title,
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook

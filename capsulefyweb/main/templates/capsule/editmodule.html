@@ -2,11 +2,14 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
+
+
     <div class="container">
+        <form id="form" method="post" enctype="multipart/form-data">
+        <h3 class="title">Your module</h3> <hr>
         {% for error in errors %}
             <p><span class="red">{{ error }}</span></p>
         {% endfor %}
-        <form id="form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="id_description">Description {{ form.description.errors }}</label>
@@ -22,7 +25,7 @@
             </div>
             <hr>
             <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{oldmodule.capsule.id}}'">Cancel</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{capsuleID}}'">Cancel</button>
         </form>
         <hr>
 

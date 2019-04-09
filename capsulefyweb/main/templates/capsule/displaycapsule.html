@@ -13,10 +13,7 @@
             {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
-            {% if capsule.capsule_type == "P" and editable%}
-                <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
-            {% endif %}
-            {% if capsule.capsule_type == "M" and editable%}
+            {% if capsule.capsule_type == "M" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             <button class="btn btn-danger" onclick="confirmAlert('Are you sure you want to delete this capsule?','/deletecapsule/{{capsule.id}}')">Delete capsule</button>

@@ -580,8 +580,6 @@ def my_account(request):
     emailNot = ""
     try:
         user_logged = User.objects.get(id=request.user.id)
-        if user_logged.email_notification != None and user_logged.email_notification != "":
-            emailNot = user_logged.email_notification.split(",")
     except:
         user_logged = Admin.objects.get(id=request.user.id)
     username = ''
@@ -598,7 +596,7 @@ def my_account(request):
         except:
             print('Twitter error, revoking credentials')
             twitteracc.delete()
-    return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
+    return render(request, 'user/myaccount.html', {'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
 
 
 @login_required

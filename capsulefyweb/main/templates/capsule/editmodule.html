@@ -45,13 +45,20 @@
   			    				<video class="embed-responsive-item" src="{{file.url}}" controls preload="none"></video>
 			    			</div>
                         {% endif %}
-			    			<button type="button" class="btn btn-danger button-delete" onclick="window.location='/deletefile/{{ file.id }}/'">Delete</button>
+			    			<button type="button" class="btn btn-danger button-delete" onclick="confirmAlert('Are you sure you want to delete this file?','/deletefile/{{ file.id }}/')">Delete</button>
 			    	</div>
 			    	<div class="col-md-1"> </div>
                 {% endfor %}
 			    </div>
         {% endif %}
     </div>
+      <script>
+  function confirmAlert(message, url){
+    if(confirm(message)){
+      window.location = url;
+    }
+  }
+  </script>
 {% endblock %}
 
 {% block styles%}

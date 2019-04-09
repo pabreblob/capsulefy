@@ -1,8 +1,9 @@
 import datetime
+import re
 
 from django import forms
 from datetime import datetime, timedelta, timezone
-from .models import File, Social_network
+from .models import File, Social_network, User
 from django.db.models import Sum
 from django.forms import formset_factory
 from django.conf import settings
@@ -51,15 +52,30 @@ class ModularCapsuleForm(forms.Form):
                 raise forms.ValidationError('You have no valid Twitter account')
         return data
 
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
+        return emails
 
 class ModuleForm(forms.Form):
     description = forms.CharField(max_length=250)
-    release_date = forms.DateTimeField()
+    release_date = forms.DateField()
     file = forms.FileField(required=False)
 
     def clean_release_date(self):
         data = self.cleaned_data['release_date']
-        if data <= datetime.now(timezone.utc):
+        if data <= datetime.now(timezone.utc).date():
             raise forms.ValidationError('The release date must be in the future')
         return data
 
@@ -70,7 +86,7 @@ ModulesFormSet = formset_factory(ModuleForm, extra=1)
 class NewFreeCapsuleForm(forms.Form):
     title = forms.CharField(max_length=250)
     description = forms.CharField(max_length=250)
-    release_date = forms.DateTimeField()
+    release_date = forms.DateField()
     emails = forms.CharField(max_length=2500, required=False)
     twitter = forms.BooleanField(required=False)
     facebook = forms.BooleanField(required=False)
@@ -83,9 +99,9 @@ class NewFreeCapsuleForm(forms.Form):
 
     def clean_release_date(self):
         data = self.cleaned_data['release_date']
-        if data <= datetime.now(timezone.utc):
+        if data <= datetime.now(timezone.utc).date():
             raise forms.ValidationError('The release date must be in the future')
-        yearafter = datetime.now(timezone.utc) + timedelta(days=365)
+        yearafter = datetime.now(timezone.utc).date() + timedelta(days=365)
         if data > yearafter:
             raise forms.ValidationError('The release date must be within 1 year from now')
         return data
@@ -123,6 +139,22 @@ class NewFreeCapsuleForm(forms.Form):
             if totalsum > 20.0:
                 raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
+
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
+        return emails
 
 
 class EditFreeCapsuleForm(forms.Form):
@@ -181,3 +213,25 @@ class EditFreeCapsuleForm(forms.Form):
             if totalsum > 20.0:
                 raise forms.ValidationError('You cannot store more than 20 MB using free capsules')
         return data
+
+    def clean_emails(self):
+        emails = self.cleaned_data['emails']
+        if emails != "":
+            emailsList = emails.split(",")
+            error = ""
+            for i in range(len(emailsList)):
+                match = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', emailsList[i], re.I)
+                if match is None:
+                    if len(error) == 0:
+                        error += "Invalid email " + str(i + 1)
+                    else:
+                        error += ", invalid email " + str(i + 1)
+            if len(error) != 0:
+                raise forms.ValidationError(error)
+        return emails
+
+
+class NotifEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email_notification',)

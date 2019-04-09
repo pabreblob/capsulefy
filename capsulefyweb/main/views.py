@@ -2,7 +2,8 @@ import paypalrestsdk
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from django.db.models import Q
 from main import paypal
-from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm, ModulesFormSet
+from .forms import ContactForm, NewFreeCapsuleForm, EditFreeCapsuleForm, ModularCapsuleForm, ModuleForm,\
+    ModulesFormSet, NotifEmailForm
 from .models import Capsule, Module, File, Social_network, User, Admin
 from gcloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
@@ -47,6 +48,8 @@ def index(request):
 
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
+    if capsule.capsule_type == 'M' and capsule.payment_id is None:
+        return HttpResponseNotFound()
     creator = False
     editable = True
     if request.user.is_authenticated:
@@ -68,7 +71,7 @@ def displayCapsules(request, id):
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]
 
-
+testMode = False
 def createModularCapsule(request):
     user = request.user
     errors = []
@@ -94,6 +97,7 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleForm.cleaned_data['twitter']
             facebook = capsuleForm.cleaned_data['facebook']
+            print(time_unit)
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
@@ -132,10 +136,13 @@ def createModularCapsule(request):
                                             remote_name=capsule.title + str(idrand) + fileext,
                                             local_name=file.name, module_id=module.id)
 
-            request.session['capsuleId'] = capsule.id
-            request.session.modified = True
-            approval_url = paypal.payment(capsule.id)
-            return HttpResponseRedirect(approval_url)
+            if not testMode:
+                request.session['capsuleId'] = capsule.id
+                request.session.modified = True
+                approval_url = paypal.payment(capsule.id)
+                return HttpResponseRedirect(approval_url)
+            else:
+                return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         capsuleForm = ModularCapsuleForm()
         moduleFormSet = ModulesFormSet()
@@ -184,9 +191,9 @@ def editModularCapsule(request, pk):
         'private': oldcapsule.private,
         'deadman_switch': oldcapsule.dead_man_switch,
         'deadman_counter': oldcapsule.seconds_to_unit(),
-        'deadman_time_unit': 0
+        'deadman_time_unit': oldcapsule.time_unit
     }
-
+    print(oldcapsule.time_unit)
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():
@@ -256,7 +263,7 @@ def createModule(request, pk):
             return HttpResponseRedirect('/editmodularcapsule/' + str(pk))
     else:
         moduleForm = ModuleForm()
-    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'capsuleID': capsule.id, 'type': 'create', 'errors': errors})
 
 
 def editModule(request, pk):
@@ -271,13 +278,12 @@ def editModule(request, pk):
         return HttpResponseNotFound()
     olddata = {
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
     }
+    print(str(oldmodule.release_date.date()))
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkModuleFiles(request, oldmodule.capsule)
-        if form.is_valid() == False:
-            errors.append(form.errors)
         if form.is_valid() and len(errors) == 0:
             formulario = form.cleaned_data
             oldmodule.description = formulario['description']
@@ -313,7 +319,7 @@ def editModule(request, pk):
     else:
         form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
-                  {'form': form, 'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
+                  {'form': form, 'oldmodule': oldmodule, 'capsuleID': oldmodule.capsule.id, 'type': 'edit', 'errors': errors})
 
 
 def checkModuleFiles(request, capsule):
@@ -449,7 +455,7 @@ def editFreeCapsule(request, pk):
     olddata = {
         'title': oldcapsule.title,
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook
@@ -516,9 +522,6 @@ def deleteCapsule(request, pk):
 @login_required
 def select_capsule(request):
     return render(request, 'capsule/select_capsule.html')
-
-
-
 
 
 @login_required
@@ -638,8 +641,24 @@ def success_twitter(request):
         print(e.response)
         print('Error! Failed to get access token.')
         return HttpResponseRedirect('/user/myaccount')
+
+
 def update(request):
     check_deadman_switch()
     check_modules_release()
     remove_expired_capsules()
     return HttpResponse("")
+
+
+@login_required
+def update_notifemail(request):
+    user = User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        form = NotifEmailForm(request.POST, instance=user)
+        if form.is_valid():
+            print(form.cleaned_data)
+            form.save()
+            return HttpResponseRedirect('/user/myaccount')
+    else:
+        form = NotifEmailForm(instance=user)
+    return render(request, 'user/notifemail.html', {'form': form})

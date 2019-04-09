@@ -2,11 +2,14 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
+
+
     <div class="container">
+        <form id="form" method="post" enctype="multipart/form-data">
+        <h3 class="title">Your module</h3> <hr>
         {% for error in errors %}
             <p><span class="red">{{ error }}</span></p>
         {% endfor %}
-        <form id="form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="id_description">Description {{ form.description.errors }}</label>
@@ -14,7 +17,7 @@
             </div>
             <div class="form-group">
                 <label for="id_release_date">Release date {{ form.release_date.errors }}</label>
-                <input type="text" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value|date:"Y-m-d H:i" }}{% endif %}">
+                <input type="date" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value }}{% endif %}">
             </div>
             <div class="form-group">
                 <label for="id_file">Files</label>
@@ -22,7 +25,7 @@
             </div>
             <hr>
             <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{oldmodule.capsule.id}}'">Cancel</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{capsuleID}}'">Cancel</button>
         </form>
         <hr>
 

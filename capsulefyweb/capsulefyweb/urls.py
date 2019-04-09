@@ -49,4 +49,6 @@ urlpatterns = [
     path('adm/list/', views_admin.list),
     path('ajaxban/', views_admin.ajax_ban),
     path('update/', views.update,name='update'),
+    path('deleteUser/', views_user.deleteUser),
+    path('user/notifemail/', views.update_notifemail, name='notifemail'),
 ]

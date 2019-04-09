@@ -112,7 +112,7 @@
                     </div> 
                 <button class="btn btn-primary" onclick="window.location = '/editmodule/{{ module.id }}'">Edit module</button>
                 {% if oldcapsule.modules.all.count != 1 %}
-                    <button class="btn btn-danger" onclick="window.location='/deletemodule/{{ module.id }}'">Delete module</button>
+                    <button class="btn btn-danger" onclick="confirmAlert('Are you sure you want to delete this module?', '/deletemodule/{{ module.id }}')">Delete module</button>
                 {% endif %}                
             </div>
             <hr>
@@ -149,6 +149,13 @@
     		}
 	    }
     </script>
+      <script>
+  function confirmAlert(message, url){
+    if(confirm(message)){
+      window.location = url;
+    }
+  }
+  </script>
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

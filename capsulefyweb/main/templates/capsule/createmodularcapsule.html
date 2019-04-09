@@ -23,8 +23,8 @@
                        maxlength="2500" id="id_emails">
             </div>
 
-            <p><b>{{form.twitter.error}}</b></p>
-			{% if form.twitter.value != None and form.twitter.value == True %}
+            <p><b>{{capsuleForm.twitter.errors}}</b></p>
+			{% if capsuleForm.twitter.value != None and capsuleForm.twitter.value == True %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
 			{% else %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to twitter?</button></p>
@@ -115,7 +115,7 @@
             <hr>
             <button class="btn btn-primary" type="submit" value="Pay capsule">Submit</button>
             <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
-
+            <br>
         </form>
 
     </div>

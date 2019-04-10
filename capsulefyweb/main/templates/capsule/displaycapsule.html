@@ -8,8 +8,8 @@
         </blockquote>
     </h3>
 
-    {% if user.id == capsule.creator.id %}
     <div class="module-btn-top">
+    {% if user.id == capsule.creator.id %}
             {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
@@ -20,10 +20,11 @@
             {% if capsule.dead_man_switch%}
                 <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
-    </div>
+    
     {% endif %}
-
-
+    <button class="btn btn-secondary" onclick="window.location='/list/public/'">Back</button>
+    </div>
+    
     {% for module in modules %}
         <div class="card">
             <div class="card-header">
@@ -64,13 +65,10 @@
     {% endfor %}
 
 
-    {% if user.id == capsule.creator.id %}
     <div class="module-btn-bottom">
+        {% if user.id == capsule.creator.id %}
             {% if capsule.capsule_type == "F" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
-            {% endif %}
-            {% if capsule.capsule_type == "P" and editable %}
-                <button class="btn btn-primary" onclick="window.location='/editpremiumcapsule/{{capsule.id}}'">Edit capsule</button>
             {% endif %}
             {% if capsule.capsule_type == "M" and editable %}
                 <button class="btn btn-primary" onclick="window.location='/editmodularcapsule/{{capsule.id}}'">Edit capsule</button>
@@ -79,8 +77,10 @@
             {% if capsule.dead_man_switch and editable %}
                 <button class="btn btn-warning" onclick="window.location='/refresh/{{capsule.id}}'">Refresh capsule {{ capsule.seconds_to_unit }} {{ capsule.get_time_unit_display}} left</button>
             {% endif %}
+        {% endif %}
+        <button class="btn btn-secondary" onclick="window.location='/list/public/'">Back</button>
     </div><br><br>
-    {% endif %}
+
   <script>
   function confirmAlert(message, url){
     if(confirm(message)){

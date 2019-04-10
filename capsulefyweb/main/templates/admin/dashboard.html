@@ -48,21 +48,25 @@
     <h1>{{data.totalCapsules}} Total</h1>
     </center>
     <div class="progress">
-	  <div class="progress-bar bg-success" role="progressbar" 
+	  
+	  <div class="progress-bar bg-success" role="progressbar" style="width: {{data.porCapPre}}%" aria-valuenow="{{data.porCapPre}}" aria-valuemin="0" aria-valuemax="100"
+	   data-toggle="tooltip" data-placement="top" title="{{data.premiumCapsules}} Capsulas premium, {{data.porCapPre}}% of total.">{{data.premiumCapsules}} prem. </div>
+		
+	  <div class="progress-bar" role="progressbar" 
 	  style="width: {{data.porCapFree}}%" aria-valuenow="{{data.porCapFree}}" 
 	  aria-valuemin="0" aria-valuemax="100"
 	  data-toggle="tooltip" data-placement="top" 
 	  title="{{data.freeCapsules}} Capsules free, {{data.porCapFree}}% of total."
 	  >{{data.freeCapsules}} free. 
 	  </div>
-	  <div class="progress-bar" role="progressbar" style="width: {{data.porCapPre}}%" aria-valuenow="{{data.porCapPre}}" aria-valuemin="0" aria-valuemax="100"
-	   data-toggle="tooltip" data-placement="top" title="{{data.premiumCapsules}} Capsulas premium, {{data.porCapPre}}% of total.">{{data.premiumCapsules}} prem. </div>
 	</div>
 	<center>
 	<br>
 	<p>
 	  	{{data.ratioPremiumFree}} Ratio premium / free capsules.
 	 </p>
+	 <p>{{data.unPaidCapsules}} Premium capsule not paid. </p>
+	 <p>{{data.bannedCapsules}} Banned capsules </p>
 	 </center>
   </div>
 </div>

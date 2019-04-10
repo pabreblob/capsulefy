@@ -549,7 +549,7 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).exclude(Q(capsule_type='M') & Q(payment_id=None)).order_by('id')
         if(searched!=""):
             wds = searched.split()
             tag_qs = reduce(operator.and_,

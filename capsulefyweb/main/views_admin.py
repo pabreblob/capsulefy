@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main.models import Capsule, Module
 from datetime import timezone, datetime
-
+from django.db.models import Q
 @login_required
 def list(request):
     if not request.user.is_superuser:
@@ -54,6 +54,9 @@ def dashboard(request):
     data['premiumCapsules']=Capsule.objects.filter(capsule_type='M').count()
     data['freeCapsules']=Capsule.objects.filter(capsule_type='F').count()
     data['totalCapsules']=Capsule.objects.all().count()
+    data['unPaidCapsules']=Capsule.objects.filter(Q(capsule_type='M') & Q(payment_id=None)).count()
+    data['bannedCapsules']=Capsule.objects.filter(creator__is_active=False).count()
+    
     data['totalModules']=Module.objects.all().count()
     data['publishedModules']=Module.objects.filter(release_date__lte=datetime.now(timezone.utc)).count()
     data['unpublishedModules']=Module.objects.filter(release_date__gt=datetime.now(timezone.utc)).count()

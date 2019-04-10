@@ -17,7 +17,16 @@
         {% if userlogged.email_notification != "" %}
           <p><b>Email for notifications: </b> {{userlogged.email_notification}}</p> 
         {% endif %}
-        <button class="btn btn-danger" onClick="confirmAlert('Are you sure you want to delete your account?', '/deleteUser')">Delete account</button>
+        <hr>
+        <div id="buttonrow" class="row justify-content-between">
+          <div class="col-12 col-sm-5">
+            <button class="btn btn-secondary" onclick="window.location='/'">Back</button>
+            <button class="btn btn-primary" onclick="window.location='/user/notifemail'">Edit email for notifications</button><br>
+          </div>
+          <div class="col-12 col-sm-3">
+            <button class="btn btn-danger" onClick="confirmAlert('Are you sure you want to delete your account?', '/deleteUser')">Delete account</button>
+          </div>
+        </div>
       </div>
       <div class="col-sm-12 col-md-3">
         {% if hastwitter %}
@@ -36,6 +45,7 @@
     </div>
   </div>
   </main>
+  <br><br>
   <script>
   function confirmAlert(message, url){
     if(confirm(message)){

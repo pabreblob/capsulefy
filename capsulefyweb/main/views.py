@@ -548,6 +548,7 @@ def ajaxlist(request,type):
         capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
+        capsules_list=capsules_list.exclude(Q(capsule_type='M') & Q(payment_id=None))
     else:
         capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).exclude(Q(capsule_type='M') & Q(payment_id=None)).order_by('id')
         if(searched!=""):

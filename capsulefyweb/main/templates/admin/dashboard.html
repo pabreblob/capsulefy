@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+{% load static %}
+<div class="container">
+<div class="card-deck" >
+<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  <div class="card-body">
+  	<center>
+    <h5 class="card-title">Registered users</h5>
+    <br>
+    <h1>{{data.registeredUser}} Total</h1>
+    <p class="card-text">{{data.bannedUser}} user banned</p>
+    </center>
+  </div>
+</div>
+
+<div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+  <div class="card-body">
+  	<center>
+    <h5 class="card-title">Modules</h5>
+    <h1>{{data.totalModules}} Total</h1>
+    </center>
+    <div class="progress">
+	  <div class="progress-bar bg-success" role="progressbar" 
+	  style="width: {{data.porModPubli}}%" aria-valuenow="{{data.porModPubli}}" 
+	  aria-valuemin="0" aria-valuemax="100"
+	  data-toggle="tooltip" data-placement="top" 
+	  title="{{data.publishedModules}} Modules published, {{data.porModPubli}}% of total."
+	  >{{data.publishedModules}} Publi. 
+	  </div>
+	  <div class="progress-bar" role="progressbar" style="width: {{data.porModunPubli}}%" aria-valuenow="{{data.porModunPubli}}" aria-valuemin="0" aria-valuemax="100"
+	   data-toggle="tooltip" data-placement="top" title="{{data.unpublishedModules}} Modules unpublished, {{data.porModunPubli}}% of total.">{{data.unpublishedModules}} Unpubli. </div>
+	</div>
+	<center>
+	<br>
+	<p>
+	  	{{data.ratioPubliUnpubli}} Ratio published / unpublished modules.
+	 </p>
+	 </center>
+	
+  </div>
+</div>
+<div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+  <div class="card-body">
+  	<center>
+    <h5 class="card-title">Capsules</h5>
+    <h1>{{data.totalCapsules}} Total</h1>
+    </center>
+    <div class="progress">
+	  
+	  <div class="progress-bar bg-success" role="progressbar" style="width: {{data.porCapPre}}%" aria-valuenow="{{data.porCapPre}}" aria-valuemin="0" aria-valuemax="100"
+	   data-toggle="tooltip" data-placement="top" title="{{data.premiumCapsules}} Capsulas premium, {{data.porCapPre}}% of total.">{{data.premiumCapsules}} prem. </div>
+		
+	  <div class="progress-bar" role="progressbar" 
+	  style="width: {{data.porCapFree}}%" aria-valuenow="{{data.porCapFree}}" 
+	  aria-valuemin="0" aria-valuemax="100"
+	  data-toggle="tooltip" data-placement="top" 
+	  title="{{data.freeCapsules}} Capsules free, {{data.porCapFree}}% of total."
+	  >{{data.freeCapsules}} free. 
+	  </div>
+	</div>
+	<center>
+	<br>
+	<p>
+	  	{{data.ratioPremiumFree}} Ratio premium / free capsules.
+	 </p>
+	 <p>{{data.unPaidCapsules}} Premium capsule not paid. </p>
+	 <p>{{data.bannedCapsules}} Banned capsules </p>
+	 </center>
+  </div>
+</div>
+
+</div>
+
+
+</div>
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock  %}
+

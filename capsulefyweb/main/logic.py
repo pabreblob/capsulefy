@@ -10,32 +10,34 @@ import tweepy
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 def send_email(module):
-    
-    html_message="<p><b>Capsule title: </b>"\
-    +module.capsule.title+"</p>"\
-    +"<p><b>Module content: </b>"\
-    +module.description+"</p>"\
-    +"<br><br><p><b>Author: </b>"\
-    +module.capsule.creator.first_name+" "\
-    +module.capsule.creator.last_name+"</p>"
-    mail_list=module.capsule.emails.split(',')
-    i=0
-    while i< len(mail_list):
-        print(mail_list[i])
-        message = Mail(
-            from_email='capsulefy.communications@gmail.com',
-            to_emails=mail_list[i],
-            subject='Module of capsule is released',
-            html_content=html_message)
-        try:
-            sg = SendGridAPIClient(capsulefyweb.settings.SENDGRID_KEY)
-            response = sg.send(message)
-            module.release_notify=True
-            module.save()
+   try:
+        html_message="<p><b>Capsule title: </b>"\
+        +module.capsule.title+"</p>"\
+        +"<p><b>Module content: </b>"\
+        +module.description+"</p>"\
+        +"<br><br><p><b>Author: </b>"\
+        +module.capsule.creator.first_name+" "\
+        +module.capsule.creator.last_name+"</p>"
+        mail_list=module.capsule.emails.split(',')
+        i=0
+        while i< len(mail_list):
+            print(mail_list[i])
+            message = Mail(
+                from_email='capsulefy.communications@gmail.com',
+                to_emails=mail_list[i],
+                subject='Module of capsule is released',
+                html_content=html_message)
+            try:
+                sg = SendGridAPIClient(capsulefyweb.settings.SENDGRID_KEY)
+                response = sg.send(message)
+                module.release_notify=True
+                module.save()
 
-        except Exception as e:
-            print(e)
-        i=i+1
+            except Exception as e:
+                print(e)
+            i=i+1
+   except:
+       pass
 
 
 def publish_twitter(module):
@@ -68,7 +70,8 @@ def check_modules_release():
         twittermodules.extend(twmodules)
 
     for mod in modules:
-        send_email(mod)
+        if mod.capsule.emails!=None:
+            send_email(mod)
 
     for mod in twittermodules:
         publish_twitter(mod)
@@ -76,7 +79,13 @@ def check_modules_release():
 
 def send_deadman_notification(capsule):
     days=round(capsule.dead_man_counter/86400)
-    mail_list=[capsule.creator.email,capsule.creator.email_notification]
+    try:
+        if capsule.creator.email_notification!= None:
+            mail_list=[capsule.creator.email,capsule.creator.email_notification]
+        else:
+            mail_list = [capsule.creator.email]
+    except:
+        pass
     html_message = "<p>Your capsule titled: " \
                    + capsule.title +" is about to expire in "+str(days)+" days!</p>" \
                    + "<p>If you don't want it to be released yet, go to your capsule and press the Refresh button " \

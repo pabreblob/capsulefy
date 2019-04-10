@@ -643,10 +643,13 @@ def success_twitter(request):
 
 
 def update(request):
-    check_deadman_switch()
-    check_modules_release()
-    remove_expired_capsules()
-    return HttpResponse("")
+    try:
+        check_deadman_switch()
+        check_modules_release()
+        remove_expired_capsules()
+    except:
+        pass
+    return HttpResponseRedirect('/')
 
 
 @login_required

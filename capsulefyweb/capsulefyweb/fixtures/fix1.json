@@ -277,86 +277,6 @@
     }
   },
   {
-    "model": "main.social_network",
-    "pk": 1,
-    "fields": {
-      "social_type":"F",
-      "user_id":2,
-      "token":"142154",
-      "secret":"178221"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 2,
-    "fields": {
-      "social_type":"T",
-      "user_id":2,
-      "token":"204746",
-      "secret":"148429"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 3,
-    "fields": {
-      "social_type":"F",
-      "user_id":3,
-      "token":"219077",
-      "secret":"108201"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 4,
-    "fields": {
-      "social_type":"T",
-      "user_id":3,
-      "token":"152889",
-      "secret":"174261"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 5,
-    "fields": {
-      "social_type":"F",
-      "user_id":4,
-      "token":"187003",
-      "secret":"128257"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 6,
-    "fields": {
-      "social_type":"T",
-      "user_id":4,
-      "token":"130901",
-      "secret":"138326"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 7,
-    "fields": {
-      "social_type":"F",
-      "user_id":5,
-      "token":"139808",
-      "secret":"278231"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 8,
-    "fields": {
-      "social_type":"T",
-      "user_id":6,
-      "token":"258212",
-      "secret":"176241"
-    }
-  },
-  {
     "model": "main.capsule",
     "pk": 1,
     "fields": {
@@ -387,8 +307,8 @@
       "dead_man_switch":"False",
       "dead_man_counter":0,
       "dead_man_initial_counter":0,
-      "twitter":"True",
-      "facebook":"True",
+      "twitter":"False",
+      "facebook":"False",
       "creator_id":2
     }
   },
@@ -440,7 +360,7 @@
       "dead_man_switch":"False",
       "dead_man_counter":0,
       "dead_man_initial_counter":0,
-      "twitter":"True",
+      "twitter":"False",
       "facebook":"False",
       "creator_id":6,
       "payment_id":"138798"
@@ -477,9 +397,9 @@
       "dead_man_switch":"True",
       "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
-      "time_unit":0,
-      "twitter":"True",
-      "facebook":"True",
+      "time_unit":2,
+      "twitter":"False",
+      "facebook":"False",
       "creator_id":3,
       "payment_id":"148636"
     }
@@ -497,7 +417,7 @@
       "dead_man_switch":"True",
       "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
-      "time_unit":1,
+      "time_unit":2,
       "twitter":"False",
       "facebook":"False",
       "creator_id":8,
@@ -519,7 +439,7 @@
       "dead_man_initial_counter":31536000,
       "time_unit":2,
       "twitter":"False",
-      "facebook":"True",
+      "facebook":"False",
       "creator_id":4,
       "payment_id":"102630"
     }

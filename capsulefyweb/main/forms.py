@@ -160,7 +160,7 @@ class NewFreeCapsuleForm(forms.Form):
 class EditFreeCapsuleForm(forms.Form):
     title = forms.CharField(max_length=250)
     description = forms.CharField(max_length=250)
-    release_date = forms.DateTimeField()
+    release_date = forms.DateField()
     emails = forms.CharField(max_length=2500, required=False)
     twitter = forms.BooleanField(required=False)
     facebook = forms.BooleanField(required=False)
@@ -173,9 +173,9 @@ class EditFreeCapsuleForm(forms.Form):
 
     def clean_release_date(self):
         data = self.cleaned_data['release_date']
-        if data <= datetime.now(timezone.utc):
+        if data <= datetime.now(timezone.utc).date():
             raise forms.ValidationError('The release date must be in the future')
-        yearafter = datetime.now(timezone.utc) + timedelta(days=365)
+        yearafter = datetime.now(timezone.utc).date() + timedelta(days=365)
         if data > yearafter:
             raise forms.ValidationError('The release date must be within 1 year from now')
         return data

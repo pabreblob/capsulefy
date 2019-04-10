@@ -14,26 +14,10 @@
         <p><b>Username: </b> {{user.get_username}}</p>
         <p><b>Birthdate: </b>{{userlogged.birthdate}}</p>
         <p><b>Email:</b> {{userlogged.email}}</p>
-        <br>
         {% if userlogged.email_notification != "" %}
-          <table class="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Emails for notifications</th>
-              </tr>  
-            </thead>
-            <tbody>
-              {% for e in emailNot%}
-                <tr>
-                  <th scope="col">{{forloop.counter}}</th>
-                  <td>{{e}}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-            
+          <p><b>Email for notifications: </b> {{userlogged.email_notification}}</p> 
         {% endif %}
+        <button class="btn btn-danger" onClick="confirmAlert('Are you sure you want to delete your account?', '/deleteUser')">Delete account</button>
       </div>
       <div class="col-sm-12 col-md-3">
         {% if hastwitter %}
@@ -51,8 +35,14 @@
       </div>
     </div>
   </div>
-  <div><a href="/deleteUser">Delete all my capsules and account data</a></div>
   </main>
+  <script>
+  function confirmAlert(message, url){
+    if(confirm(message)){
+      window.location = url;
+    }
+  }
+  </script>
 {% endblock %}
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styleAccount.css' %}"/>

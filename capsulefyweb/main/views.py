@@ -549,7 +549,7 @@ def ajaxlist(request,type):
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).exclude(Q(capsule_type='M') & Q(payment_id=None)).order_by('id')
         if(searched!=""):
             wds = searched.split()
             tag_qs = reduce(operator.and_,
@@ -580,8 +580,6 @@ def my_account(request):
     emailNot = ""
     try:
         user_logged = User.objects.get(id=request.user.id)
-        if user_logged.email_notification != None and user_logged.email_notification != "":
-            emailNot = user_logged.email_notification.split(",")
     except:
         user_logged = Admin.objects.get(id=request.user.id)
     username = ''
@@ -598,7 +596,7 @@ def my_account(request):
         except:
             print('Twitter error, revoking credentials')
             twitteracc.delete()
-    return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
+    return render(request, 'user/myaccount.html', {'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
 
 
 @login_required

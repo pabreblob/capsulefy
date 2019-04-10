@@ -28,9 +28,9 @@
 
             <p><b>{{form.twitter.errors}}</b></p>
 			{% if form.twitter.value != None and form.twitter.value == True %}
-				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
+				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to Twitter</button></p>
 			{% else %}
-				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to twitter?</button></p>
+				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to Twitter?</button></p>
 			{% endif %}
             <input style="display: none" type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
                 {% if form.twitter.value == True %}checked{% endif %}>

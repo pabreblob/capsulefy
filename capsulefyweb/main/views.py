@@ -74,6 +74,8 @@ conversion_to_seconds = [60, 86400, 2592000, 31536000]
 testMode = False
 def createModularCapsule(request):
     user = request.user
+    if user.is_superuser:
+        return HttpResponseNotFound()
     errors = []
     if request.method == 'POST':
         capsuleForm = ModularCapsuleForm(request.POST, user=request.user)
@@ -393,6 +395,8 @@ class login(LoginView):
 
 @login_required
 def createFreeCapsule(request):
+    if request.user.is_superuser:
+        return HttpResponseNotFound()
     if request.method == 'POST':
         form = NewFreeCapsuleForm(request.POST, request.FILES, user=request.user,
                                   upfiles=request.FILES.getlist('files'))
@@ -578,6 +582,8 @@ def ajaxlist(request,type):
 def my_account(request):
     hastwitter = False
     emailNot = ""
+    if request.user.is_superuser:
+        return HttpResponseNotFound()
     try:
         user_logged = User.objects.get(id=request.user.id)
     except:
@@ -601,6 +607,8 @@ def my_account(request):
 
 @login_required
 def login_twitter(request):
+    if request.user.is_superuser:
+        return HttpResponseNotFound()
     twitteracc = Social_network.objects.filter(social_type='T', user_id=request.user.id).first()
     if twitteracc is not None:
         return HttpResponseRedirect('/user/myaccount')
@@ -653,6 +661,8 @@ def update(request):
 
 @login_required
 def update_notifemail(request):
+    if request.user.is_superuser:
+        return HttpResponseNotFound()
     user = User.objects.get(id=request.user.id)
     if request.method == 'POST':
         form = NotifEmailForm(request.POST, instance=user)

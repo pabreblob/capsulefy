@@ -193,7 +193,6 @@ def editModularCapsule(request, pk):
         'deadman_counter': oldcapsule.seconds_to_unit(),
         'deadman_time_unit': oldcapsule.time_unit
     }
-    print(oldcapsule.time_unit)
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():
@@ -217,7 +216,7 @@ def editModularCapsule(request, pk):
             return HttpResponseRedirect('/displaycapsule/' + str(pk))
     else:
         form = ModularCapsuleForm(initial=olddata)
-        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
+    return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
 
 
 def createModule(request, pk):

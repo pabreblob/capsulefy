@@ -8,7 +8,7 @@
 		<hr>
     	    {% csrf_token %}
 			<div class="form-group">
-			    <label for="id_title"><span class="red">*</span> Email {{ form.email_notification.errors }}</label>
+			    <label for="id_title">Email {{ form.email_notification.errors }}</label>
 			    <input type="email" class="form-control" name="email_notification" id="id_email_notification" maxlength="250" value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email">
 			</div>
 

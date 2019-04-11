@@ -7,9 +7,11 @@
  <!-- Your regular body -->
 
 <div class="container main-list">
-  <h3>List Capsule</h3>
-
-
+	{% if '/list/public/' in request.path %}
+  	<h3>List capsules</h3>
+	{% else %}
+		<h3>Your capsules</h3>
+	{% endif %}
 
   <div class="form-group row">
 		<label class="col-form-label col-sm-1" for="form_search">Search: </label>

@@ -24,6 +24,7 @@
             <img class="capsuleimg" class="img-fluid" src="{% static 'image/capsule.png' %}"/>
         </div>
 
+{% if not user.username or not user.is_superuser %}
 <a name="pricing"></a>
     <div id="pricing">
     <div class="bg-3 container">
@@ -71,6 +72,6 @@
 </section>
 </div>
 </div>
-
+{% endif %}
 
 {% endblock %}

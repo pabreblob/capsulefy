@@ -1,0 +1,46 @@
+Con un * todo lo que creo que habria que presentar el Lunes, que es la mayoria porque lo ideal es dejar la
+segunda semana para aplicar feedback nuevo de los users y corregir errores. Recuerdo que el despliegue es el
+miercoles de la semana que viene asi que cuanto menos dejemos para la semana que viene mejor.
+
+
+Tareas de mejora:
+-Mejorar dashboard *
+-Mejorar return button *
+-Videos explicando el deadman switch *
+-Mejorar páginas 404 *
+-Placeholder de la separación de emails *
+-Añadir datepicker en los campos que faltan *
+-Mejorar checkboxes *
+-Mejorar diseño responsive *
+-Mejorar proporciones de las imágenes *
+-Pasar el contenido de la landing (Quiénes somos, FAQ...) a la página principal
+-Asegurarse que toda la internacionalizacion es coherente (el mensaje de registro por ejemplo esta en español,
+ver que las fechas siguen todas el mismo formato)*
+
+Funcionalidades nuevas a añadir:
+-Integración con Facebook
+
+Tests a añadir:
+-SonarCloud
+-ApacheJMeter
+
+Grabaciones:
+-Regrabar o añadir alguna demo si es necesario, en la demo del deadman cambiar los minutos por días*
+-Grabar anuncio*
+
+GDPR:
+-Texto legal con las condiciones de servicio*
+-Explicar cómo puede ser el usuario alertado si se compromete su cuenta, cómo puede borrar sus datos y cómo puede
+solicitar que se le envíe la información que el sistema tiene almacenada acerca de él (pero no hay que implementarlo)*
+-No hay que enumerar las cookies ni para que se usan pero un aviso de que en el sitio web se usan cookies estaria bien*
+
+Cosas para la presentación:
+-Actualizar el análisis de competidores ahora que conocemos el mvp de nuestro producto (Honestamente yo creo que el
+nuestro no habría que cambiarlo)*
+-Actualizar el presupuesto. Ahora conocemos mejor los costes del software que estamos usando, tener en cuenta los costes de 
+mantenimiento, entre ellos el de atención al público.*
+-Feedback actual de los usuarios piloto, no centrarse en semanas anteriores.*
+-Acciones derivadas del feedback. Ordenarlas por prioridad y razonar esa clasificación.*
+-Detalles sobre la automatización del testing y los resultados que se obtienen.*
+-Tratar de meter alguna medición más objetiva del rendimiento*
+-Planificación básica de qué se hará para el entregable del project launch*

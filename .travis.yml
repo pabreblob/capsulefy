@@ -8,9 +8,9 @@ before_script:
 - python manage.py migrate
 - python manage.py collectstatic
 script:
-- coverage run --branch --source main --omit *models*,*migrations*,*__init__*,*admin*,*apps*,*tests* manage.py test
+- coverage run manage.py test
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+- coveralls
 - cd ..
 notifications:
   email: false

@@ -1,0 +1,10 @@
+[run]
+branch = True
+source = main
+omit =
+    *models*
+    *migrations*
+    *__init__*
+    *admin*
+    *apps*
+    *tests*

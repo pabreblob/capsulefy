@@ -2,11 +2,14 @@
 {% load static %}
 {% block contenido %}
     {% load static %}
+
+
     <div class="container">
+        <form id="form" method="post" enctype="multipart/form-data">
+        <h3 class="title">Your module</h3> <hr>
         {% for error in errors %}
             <p><span class="red">{{ error }}</span></p>
         {% endfor %}
-        <form id="form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="id_description">Description {{ form.description.errors }}</label>
@@ -14,7 +17,7 @@
             </div>
             <div class="form-group">
                 <label for="id_release_date">Release date {{ form.release_date.errors }}</label>
-                <input type="text" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value|date:"Y-m-d H:i" }}{% endif %}">
+                <input type="date" class="form-control" name="release_date" required id="id_release_date" value="{% if form.release_date.value != None %}{{ form.release_date.value }}{% endif %}">
             </div>
             <div class="form-group">
                 <label for="id_file">Files</label>
@@ -22,7 +25,7 @@
             </div>
             <hr>
             <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{oldmodule.capsule.id}}'">Cancel</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='/editmodularcapsule/{{capsuleID}}'">Cancel</button>
         </form>
         <hr>
 
@@ -42,13 +45,20 @@
   			    				<video class="embed-responsive-item" src="{{file.url}}" controls preload="none"></video>
 			    			</div>
                         {% endif %}
-			    			<button type="button" class="btn btn-danger button-delete" onclick="window.location='/deletefile/{{ file.id }}/'">Delete</button>
+			    			<button type="button" class="btn btn-danger button-delete" onclick="confirmAlert('Are you sure you want to delete this file?','/deletefile/{{ file.id }}/')">Delete</button>
 			    	</div>
 			    	<div class="col-md-1"> </div>
                 {% endfor %}
 			    </div>
         {% endif %}
     </div>
+      <script>
+  function confirmAlert(message, url){
+    if(confirm(message)){
+      window.location = url;
+    }
+  }
+  </script>
 {% endblock %}
 
 {% block styles%}

@@ -277,86 +277,6 @@
     }
   },
   {
-    "model": "main.social_network",
-    "pk": 1,
-    "fields": {
-      "social_type":"F",
-      "user_id":2,
-      "token":"142154",
-      "secret":"178221"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 2,
-    "fields": {
-      "social_type":"T",
-      "user_id":2,
-      "token":"204746",
-      "secret":"148429"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 3,
-    "fields": {
-      "social_type":"F",
-      "user_id":3,
-      "token":"219077",
-      "secret":"108201"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 4,
-    "fields": {
-      "social_type":"T",
-      "user_id":3,
-      "token":"152889",
-      "secret":"174261"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 5,
-    "fields": {
-      "social_type":"F",
-      "user_id":4,
-      "token":"187003",
-      "secret":"128257"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 6,
-    "fields": {
-      "social_type":"T",
-      "user_id":4,
-      "token":"130901",
-      "secret":"138326"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 7,
-    "fields": {
-      "social_type":"F",
-      "user_id":5,
-      "token":"139808",
-      "secret":"278231"
-    }
-  },
-  {
-    "model": "main.social_network",
-    "pk": 8,
-    "fields": {
-      "social_type":"T",
-      "user_id":6,
-      "token":"258212",
-      "secret":"176241"
-    }
-  },
-  {
     "model": "main.capsule",
     "pk": 1,
     "fields": {
@@ -387,8 +307,8 @@
       "dead_man_switch":"False",
       "dead_man_counter":0,
       "dead_man_initial_counter":0,
-      "twitter":"True",
-      "facebook":"True",
+      "twitter":"False",
+      "facebook":"False",
       "creator_id":2
     }
   },
@@ -434,13 +354,13 @@
       "creation_date":"2018-02-20",
       "title":"These are us! The Wilson Family",
       "emails":"capsulefy.communications@gmail.com,pab3.rebollo@gmail.com",
-      "capsule_type":"P",
+      "capsule_type":"M",
       "private":"False",
       "price":11.99,
       "dead_man_switch":"False",
       "dead_man_counter":0,
       "dead_man_initial_counter":0,
-      "twitter":"True",
+      "twitter":"False",
       "facebook":"False",
       "creator_id":6,
       "payment_id":"138798"
@@ -453,7 +373,7 @@
       "creation_date":"2018-01-27",
       "title":"For my son",
       "emails":"capsulefy.communications@gmail.com",
-      "capsule_type":"P",
+      "capsule_type":"M",
       "private":"True",
       "price":11.99,
       "dead_man_switch":"False",
@@ -471,15 +391,15 @@
     "fields": {
       "creation_date":"2019-03-05",
       "title":"I want to leave something behind me",
-      "capsule_type":"P",
+      "capsule_type":"M",
       "private":"False",
       "price":11.99,
       "dead_man_switch":"True",
       "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
-      "time_unit":0,
-      "twitter":"True",
-      "facebook":"True",
+      "time_unit":2,
+      "twitter":"False",
+      "facebook":"False",
       "creator_id":3,
       "payment_id":"148636"
     }
@@ -491,13 +411,13 @@
       "creation_date":"2018-12-20",
       "title":"To my dear daughters",
       "emails":"capsulefy.communications@gmail.com,pab3.rebollo@gmail.com",
-      "capsule_type":"P",
+      "capsule_type":"M",
       "private":"True",
       "price":11.99,
       "dead_man_switch":"True",
       "dead_man_counter":31363200,
       "dead_man_initial_counter":31536000,
-      "time_unit":1,
+      "time_unit":2,
       "twitter":"False",
       "facebook":"False",
       "creator_id":8,
@@ -519,7 +439,7 @@
       "dead_man_initial_counter":31536000,
       "time_unit":2,
       "twitter":"False",
-      "facebook":"True",
+      "facebook":"False",
       "creator_id":4,
       "payment_id":"102630"
     }
@@ -646,12 +566,12 @@
     "model": "main.file",
     "pk": 1,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test464.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/eiffel-tower-priority.jpg?alt=media&token=8ceaf3dc-6df4-4f57-a83f-867dcea4c722",
       "size":0.06,
       "type":"I",
       "module_id":1,
       "local_name":"eiffel-tower-priority.jpg",
-      "remote_name":"test464.jpg"
+      "remote_name":"eiffel-tower-priority.jpg"
     }
   }
   ,
@@ -659,55 +579,55 @@
     "model": "main.file",
     "pk": 2,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test111.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/retail-paris-trip-452x322.jpg?alt=media&token=2b93ad0a-1b9a-4037-bf0e-0cf13ab82d63",
       "size":0.12,
       "type":"I",
       "module_id":1,
       "local_name":"retail-paris-trip-452x322.jpg",
-      "remote_name":"test111.jpg"
+      "remote_name":"retail-paris-trip-452x322.jpg"
     }
   },
   {
     "model": "main.file",
     "pk": 3,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test614.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5.jpg",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/409771_10151085073279479_368398519_n.jpg?alt=media&token=7009f797-9317-4484-80d4-2f092859479b",
       "size":0.03,
       "type":"I",
       "module_id":3,
       "local_name":"409771_10151085073279479_368398519_n.jpg",
-      "remote_name":"test614.jpg"
+      "remote_name":"409771_10151085073279479_368398519_n.jpg"
     }
   },
   {
     "model": "main.file",
     "pk": 4,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test496.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/e81e7787-dcb9-4480-abf3-1a877ddc772e.jpg?alt=media&token=5310e0d8-e4c9-44cb-8c1d-c8d2b24e4b76",
       "size":0.07,
       "type":"I",
       "module_id":4,
       "local_name":"e81e7787-dcb9-4480-abf3-1a877ddc772e.jpg",
-      "remote_name":"test496.jpg"
+      "remote_name":"e81e7787-dcb9-4480-abf3-1a877ddc772e.jpg"
     }
   },
   {
     "model": "main.file",
     "pk": 5,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test213.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/shutterstock_282305945.jpg?alt=media&token=7703b464-829a-4dba-8a10-aa68de479a6c",
       "size":0.16,
       "type":"I",
       "module_id":5,
       "local_name":"shutterstock_282305945.jpg",
-      "remote_name":"test213.jpg"
+      "remote_name":"shutterstock_282305945.jpg"
     }
   },
   {
     "model": "main.file",
     "pk": 6,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo1.mp4?alt=media&token=44227ed6-ce31-4f59-9047-fee00d721aa3",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo1.mp4?alt=media&token=baa43fae-f3e4-46ae-8d96-c6f3dab41bbc",
       "size":27.99,
       "type":"V",
       "module_id":5,
@@ -719,7 +639,7 @@
     "model": "main.file",
     "pk": 7,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo2.mp4?alt=media&token=35a30601-2e60-4a43-9123-746874d58c23",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/capsulevideo2.mp4?alt=media&token=c9429256-b81d-439f-af8e-9781984e0531",
       "size":173.65,
       "type":"V",
       "module_id":9,
@@ -731,12 +651,12 @@
     "model": "main.file",
     "pk": 8,
     "fields": {
-      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/test563.jpg?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5",
+      "url":"https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/3VeniceForKids.jpg?alt=media&token=aac451a0-4238-4428-a063-1fd80fe5585c",
       "size":0.06,
       "type":"I",
       "module_id":11,
       "local_name":"3VeniceForKids.jpg",
-      "remote_name":"test563.jpg"
+      "remote_name":"3VeniceForKids.jpg"
     }
   }
 ]

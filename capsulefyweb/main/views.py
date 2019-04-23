@@ -48,6 +48,8 @@ def index(request):
 
 def displayCapsules(request, id):
     capsule = get_object_or_404(Capsule, id=id)
+    if capsule.capsule_type == 'M' and capsule.payment_id is None:
+        return HttpResponseNotFound()
     creator = False
     editable = True
     if request.user.is_authenticated:
@@ -191,7 +193,6 @@ def editModularCapsule(request, pk):
         'deadman_counter': oldcapsule.seconds_to_unit(),
         'deadman_time_unit': oldcapsule.time_unit
     }
-    print(oldcapsule.time_unit)
     if request.method == 'POST':
         form = ModularCapsuleForm(request.POST, user=request.user)
         if form.is_valid():
@@ -215,7 +216,7 @@ def editModularCapsule(request, pk):
             return HttpResponseRedirect('/displaycapsule/' + str(pk))
     else:
         form = ModularCapsuleForm(initial=olddata)
-        return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
+    return render(request, 'capsule/editmodularcapsule.html', {'form': form, 'oldcapsule': oldcapsule})
 
 
 def createModule(request, pk):
@@ -261,7 +262,7 @@ def createModule(request, pk):
             return HttpResponseRedirect('/editmodularcapsule/' + str(pk))
     else:
         moduleForm = ModuleForm()
-    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'type': 'create', 'errors': errors})
+    return render(request, 'capsule/editmodule.html', {'form': moduleForm, 'capsuleID': capsule.id, 'type': 'create', 'errors': errors})
 
 
 def editModule(request, pk):
@@ -276,13 +277,12 @@ def editModule(request, pk):
         return HttpResponseNotFound()
     olddata = {
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
     }
+    print(str(oldmodule.release_date.date()))
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkModuleFiles(request, oldmodule.capsule)
-        if form.is_valid() == False:
-            errors.append(form.errors)
         if form.is_valid() and len(errors) == 0:
             formulario = form.cleaned_data
             oldmodule.description = formulario['description']
@@ -318,7 +318,7 @@ def editModule(request, pk):
     else:
         form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
-                  {'form': form, 'oldmodule': oldmodule, 'type': 'edit', 'errors': errors})
+                  {'form': form, 'oldmodule': oldmodule, 'capsuleID': oldmodule.capsule.id, 'type': 'edit', 'errors': errors})
 
 
 def checkModuleFiles(request, capsule):
@@ -454,7 +454,7 @@ def editFreeCapsule(request, pk):
     olddata = {
         'title': oldcapsule.title,
         'description': oldmodule.description,
-        'release_date': oldmodule.release_date,
+        'release_date': str(oldmodule.release_date.date()),
         'emails': oldcapsule.emails,
         'twitter': oldcapsule.twitter,
         'facebook': oldcapsule.facebook
@@ -547,8 +547,9 @@ def ajaxlist(request,type):
         capsulesDate = Capsule.objects.filter(creator_id=request.user.id).filter(modules__release_date__icontains=searched)
         capsulesDesc = Capsule.objects.filter(creator_id=request.user.id).filter(modules__description__icontains=searched)
         capsules_list=capsulesT|capsulesDate|capsulesDesc
+        capsules_list=capsules_list.exclude(Q(capsule_type='M') & Q(payment_id=None))
     else:
-        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).order_by('id')
+        capsules_list = Capsule.objects.filter(private=False,creator__is_active=True).exclude(Q(capsule_type='M') & Q(payment_id=None)).order_by('id')
         if(searched!=""):
             wds = searched.split()
             tag_qs = reduce(operator.and_,
@@ -579,8 +580,6 @@ def my_account(request):
     emailNot = ""
     try:
         user_logged = User.objects.get(id=request.user.id)
-        if user_logged.email_notification != None and user_logged.email_notification != "":
-            emailNot = user_logged.email_notification.split(",")
     except:
         user_logged = Admin.objects.get(id=request.user.id)
     username = ''
@@ -597,7 +596,7 @@ def my_account(request):
         except:
             print('Twitter error, revoking credentials')
             twitteracc.delete()
-    return render(request, 'user/myaccount.html', {'emailNot':emailNot, 'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
+    return render(request, 'user/myaccount.html', {'userlogged': user_logged, 'hastwitter': hastwitter, 'username': username})
 
 
 @login_required
@@ -643,10 +642,13 @@ def success_twitter(request):
 
 
 def update(request):
-    check_deadman_switch()
-    check_modules_release()
-    remove_expired_capsules()
-    return HttpResponse("")
+    try:
+        check_deadman_switch()
+        check_modules_release()
+        remove_expired_capsules()
+    except:
+        pass
+    return HttpResponseRedirect('/')
 
 
 @login_required

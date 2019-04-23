@@ -23,8 +23,8 @@
                        maxlength="2500" id="id_emails">
             </div>
 
-            <p><b>{{form.twitter.error}}</b></p>
-			{% if form.twitter.value != None and form.twitter.value == True %}
+            <p><b>{{capsuleForm.twitter.errors}}</b></p>
+			{% if capsuleForm.twitter.value != None and capsuleForm.twitter.value == True %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-success" id="twitter">Connected to twitter</button></p>
 			{% else %}
 				<p><button type="button" onClick="add_twitter(this)" class="btn btn-secondary" id="twitter">Connect to twitter?</button></p>
@@ -94,10 +94,9 @@
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-release_date"><span class="red">* </span>Release
                                 date: {{ formModule.release_date.errors }}</label>
-                            <input type="text" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
+                            <input type="date" name="form-{{ forloop.counter0 }}-release_date" required value="{% if formModule.release_date.value != None %}{{ formModule.release_date.value }}{% endif %}"
                                    class="form-control"
-                                   id="id_form-{{ forloop.counter0 }}-release_date"
-                                   placeholder="YYYY-MM-DD HH:MM">
+                                   id="id_form-{{ forloop.counter0 }}-release_date">
                         </div>
                         <div class="form-group">
                             <label for="id_form-{{ forloop.counter0 }}-file">File: {{ formModule.file.errors }}</label>
@@ -116,7 +115,7 @@
             <hr>
             <button class="btn btn-primary" type="submit" value="Pay capsule">Submit</button>
             <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
-
+            <br>
         </form>
 
     </div>
@@ -134,7 +133,7 @@
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-release_date"><span class="red">* </span>Release date:</label>
-                    <input type="text" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
+                    <input type="date" name="form-` + totalForms + `-release_date" required class="form-control" id="id_form-` + totalForms + `-release_date" placeholder="YYYY-MM-DD HH:MM">
                 </div>
                 <div class="form-group">
                     <label for="id_form-` + totalForms + `-file">File:</label>

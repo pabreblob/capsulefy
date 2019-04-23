@@ -562,7 +562,7 @@ def ajaxlist(request,type):
                              Q(modules__description__icontains=x)  for x in wds))
             capsules_list =capsules_list.filter(tag_qs)
 
-    
+    capsules_list = capsules_list.distinct()
     page = request.GET.get('page', 1)
     paginator = Paginator(capsules_list, 4)
     

@@ -28,7 +28,7 @@ class SimpleTest(TestCase):
             'emails': 'test@test.com',
             'twitter': False,
             'facebook': False,
-            'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
+            #'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -52,8 +52,9 @@ class SimpleTest(TestCase):
             'emails': 'test@test.com',
             'twitter': False,
             'facebook': False,
-            'file': os.path.join(settings.STATIC_ROOT, 'image/capsule.png')
+            #'file': f
         }
+
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
         createFreeCapsule(request)
@@ -66,7 +67,7 @@ class SimpleTest(TestCase):
             'emails': 'test@tested.com',
             'twitter': False,
             'facebook': True
-            #'file': None
+             #'file': None
         }
         editrequest = self.request_factory.post('/editfreecapsule/' + str(capsule.id), newdata, follow=True)
         editrequest.user = self.test_user
@@ -579,7 +580,7 @@ class SimpleTest(TestCase):
 
         response = list(request, 'private')
         self.assertEquals(response.status_code, 200)
-        
+
 
     def test_update_notifemail(self):
         editemail = self.client.get('/user/notifemail', follow=True)

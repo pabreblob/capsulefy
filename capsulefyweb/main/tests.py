@@ -1,6 +1,8 @@
+from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import TestCase
 
 from main import views
+from main.views_user import register, deleteUser
 from .models import User, Capsule
 from django.test.client import RequestFactory
 from .views import *
@@ -604,3 +606,48 @@ class SimpleTest(TestCase):
     def test_index(self):
         my_account = self.client.get('/', follow=True)
         self.assertEquals(my_account.status_code, 200)
+
+
+    def test_create_user(self):
+        views.testMode = True
+        createcapsule = self.client.get('/register', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'first_name': 'Name',
+            'last_name': 'Surname',
+            'username': 'username',
+            'password': 'password',
+            'birthdate': '2000-10-10',
+            'email': 'email@domain.com',
+            'email_notification': 'email2@domain.com'
+        }
+        request = self.request_factory.post('/register', data, follow=True)
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        response = register(request)
+
+
+    def test_delete_user(self):
+        views.testMode = True
+        createcapsule = self.client.get('/register', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'first_name': 'Name',
+            'last_name': 'Surname',
+            'username': 'username',
+            'password': 'password',
+            'birthdate': '2000-10-10',
+            'email': 'email@domain.com',
+            'email_notification': 'email2@domain.com'
+        }
+        request = self.request_factory.post('/register', data, follow=True)
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        response = register(request)
+        user = User.objects.filter(username="username").first()
+        login = self.client.login(username="username", password="password")
+        request = self.request_factory.get('/deleteUser')
+        request.user = user
+        deleteUser(request)

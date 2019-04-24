@@ -99,7 +99,6 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleForm.cleaned_data['twitter']
             facebook = capsuleForm.cleaned_data['facebook']
-            print(time_unit)
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
@@ -158,7 +157,6 @@ def checkSize(request, moduleFormSet):
         files = request.FILES.getlist('form-' + str(modulesCount) + '-file')
         if files is not None:
             for file in files:
-                print(file.size)
                 totalSize += file.size
     return totalSize
 
@@ -281,7 +279,6 @@ def editModule(request, pk):
         'description': oldmodule.description,
         'release_date': str(oldmodule.release_date.date()),
     }
-    print(str(oldmodule.release_date.date()))
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkModuleFiles(request, oldmodule.capsule)
@@ -388,8 +385,6 @@ def deleteFreeFile(request, pk):
 class login(LoginView):
     def __init__(self, *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
-
-
 
 
 
@@ -667,7 +662,6 @@ def update_notifemail(request):
     if request.method == 'POST':
         form = NotifEmailForm(request.POST, instance=user)
         if form.is_valid():
-            print(form.cleaned_data)
             form.save()
             return HttpResponseRedirect('/user/myaccount')
     else:

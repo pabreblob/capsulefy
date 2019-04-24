@@ -16,7 +16,7 @@ class SimpleTest(TestCase):
         self.test_user = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
         login = self.client.login(username=self.username, password=self.password)
         self.assertEqual(login, True)
-
+    """
     def test_create_free(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
@@ -102,7 +102,6 @@ class SimpleTest(TestCase):
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
         self.assertIsNone(delcapsule)
 
-
     def test_create_modular_capsule(self):
         # Creating a new modular capsule
         views.testMode = True
@@ -177,7 +176,6 @@ class SimpleTest(TestCase):
         capsule = Capsule.objects.filter(title='TestModular').first()
         self.assertTrue(capsule.private)
 
-
     def test_create_module(self):
         # Creating a new modular capsule
         views.testMode = True
@@ -217,7 +215,6 @@ class SimpleTest(TestCase):
         createModule(request, capsule.id)
         capsule = Capsule.objects.filter(title='TestModular').first()
         self.assertIs(len(capsule.modules.all()), 3)
-
 
     def test_edit_module(self):
         # Creating a new modular capsule
@@ -377,3 +374,112 @@ class SimpleTest(TestCase):
         remove_expired_capsules()
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
         self.assertIsNone(delcapsule)
+    """
+    def test_display_capsule_free(self):
+        #Creation of a capsule
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False
+            # 'file': None
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.modules.first().description, data['description'])
+        self.assertEqual(capsule.modules.first().release_date.strftime('%Y-%m-%d'), data['release_date'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+        request = self.request_factory.get('/displaycapsule/')
+        request.user = self.test_user
+
+        response = displayCapsules(request, capsule.id)
+        self.assertEquals(response.status_code, 200)
+
+    def test_display_capsule_notpublished(self):
+        #Creation of a capsule
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False
+            # 'file': None
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.modules.first().description, data['description'])
+        self.assertEqual(capsule.modules.first().release_date.strftime('%Y-%m-%d'), data['release_date'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+
+        self.request_factory = RequestFactory()
+        self.username = 'testuser2'
+        self.email = 'testuser2@test.com'
+        self.password = 'testpass2'
+        self.test_user2 = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
+        login = self.client.login(username=self.username, password=self.password)
+
+        request = self.request_factory.get('/displaycapsule/')
+        request.user= self.test_user2
+        response = displayCapsules(request, capsule.id)
+        self.assertEquals(response.status_code, 404)
+
+    def test_display_capsule_notpaid(self):
+        #Creation of a capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestDisplay',
+            'emails': 'test@test.com',
+            'form-TOTAL_FORMS': 2,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': False,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+            'form-1-description': 'Modulo2',
+            'form-1-release_date': '2020-10-10'
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestDisplay').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+        self.assertIs(len(capsule.modules.all()), 2)
+        views.testMode = False
+
+        request = self.request_factory.get('/displaycapsule/')
+        request.user = self.test_user
+
+        response = displayCapsules(request, capsule.id)
+        self.assertEquals(response.status_code, 404)
+
+    def test_select_capsule(self):
+        createcapsule = self.client.get('/select_capsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)

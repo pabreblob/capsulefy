@@ -3,7 +3,7 @@
 {% block contenido %}
     {% load static %}
     <div class="container">
-        <form id="form" action="" method="post">
+        <form id="form" action="" onsubmit="submitEmail()" method="post">
             {% csrf_token %}
             <h3 class="title">Editing the capsule</h3>
             <hr>
@@ -11,10 +11,14 @@
                 <label for="id_title"><span class="red">* </span>Title: {{ form.title.errors }}</label>
                 <input type="text" class="form-control" name="title"value="{% if form.title.value != None %}{{ form.title.value }}{% endif %}" maxlength="250" required="" id="id_title">
             </div>
+
             <div class="form-group">
-                <label for="id_emails">Emails: {{ form.emails.errors }}</label>
-                <input type="text" class="form-control" name="emails" value="{% if form.emails.value != None %}{{ form.emails.value }}{% endif %}" maxlength="2500" id="id_emails">
-            </div>
+			    <label>Emails {{ form.emails.errors }}</label>
+			    <div id="email_inputs">	
+					</div>
+					<button type="button" onclick="addEmail()" class="btn btn-success">Add email</button>
+			</div>
+			<input type="hidden" id="id_emails" name="emails">
 
             <hr>
             <!--
@@ -156,6 +160,38 @@
     }
   }
   </script>
+  <script>
+	var numberEmails = 0;
+	function removeEmail(e){
+		document.getElementById("email_"+e).parentNode.parentNode.remove();
+	}
+	
+	function addEmail(){
+		$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + numberEmails + '" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+numberEmails+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+		numberEmails++;
+	}
+
+	var values = "{{form.emails.value}}";
+	if(values != "None" && values != ""){
+		var emails = values.split(",");
+
+		for(var i = 0; i < emails.length; i++){
+			$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + i + '" value="'+$.trim(emails[i])+'" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+i+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+			numberEmails = i;
+		}
+	}
+	numberEmails++;
+
+	function submitEmail(){
+		var res = "";
+		for(const c of document.getElementById("email_inputs").children){
+			res += c.firstElementChild.firstElementChild.value + ",";
+		}
+		res = res.substring(0, res.length-1);
+		document.getElementById("id_emails").value = res;
+		console.log(document.getElementById("id_emails"));
+	}
+    </script>
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

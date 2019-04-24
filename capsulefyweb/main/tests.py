@@ -527,7 +527,7 @@ class SimpleTest(TestCase):
         capsule = Capsule.objects.filter(title='TestRefresh').first()
         self.assertEquals(capsule.dead_man_counter, 500)
 
-    def test_refresh_deadman_notowner(self):
+    def test_refresh_deadman_not_owner(self):
         # Creation of a capsule
         views.testMode = True
         createcapsule = self.client.get('/newmodularcapsule', follow=True)
@@ -565,3 +565,17 @@ class SimpleTest(TestCase):
         request.user = self.test_user2
         response = refresh_deadman(request, capsule.id)
         self.assertEquals(response.status_code, 404)
+
+    def test_list_public(self):
+        request = self.request_factory.get('/list/')
+        request.user = self.test_user
+
+        response = list(request, 'public')
+        self.assertEquals(response.status_code, 200)
+
+    def test_list_private(self):
+        request = self.request_factory.get('/list/')
+        request.user = self.test_user
+
+        response = list(request, 'private')
+        self.assertEquals(response.status_code, 200)

@@ -534,7 +534,6 @@ def refresh_deadman(request, id):
     return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
 def list(request,type):
-    
     return render(request, 'capsule/list.html',{'type':type})
 
 

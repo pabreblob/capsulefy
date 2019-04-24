@@ -1,0 +1,12 @@
+[run]
+branch = True
+source = main
+omit =
+    *migrations*
+    *__init__*
+    *admin*
+    *apps*
+    *tests*
+    *rundeadman*
+    *paypal*
+    *logic*

@@ -9,3 +9,5 @@ paypalrestsdk
 python-dateutil
 tweepy
 sendgrid
+coverage
+coveralls

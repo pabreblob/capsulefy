@@ -50,6 +50,7 @@ class SimpleTest(TestCase):
         self.assertEquals(capsule.is_released, True)
         self.assertEquals(capsule.seconds_to_unit(), 0)
         self.assertEquals(capsule.unit_to_seconds(1), 0)
+        self.assertEquals(capsule.unit_to_seconds(None), 0)
         self.assertEquals(capsule.modules.first().is_released, True)
 
     def test_create_free_twitter(self):
@@ -229,6 +230,9 @@ class SimpleTest(TestCase):
             'twitter': False,
             'facebook': False,
             'private': False,
+            'deadman_switch': True,
+            'deadman_counter': 300,
+            'deadman_time_unit': 1,
             'form-0-description': 'Modulo1',
             'form-0-release_date': '2019-10-10',
             'form-1-description': 'Modulo2',
@@ -313,6 +317,9 @@ class SimpleTest(TestCase):
             'twitter': False,
             'facebook': False,
             'private': False,
+            'deadman_switch': True,
+            'deadman_counter': 300,
+            'deadman_time_unit': 1,
             'form-0-description': 'Modulo1',
             'form-0-release_date': '2019-10-10',
             'form-1-description': 'Modulo2',
@@ -603,6 +610,9 @@ class SimpleTest(TestCase):
         self.assertEqual(capsule.emails, data['emails'])
         self.assertEqual(capsule.twitter, data['twitter'])
         self.assertEqual(capsule.facebook, data['facebook'])
+        module = capsule.modules.first()
+        module.release_date = datetime.datetime.strptime("2017-10-10", "%Y-%m-%d")
+        module.save()
         request = self.request_factory.get('/displaycapsule/')
         request.user = self.test_user
 
@@ -783,6 +793,18 @@ class SimpleTest(TestCase):
         response = list(request, 'private')
         self.assertEquals(response.status_code, 200)
 
+    def test_ajax_public(self):
+        request = self.request_factory.get('/ajaxlist/')
+        request.user = self.test_user
+        response = ajaxlist(request, 'public')
+        self.assertEquals(response.status_code, 200)
+
+    def test_ajax_private(self):
+        request = self.request_factory.get('/ajaxlist/')
+        request.user = self.test_user
+        response = ajaxlist(request, 'private')
+        self.assertEquals(response.status_code, 200)
+
     def test_update_notifemail(self):
         editemail = self.client.get('/user/notifemail', follow=True)
         self.assertEquals(editemail.status_code, 200)
@@ -798,6 +820,8 @@ class SimpleTest(TestCase):
         self.assertEquals(update.status_code, 200)
 
     def test_my_account(self):
+        Social_network.objects.create(social_type='T', token="token", secret="secret",
+                                      user_id=self.test_user.id)
         my_account = self.client.get('/user/myaccount', follow=True)
         self.assertEquals(my_account.status_code, 200)
 

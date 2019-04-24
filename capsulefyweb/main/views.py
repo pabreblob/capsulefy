@@ -23,27 +23,12 @@ from django.template.loader import render_to_string
 import tweepy
 from _functools import reduce
 import operator
-from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
+from main.logic import check_modules_release, remove_expired_capsules, check_deadman_switch, upload_file, \
+    checkModuleFiles, checkSize, delete_files, delete_file
 
 
 def index(request):
-    enterpriseEmail = "capsulefy.communications@gmail.com"
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data["Name"]
-            email = form.cleaned_data["Email"]
-            message = form.cleaned_data["Message"]
-            form = ContactForm()
-            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login(enterpriseEmail, "aG7nOp4FhG")
-            msg = name + "\n" + email + "\n" + message
-            msg = msg.encode('utf-8')
-            server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])
-            return render(request, 'index.html', {'form': form})
-    else:
-        form = ContactForm()
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'index.html')
 
 
 def displayCapsules(request, id):
@@ -99,7 +84,6 @@ def createModularCapsule(request):
             price = 11.99
             twitter = capsuleForm.cleaned_data['twitter']
             facebook = capsuleForm.cleaned_data['facebook']
-            print(time_unit)
             capsule = Capsule.objects.create(title=title, emails=emails, capsule_type=capsule_type, private=private,
                                              dead_man_switch=dead_man_switch, dead_man_counter=dead_man_counter,
                                              dead_man_initial_counter=dead_man_counter, time_unit=time_unit,
@@ -115,29 +99,7 @@ def createModularCapsule(request):
                 modulesCount += 1
                 if files is not None:
                     for file in files:
-                        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                        client = storage.Client(credentials=credentials, project='capsulefy')
-                        bucket = client.get_bucket('capsulefy.appspot.com')
-                        idrand = randint(0, 999)
-                        filename, fileext = os.path.splitext(file.name)
-                        blob = bucket.blob(capsule.title + str(idrand) + fileext)
-                        filetype = mimetypes.guess_type(file.name)[0]
-                        if filetype is None:
-                            filetype = 'application/octet-stream'
-                        filetypedb = 'F'
-                        if filetype.split('/')[0] == 'image':
-                            filetypedb = 'I'
-                        elif filetype.split('/')[0] == 'video':
-                            filetypedb = 'V'
-                        blob.upload_from_file(file, size=file.size, content_type=filetype)
-                        url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
-                            idrand) + \
-                              fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                        filesize = file.size / 1048576
-                        File.objects.create(url=url, size=filesize, type=filetypedb,
-                                            remote_name=capsule.title + str(idrand) + fileext,
-                                            local_name=file.name, module_id=module.id)
-
+                        upload_file(capsule, module, file)
             if not testMode:
                 request.session['capsuleId'] = capsule.id
                 request.session.modified = True
@@ -151,25 +113,13 @@ def createModularCapsule(request):
     return render(request, 'capsule/createmodularcapsule.html', {"capsuleForm": capsuleForm, "moduleFormSet": moduleFormSet, "errors": errors})
 
 
-def checkSize(request, moduleFormSet):
-    totalSize = 0
-    modulesCount = 0
-    for moduleForm in moduleFormSet:
-        files = request.FILES.getlist('form-' + str(modulesCount) + '-file')
-        if files is not None:
-            for file in files:
-                print(file.size)
-                totalSize += file.size
-    return totalSize
-
-
 def paymentExecute(request):
     paymentId = request.GET["paymentId"]
     PayerID = request.GET["PayerID"]
     payment = paypalrestsdk.Payment.find(paymentId)
     paypal.execute(payment, PayerID)
     capsuleId = request.session['capsuleId']
-    capsule = Capsule.objects.filter(id = capsuleId).first()
+    capsule = Capsule.objects.filter(id=capsuleId).first()
     capsule.payment_id = paymentId
     capsule.save()
     return HttpResponseRedirect('/displaycapsule/' + str(capsuleId))
@@ -238,29 +188,7 @@ def createModule(request, pk):
             files = request.FILES.getlist('file')
             if files is not None:
                 for file in files:
-                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                    client = storage.Client(credentials=credentials, project='capsulefy')
-                    bucket = client.get_bucket('capsulefy.appspot.com')
-                    idrand = randint(0, 999)
-                    filename, fileext = os.path.splitext(file.name)
-                    blob = bucket.blob(capsule.title + str(idrand) + fileext)
-                    filetype = mimetypes.guess_type(file.name)[0]
-                    if filetype is None:
-                        filetype = 'application/octet-stream'
-                    filetypedb = 'F'
-                    if filetype.split('/')[0] == 'image':
-                        filetypedb = 'I'
-                    elif filetype.split('/')[0] == 'video':
-                        filetypedb = 'V'
-                    blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + capsule.title + str(
-                        idrand) + \
-                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1048576
-
-                    File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=capsule.title + str(idrand) + fileext,
-                                        local_name=file.name, module_id=module.id)
+                    upload_file(module.capsule, module, file)
             return HttpResponseRedirect('/editmodularcapsule/' + str(pk))
     else:
         moduleForm = ModuleForm()
@@ -281,7 +209,6 @@ def editModule(request, pk):
         'description': oldmodule.description,
         'release_date': str(oldmodule.release_date.date()),
     }
-    print(str(oldmodule.release_date.date()))
     if request.method == 'POST':
         form = ModuleForm(request.POST, request.FILES)
         errors = checkModuleFiles(request, oldmodule.capsule)
@@ -292,51 +219,13 @@ def editModule(request, pk):
             files = request.FILES.getlist('file')
             if files is not None:
                 for file in files:
-                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                    client = storage.Client(credentials=credentials, project='capsulefy')
-                    bucket = client.get_bucket('capsulefy.appspot.com')
-                    idrand = randint(0, 999)
-                    filename, fileext = os.path.splitext(file.name)
-                    blob = bucket.blob(oldmodule.capsule.title + str(idrand) + fileext)
-                    filetype = mimetypes.guess_type(file.name)[0]
-                    if filetype is None:
-                        filetype = 'application/octet-stream'
-                    filetypedb = 'F'
-                    if filetype.split('/')[0] == 'image':
-                        filetypedb = 'I'
-                    elif filetype.split('/')[0] == 'video':
-                        filetypedb = 'V'
-                    blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldmodule.capsule.title + str(
-                        idrand) + \
-                          fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1048576
-
-                    File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=oldmodule.capsule.title + str(idrand) + fileext,
-                                        local_name=file.name, module_id=oldmodule.id)
+                    upload_file(oldmodule.capsule, oldmodule, file)
             oldmodule.save()
             return HttpResponseRedirect('/editmodularcapsule/' + str(oldmodule.capsule.id))
     else:
         form = ModuleForm(initial=olddata)
     return render(request, 'capsule/editmodule.html',
                   {'form': form, 'oldmodule': oldmodule, 'capsuleID': oldmodule.capsule.id, 'type': 'edit', 'errors': errors})
-
-
-def checkModuleFiles(request, capsule):
-    errors = []
-    files = request.FILES.getlist('file')
-    totalSize = 0
-    if files is not None:
-        for file in files:
-            totalSize += file.size
-    for module in capsule.modules.all():
-        for file in module.files.all():
-            totalSize += (file.size * 1048576)
-    if totalSize > 524288000:
-        errors.append("The total size of files can not be more than 500mb ")
-    return errors
-
 
 
 def deleteModule(request, pk):
@@ -346,11 +235,7 @@ def deleteModule(request, pk):
         return HttpResponseNotFound()
     files = File.objects.filter(module__capsule_id=pk)
     if len(files) != 0:
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-        client = storage.Client(credentials=credentials, project='capsulefy')
-        bucket = client.get_bucket('capsulefy.appspot.com')
-        for file in files:
-            bucket.delete_blob(file.remote_name)
+        delete_files(files)
     module.delete()
     return HttpResponseRedirect('/editmodularcapsule/' + str(module.capsule.id))
 
@@ -362,10 +247,7 @@ def deleteFile(request, pk):
     user = request.user
     if user.id != file.module.capsule.creator.id:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
-    bucket.delete_blob(file.remote_name)
+    delete_file(file)
     file.delete()
     return HttpResponseRedirect('/editmodule/' + str(moduleid))
 
@@ -377,10 +259,7 @@ def deleteFreeFile(request, pk):
     user = request.user
     if user.id != file.module.capsule.creator.id:
         return HttpResponseNotFound()
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-    client = storage.Client(credentials=credentials, project='capsulefy')
-    bucket = client.get_bucket('capsulefy.appspot.com')
-    bucket.delete_blob(file.remote_name)
+    delete_file(file)
     file.delete()
     return HttpResponseRedirect('/editfreecapsule/' + str(capsuleid))
 
@@ -388,8 +267,6 @@ def deleteFreeFile(request, pk):
 class login(LoginView):
     def __init__(self, *args, **kwargs):
         super(LoginView, self).__init__(*args, **kwargs)
-
-
 
 
 
@@ -420,27 +297,7 @@ def createFreeCapsule(request):
             files = request.FILES.getlist('files')
             if files is not None:
                 for file in files:
-                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                    client = storage.Client(credentials=credentials, project='capsulefy')
-                    bucket = client.get_bucket('capsulefy.appspot.com')
-                    idrand = randint(0, 999)
-                    filename, fileext = os.path.splitext(file.name)
-                    blob = bucket.blob(title + str(idrand) + fileext)
-                    filetype = mimetypes.guess_type(file.name)[0]
-                    if filetype is None:
-                        filetype = 'application/octet-stream'
-                    filetypedb = 'F'
-                    if filetype.split('/')[0] == 'image':
-                        filetypedb = 'I'
-                    elif filetype.split('/')[0] == 'video':
-                        filetypedb = 'V'
-                    blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + title + \
-                          str(idrand) + fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1000000
-                    File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=title + str(idrand) + fileext, local_name=file.name,
-                                        module_id=module.id)
+                    upload_file(capsule, module, file)
             return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
     else:
         form = NewFreeCapsuleForm()
@@ -479,27 +336,7 @@ def editFreeCapsule(request, pk):
             files = request.FILES.getlist('files')
             if files is not None:
                 for file in files:
-                    credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-                    client = storage.Client(credentials=credentials, project='capsulefy')
-                    bucket = client.get_bucket('capsulefy.appspot.com')
-                    idrand = randint(0, 999)
-                    filename, fileext = os.path.splitext(file.name)
-                    blob = bucket.blob(oldcapsule.title + str(idrand) + fileext)
-                    filetype = mimetypes.guess_type(file.name)[0]
-                    if filetype is None:
-                        filetype = 'application/octet-stream'
-                    filetypedb = 'F'
-                    if filetype.split('/')[0] == 'image':
-                        filetypedb = 'I'
-                    elif filetype.split('/')[0] == 'video':
-                        filetypedb = 'V'
-                    blob.upload_from_file(file, size=file.size, content_type=filetype)
-                    url = 'https://firebasestorage.googleapis.com/v0/b/capsulefy.appspot.com/o/' + oldcapsule.title + \
-                          str(idrand) + fileext + '?alt=media&token=fbe33a62-037f-4d29-8868-3e5c6d689ca5'
-                    filesize = file.size / 1000000
-                    File.objects.create(url=url, size=filesize, type=filetypedb,
-                                        remote_name=oldcapsule.title + str(idrand) + fileext, local_name=file.name,
-                                        module_id=oldmodule.id)
+                    upload_file(oldmodule.capsule, oldmodule, file)
             return HttpResponseRedirect('/displaycapsule/' + str(oldcapsule.id))
     else:
         form = EditFreeCapsuleForm(initial=olddata)
@@ -513,11 +350,7 @@ def deleteCapsule(request, pk):
         return HttpResponseNotFound()
     files = File.objects.filter(module__capsule_id=pk)
     if len(files) != 0:
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(settings.FIREBASE_CREDENTIALS)
-        client = storage.Client(credentials=credentials, project='capsulefy')
-        bucket = client.get_bucket('capsulefy.appspot.com')
-        for file in files:
-            bucket.delete_blob(file.remote_name)
+        delete_files(files)
     capsule.delete()
     return HttpResponseRedirect('/list/private')
 
@@ -539,7 +372,6 @@ def refresh_deadman(request, id):
     return HttpResponseRedirect('/displaycapsule/' + str(capsule.id))
 
 def list(request,type):
-    
     return render(request, 'capsule/list.html',{'type':type})
 
 
@@ -667,7 +499,6 @@ def update_notifemail(request):
     if request.method == 'POST':
         form = NotifEmailForm(request.POST, instance=user)
         if form.is_valid():
-            print(form.cleaned_data)
             form.save()
             return HttpResponseRedirect('/user/myaccount')
     else:

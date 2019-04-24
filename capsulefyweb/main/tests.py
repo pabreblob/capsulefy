@@ -17,18 +17,18 @@ class SimpleTest(TestCase):
         login = self.client.login(username=self.username, password=self.password)
         self.assertEqual(login, True)
 
-
     def test_create_free(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
+
         data = {
             'title': 'Test',
             'description': 'Test',
             'release_date': '2019-10-10',
             'emails': 'test@test.com',
             'twitter': False,
-            'facebook': False
-            #'file': None
+            'facebook': False,
+            'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -51,8 +51,8 @@ class SimpleTest(TestCase):
             'release_date': '2019-10-10',
             'emails': 'test@test.com',
             'twitter': False,
-            'facebook': False
-            #'file': None
+            'facebook': False,
+            'file': os.path.join(settings.STATIC_ROOT, 'image/capsule.png')
         }
         request = self.request_factory.post('/newfreecapsule', data, follow=True)
         request.user = self.test_user
@@ -579,3 +579,27 @@ class SimpleTest(TestCase):
 
         response = list(request, 'private')
         self.assertEquals(response.status_code, 200)
+        
+
+    def test_update_notifemail(self):
+        editemail = self.client.get('/user/notifemail', follow=True)
+        self.assertEquals(editemail.status_code, 200)
+        data = {
+            'email_notification': 'test@test.com',
+        }
+        request = self.request_factory.post('/user/notifemail', data, follow=True)
+        request.user = self.test_user
+        update_notifemail(request)
+
+    def test_update(self):
+        update = self.client.get('/update', follow=True)
+        self.assertEquals(update.status_code, 200)
+
+    def test_my_account(self):
+        my_account = self.client.get('/user/myaccount', follow=True)
+        self.assertEquals(my_account.status_code, 200)
+
+
+    def test_index(self):
+        my_account = self.client.get('/', follow=True)
+        self.assertEquals(my_account.status_code, 200)

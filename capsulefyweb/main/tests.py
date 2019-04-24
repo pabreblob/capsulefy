@@ -43,6 +43,50 @@ class SimpleTest(TestCase):
         self.assertEqual(capsule.emails, data['emails'])
         self.assertEqual(capsule.twitter, data['twitter'])
         self.assertEqual(capsule.facebook, data['facebook'])
+        module = capsule.modules.first()
+        module.release_date = datetime.datetime.strptime("2017-10-10", "%Y-%m-%d")
+        module.save()
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertEquals(capsule.is_released, True)
+        self.assertEquals(capsule.seconds_to_unit(), 0)
+        self.assertEquals(capsule.unit_to_seconds(1), 0)
+        self.assertEquals(capsule.modules.first().is_released, True)
+
+    def test_create_free_twitter(self):
+        Social_network.objects.create(social_type='T', token="token", secret="secret",
+                                      user_id=self.test_user.id)
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2017-10-10',
+            'emails': 'test@test.com, a, b',
+            'twitter': True,
+            'facebook': False,
+            #'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+
+    def test_create_free_twitter2(self):
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2022-10-10',
+            'emails': '',
+            'twitter': True,
+            'facebook': False,
+            #'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
 
     def test_edit_free(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
@@ -82,6 +126,70 @@ class SimpleTest(TestCase):
         self.assertEqual(editedcapsule.emails, newdata['emails'])
         self.assertEqual(editedcapsule.twitter, newdata['twitter'])
         self.assertEqual(editedcapsule.facebook, newdata['facebook'])
+
+    def test_edit_free_twitter(self):
+        Social_network.objects.create(social_type='T', token="token", secret="secret",
+                                      user_id=self.test_user.id)
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            #'file': f
+        }
+
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertIsNotNone(capsule)
+        newdata = {
+            'title': 'TestEdited',
+            'description': 'Test was edited',
+            'release_date': '2017-10-20',
+            'emails': 'test@tested.com, a, b',
+            'twitter': True,
+            'facebook': False
+             #'file': None
+        }
+        editrequest = self.request_factory.post('/editfreecapsule/' + str(capsule.id), newdata, follow=True)
+        editrequest.user = self.test_user
+        editFreeCapsule(editrequest, capsule.id)
+
+    def test_edit_free_twitter2(self):
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            # 'file': f
+        }
+
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = self.test_user
+        createFreeCapsule(request)
+        capsule = Capsule.objects.filter(emails='test@test.com').first()
+        self.assertIsNotNone(capsule)
+        newdata = {
+            'title': 'TestEdited',
+            'description': 'Test was edited',
+            'release_date': '2022-10-2',
+            'emails': '',
+            'twitter': True,
+            'facebook': False
+            # 'file': None
+        }
+        editrequest = self.request_factory.post('/editfreecapsule/' + str(capsule.id), newdata, follow=True)
+        editrequest.user = self.test_user
+        editFreeCapsule(editrequest, capsule.id)
 
     def test_delete_free(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
@@ -138,6 +246,58 @@ class SimpleTest(TestCase):
         self.assertIs(len(capsule.modules.all()), 2)
         views.testMode = False
 
+    def test_create_modular_capsule_twitter(self):
+        Social_network.objects.create(social_type='T', token="token", secret="secret",
+                                      user_id=self.test_user.id)
+        # Creating a new modular capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestModular',
+            'emails': '',
+            'form-TOTAL_FORMS': 2,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': True,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+            'form-1-description': 'Modulo2',
+            'form-1-release_date': '2020-10-10'
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        views.testMode = False
+
+    def test_create_modular_capsule_twitter2(self):
+        # Creating a new modular capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestModular',
+            'emails': 'test@test.com, a, b',
+            'form-TOTAL_FORMS': 2,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': True,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2017-10-10',
+            'form-1-description': 'Modulo2',
+            'form-1-release_date': '2020-10-10'
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        views.testMode = False
+
     def test_edit_modular_capsule(self):
         #Creating a new modular capsule
         views.testMode = True
@@ -179,6 +339,46 @@ class SimpleTest(TestCase):
         editModularCapsule(request, capsule.id)
         capsule = Capsule.objects.filter(title='TestModular').first()
         self.assertTrue(capsule.private)
+
+    def test_create_module(self):
+        # Creating a new modular capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestModular',
+            'emails': 'test@test.com',
+            'form-TOTAL_FORMS': 2,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': False,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+            'form-1-description': 'Modulo2',
+            'form-1-release_date': '2020-10-10'
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertIs(len(capsule.modules.all()), 2)
+        views.testMode = False
+        #Creating a module
+        createcapsule = self.client.get('/newmodule/' + str(capsule.id), follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'description': 'Module3',
+            'release_date': '2019-10-10'
+            #'file': None
+        }
+        request = self.request_factory.post('/newmodule/'+str(capsule.id), data, follow=True)
+        request.user = self.test_user
+        createModule(request, capsule.id)
+        capsule = Capsule.objects.filter(title='TestModular').first()
+        self.assertIs(len(capsule.modules.all()), 3)
 
     def test_create_module(self):
         # Creating a new modular capsule
@@ -606,7 +806,6 @@ class SimpleTest(TestCase):
         self.assertEquals(my_account.status_code, 200)
 
     def test_create_user(self):
-        views.testMode = True
         createcapsule = self.client.get('/register', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
         data = {
@@ -624,8 +823,25 @@ class SimpleTest(TestCase):
         setattr(request, '_messages', messages)
         response = register(request)
 
+    def test_create_user2(self):
+        createcapsule = self.client.get('/register', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'first_name': 'Name',
+            'last_name': 'Surname',
+            'username': 'username',
+            'password': 'password',
+            'birthdate': '2040-10-10',
+            'email': 'email@domain.com',
+            'email_notification': 'email2@domain.com'
+        }
+        request = self.request_factory.post('/register', data, follow=True)
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        response = register(request)
+
     def test_delete_user(self):
-        views.testMode = True
         createcapsule = self.client.get('/register', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
         data = {
@@ -644,6 +860,22 @@ class SimpleTest(TestCase):
         response = register(request)
         user = User.objects.filter(username="username").first()
         login = self.client.login(username="username", password="password")
+
+        createcapsule = self.client.get('/newfreecapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'Test',
+            'description': 'Test',
+            'release_date': '2019-10-10',
+            'emails': 'test@test.com',
+            'twitter': False,
+            'facebook': False,
+            # 'file': os.path.join(settings.STATIC_ROOT, 'image/background.png')
+        }
+        request = self.request_factory.post('/newfreecapsule', data, follow=True)
+        request.user = user
+        createFreeCapsule(request)
         request = self.request_factory.get('/deleteUser')
         request.user = user
         deleteUser(request)
+

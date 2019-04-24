@@ -583,7 +583,6 @@ class SimpleTest(TestCase):
         response = list(request, 'private')
         self.assertEquals(response.status_code, 200)
 
-
     def test_update_notifemail(self):
         editemail = self.client.get('/user/notifemail', follow=True)
         self.assertEquals(editemail.status_code, 200)
@@ -602,11 +601,9 @@ class SimpleTest(TestCase):
         my_account = self.client.get('/user/myaccount', follow=True)
         self.assertEquals(my_account.status_code, 200)
 
-
     def test_index(self):
         my_account = self.client.get('/', follow=True)
         self.assertEquals(my_account.status_code, 200)
-
 
     def test_create_user(self):
         views.testMode = True
@@ -626,7 +623,6 @@ class SimpleTest(TestCase):
         messages = FallbackStorage(request)
         setattr(request, '_messages', messages)
         response = register(request)
-
 
     def test_delete_user(self):
         views.testMode = True

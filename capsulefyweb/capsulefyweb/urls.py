@@ -20,6 +20,8 @@ from django.contrib.auth import views as auth_views
 from main import views, views_user, views_admin
 from main.admin import admin_site
 
+handler404 = 'main.views_error.handler404'
+
 urlpatterns = [
     path('', views.index),
     path('admin/', admin_site.urls),

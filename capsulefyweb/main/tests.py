@@ -16,7 +16,8 @@ class SimpleTest(TestCase):
         self.test_user = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
         login = self.client.login(username=self.username, password=self.password)
         self.assertEqual(login, True)
-    """
+
+
     def test_create_free(self):
         createcapsule = self.client.get('/newfreecapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
@@ -374,7 +375,7 @@ class SimpleTest(TestCase):
         remove_expired_capsules()
         delcapsule = Capsule.objects.filter(id=capsule.id).first()
         self.assertIsNone(delcapsule)
-    """
+
     def test_display_capsule_free(self):
         #Creation of a capsule
         createcapsule = self.client.get('/newfreecapsule', follow=True)
@@ -483,3 +484,84 @@ class SimpleTest(TestCase):
     def test_select_capsule(self):
         createcapsule = self.client.get('/select_capsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)
+
+    def test_refresh_deadman(self):
+        # Creation of a capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestRefresh',
+            'emails': 'test@test.com',
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': False,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestRefresh').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+        self.assertIs(len(capsule.modules.all()), 1)
+        views.testMode = False
+
+        capsule.dead_man_counter = 300
+        capsule.dead_man_initial_counter = 500
+        capsule.dead_man_switch = True
+        capsule.save()
+        capsule = Capsule.objects.filter(title='TestRefresh').first()
+        self.assertEquals(capsule.dead_man_counter, 300)
+        request = self.request_factory.get('/refresh/')
+        request.user = self.test_user
+        response = refresh_deadman(request, capsule.id)
+        capsule = Capsule.objects.filter(title='TestRefresh').first()
+        self.assertEquals(capsule.dead_man_counter, 500)
+
+    def test_refresh_deadman_notowner(self):
+        # Creation of a capsule
+        views.testMode = True
+        createcapsule = self.client.get('/newmodularcapsule', follow=True)
+        self.assertEquals(createcapsule.status_code, 200)
+        data = {
+            'title': 'TestRefresh',
+            'emails': 'test@test.com',
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'twitter': False,
+            'facebook': False,
+            'private': False,
+            'form-0-description': 'Modulo1',
+            'form-0-release_date': '2019-10-10',
+        }
+        request = self.request_factory.post('/newmodularcapsule', data, follow=True)
+        request.user = self.test_user
+        createModularCapsule(request)
+        capsule = Capsule.objects.filter(title='TestRefresh').first()
+        self.assertIsNotNone(capsule)
+        self.assertEqual(capsule.title, data['title'])
+        self.assertEqual(capsule.emails, data['emails'])
+        self.assertEqual(capsule.twitter, data['twitter'])
+        self.assertEqual(capsule.facebook, data['facebook'])
+        self.assertIs(len(capsule.modules.all()), 1)
+        views.testMode = False
+        self.username = 'testuser2'
+        self.email = 'testuser2@test.com'
+        self.password = 'testpass2'
+        self.test_user2 = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
+        login = self.client.login(username=self.username, password=self.password)
+        request = self.request_factory.get('/refresh/')
+        request.user = self.test_user2
+        response = refresh_deadman(request, capsule.id)
+        self.assertEquals(response.status_code, 404)

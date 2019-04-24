@@ -233,7 +233,8 @@ def deleteModule(request, pk):
     user = request.user
     if user.id != module.capsule.creator.id or len(module.capsule.modules.all()) == 1:
         return HttpResponseNotFound()
-    files = File.objects.filter(module__capsule_id=pk)
+    files = module.files.all()
+    print(files)
     if len(files) != 0:
         delete_files(files)
     module.delete()

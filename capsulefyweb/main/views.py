@@ -48,10 +48,20 @@ def displayCapsules(request, id):
         if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
+
+    urlBack = request.META.get('HTTP_REFERER')
+    if urlBack == None:
+        urlBack = '/list/public'
+    elif not ('/list/public' in urlBack) and not ('/list/private' in urlBack):
+        if(request.user.is_authenticated):
+            urlBack = '/list/private'
+        else:
+            urlBack = '/list/public' 
+
     if len(modules) == 0:
         return HttpResponseNotFound()
     else:
-        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules, 'editable': editable})
+        return render(request, 'capsule/displaycapsule.html', {'urlBack': urlBack, 'capsule': capsule, 'modules': modules, 'editable': editable})
 
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]

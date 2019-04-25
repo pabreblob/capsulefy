@@ -46,9 +46,9 @@
                 <div class="container">
                 <div class="row">
                     {% for file in module.files.all %}
-                        <div class="col-sm-12 col-md-5 elem-display">
+                        <div class="col-sm-12 col-md-5">
                             {% if file.type == "I" %}
-                                <img class="img-fluid rounded" src="{{ file.url }}"/>
+                                <img class="img-fluid rounded elem-display" src="{{ file.url }}"/>
                             {% endif %}
                             {% if file.type == "F" %}
                                 <div class="button_div">

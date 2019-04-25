@@ -673,3 +673,6 @@ def update_notifemail(request):
     else:
         form = NotifEmailForm(instance=user)
     return render(request, 'user/notifemail.html', {'form': form})
+
+def terms(request):
+    return render(request, 'terms.html')

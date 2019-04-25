@@ -24,6 +24,7 @@ import tweepy
 from _functools import reduce
 import operator
 from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
+from django.contrib import messages
 
 
 def index(request):
@@ -40,6 +41,7 @@ def index(request):
             msg = name + "\n" + email + "\n" + message
             msg = msg.encode('utf-8')
             server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])
+            messages.success(request, " Contact message has benn recieved succesfully. Capsulefy team will contact you has soon as possible.")
             return render(request, 'index.html', {'form': form})
     else:
         form = ContactForm()

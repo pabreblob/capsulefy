@@ -3,9 +3,13 @@
 {% block contenido %}
 {% load static %}
 <div class="container">
+<br>
+<h3>Dashboard</h3>
+<br>
+
 <div class="card-deck" >
 <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-  <div class="card-body">
+  <div class="card-body align-items-center d-flex justify-content-center">
   	<center>
     <h5 class="card-title">Registered users</h5>
     <br>
@@ -16,7 +20,7 @@
 </div>
 
 <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-  <div class="card-body">
+  <div class="card-body" style="margin-top: 47px;">
   	<center>
     <h5 class="card-title">Modules</h5>
     <h1>{{data.totalModules}} Total</h1>
@@ -42,7 +46,7 @@
   </div>
 </div>
 <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
-  <div class="card-body">
+  <div class="card-body" >
   	<center>
     <h5 class="card-title">Capsules</h5>
     <h1>{{data.totalCapsules}} Total</h1>

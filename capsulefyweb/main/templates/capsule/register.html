@@ -70,7 +70,7 @@ function checkPassword(){
 		    <label for="id_birthdate"><span class="red">*</span> 
 		    		Birthdate {{ form.birthdate.errors }}
 		    	</label>
-		    <input type="text" class="form-control" name="birthdate" 
+		    <input type="date" class="form-control" name="birthdate" 
 		    	id="id_birthdate"  placeholder="YYYY-MM-DD"
 		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="yyyy-mm-dd">
 		</div>

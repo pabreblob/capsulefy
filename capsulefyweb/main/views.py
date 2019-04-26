@@ -23,12 +23,35 @@ from django.template.loader import render_to_string
 import tweepy
 from _functools import reduce
 import operator
+
 from main.logic import check_modules_release, remove_expired_capsules, check_deadman_switch, upload_file, \
     checkModuleFiles, checkSize, delete_files, delete_file
 
+from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
+from django.contrib import messages
+
+
 
 def index(request):
-    return render(request, 'index.html')
+
+    enterpriseEmail = "capsulefy.communications@gmail.com"
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["Name"]
+            email = form.cleaned_data["Email"]
+            message = form.cleaned_data["Message"]
+            form = ContactForm()
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(enterpriseEmail, "aG7nOp4FhG")
+            msg = name + "\n" + email + "\n" + message
+            msg = msg.encode('utf-8')
+            server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])
+            messages.success(request, " Contact message has benn recieved succesfully. Capsulefy team will contact you has soon as possible.")
+            return render(request, 'index.html', {'form': form})
+    else:
+        form = ContactForm()
+    return render(request, 'index.html', {'form': form})
 
 
 def displayCapsules(request, id):

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pabreblob/capsulefy.svg?branch=master)](https://travis-ci.org/pabreblob/capsulefy)
+[![Coverage Status](https://coveralls.io/repos/github/pabreblob/capsulefy/badge.svg?branch=master)](https://coveralls.io/github/pabreblob/capsulefy?branch=master)
 # Capsulefy
 
 Capsulefy is an online time capsule that allow users to store their memories and share them in the future. Users will be able to create a time capsule, attach a message to it, load files such as videos or images into it and set a date when they want the capsule to be released.

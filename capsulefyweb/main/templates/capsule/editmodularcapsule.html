@@ -3,7 +3,7 @@
 {% block contenido %}
     {% load static %}
     <div class="container">
-        <form id="form" action="" method="post">
+        <form id="form" action="" onsubmit="submitEmail()" method="post">
             {% csrf_token %}
             <h3 class="title">Editing the capsule</h3>
             <hr>
@@ -11,20 +11,16 @@
                 <label for="id_title"><span class="red">* </span>Title: {{ form.title.errors }}</label>
                 <input type="text" class="form-control" name="title"value="{% if form.title.value != None %}{{ form.title.value }}{% endif %}" maxlength="250" required="" id="id_title">
             </div>
+
             <div class="form-group">
-                <label for="id_emails">Emails: {{ form.emails.errors }}</label>
-                <input type="text" class="form-control" name="emails" value="{% if form.emails.value != None %}{{ form.emails.value }}{% endif %}" maxlength="2500" id="id_emails">
-            </div>
+			    <label>Emails {{ form.emails.errors }}</label>
+			    <div id="email_inputs">	
+					</div>
+					<button type="button" onclick="addEmail()" class="btn btn-success">Add email</button>
+			</div>
+			<input type="hidden" id="id_emails" name="emails">
 
             <hr>
-            <!--
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="twitter" id="id_twitter"
-                       {% if form.twitter.value == True %}checked{% endif %}>
-                <label for="id_twitter" class="form-check-label">
-                    Twitter
-                </label>
-            </div>-->
 
             <p><b>{{form.twitter.errors}}</b></p>
 			{% if form.twitter.value != None and form.twitter.value == True %}
@@ -36,30 +32,26 @@
                 {% if form.twitter.value == True %}checked{% endif %}>
 
 
-            <!--
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="facebook" id="id_facebook"
-                       {% if form.facebook.value == True %}checked{% endif %}>
-                <label for="id_facebook" class="form-check-label">
-                    Facebook
-                </label>
-            </div>-->
             <hr>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="private" id="id_private"
-                       {% if form.private.value == True %}checked{% endif %}>
-                <label for="id_private" class="form-check-label">
-                    Private capsule
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="deadman_switch"
-                       onclick="deadman_switch_activated()" id="id_deadman_switch"
-                       {% if form.deadman_switch.value == True %}checked{% endif %}>
-                <label class="form-check-label" for="id_deadman_switch">
-                    Activate deadman switch
-                </label>
-            </div>
+            
+            {% if form.private.value != None and form.private.value == True %}
+                <p><button type="button" onClick="add_private(this)" class="btn btn-success" id="private">Private capsule</button></p>
+            {% else %}
+                <p><button type="button" onClick="add_private(this)" class="btn btn-secondary" id="private">Public capsule</button></p>
+            {% endif %}
+            <input style="display: none" type="checkbox" class="form-check-input" name="private" id="id_private"
+                {% if form.private.value == True %}checked{%endif%}>
+
+
+            {% if form.deadman_switch.value != None and form.deadman_switch.value == True %}
+                <p><button type="button" onClick="add_deadman_switch(this)" class="btn btn-success" id="deadman_switch">Deadman switch activated</button></p>
+            {% else %}
+                <p><button type="button" onClick="add_deadman_switch(this)" class="btn btn-secondary" id="deadman_swtich">Activate deadman switch?</button></p>
+            {% endif %}
+            <input style="display: none" type="checkbox" class="form-check-input" name="deadman_switch" id="id_deadman_switch"
+                {% if form.deadman_switch.value == True %}checked{%endif%}>
+
+
             <hr>
             <div id="input_deadman" style="display: none;">
                 <div class="form-group row">
@@ -133,21 +125,56 @@
     deadman_switch_activated();
 
     if("{{form.twitter.value}}" == "True"){
-		    document.getElementById("id_twitter").setAttribute("checked", "checked");
-	    }
-    	function add_twitter(element){
-	    	if(!document.getElementById("id_twitter").hasAttribute("checked")){
-		    	document.getElementById("id_twitter").setAttribute("checked", "checked");
-			    element.classList.remove("btn-secondary");
-    			element.classList.add("btn-success");
-	    		element.innerHTML = "Connected to Twitter";
-		    }else{
-    			document.getElementById("id_twitter").removeAttribute("checked");
-	    		element.classList.remove("btn-success");
-		    	element.classList.add("btn-secondary");
-			    element.innerHTML = "Connect to Twitter?";
-    		}
-	    }
+	    document.getElementById("id_twitter").setAttribute("checked", "checked");
+	}
+    function add_twitter(element){
+		if(!document.getElementById("id_twitter").hasAttribute("checked")){
+	    	document.getElementById("id_twitter").setAttribute("checked", "checked");
+		    element.classList.remove("btn-secondary");
+    		element.classList.add("btn-success");
+			element.innerHTML = "Connected to Twitter";
+	    }else{
+    		document.getElementById("id_twitter").removeAttribute("checked");
+			element.classList.remove("btn-success");
+	    	element.classList.add("btn-secondary");
+		    element.innerHTML = "Connect to Twitter?";
+    	}
+	}
+
+    if("{{form.private.value}}" == "True"){
+	    document.getElementById("id_private").setAttribute("checked", "checked");
+	}
+    function add_private(element){
+        if(!document.getElementById("id_private").hasAttribute("checked")){
+            document.getElementById("id_private").setAttribute("checked", "checked");
+            element.classList.remove("btn-secondary");
+            element.classList.add("btn-success");
+            element.innerHTML = "Private capsule";
+        }else{
+            document.getElementById("id_private").removeAttribute("checked");
+            element.classList.remove("btn-success");
+            element.classList.add("btn-secondary");
+            element.innerHTML = "Public capsule";
+        }
+    }
+    if("{{form.deadman_switch.value}}" == "True"){
+	    document.getElementById("id_deadman_switch").setAttribute("checked", "checked");
+	}
+    function add_deadman_switch(element){
+        if(!document.getElementById("id_deadman_switch").hasAttribute("checked")){
+            document.getElementById("id_deadman_switch").setAttribute("checked", "checked");
+            element.classList.remove("btn-secondary");
+            element.classList.add("btn-success");
+            element.innerHTML = "Deadman switch activated";
+        }else{
+            document.getElementById("id_deadman_switch").removeAttribute("checked");
+            element.classList.remove("btn-success");
+            element.classList.add("btn-secondary");
+            element.innerHTML = "Activate deadman switch?";
+        }
+        deadman_switch_activated();
+    }
+
     </script>
       <script>
   function confirmAlert(message, url){
@@ -156,6 +183,38 @@
     }
   }
   </script>
+  <script>
+	var numberEmails = 0;
+	function removeEmail(e){
+		document.getElementById("email_"+e).parentNode.parentNode.remove();
+	}
+	
+	function addEmail(){
+		$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + numberEmails + '" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+numberEmails+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+		numberEmails++;
+	}
+
+	var values = "{{form.emails.value}}";
+	if(values != "None" && values != ""){
+		var emails = values.split(",");
+
+		for(var i = 0; i < emails.length; i++){
+			$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + i + '" value="'+$.trim(emails[i])+'" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+i+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+			numberEmails = i;
+		}
+	}
+	numberEmails++;
+
+	function submitEmail(){
+		var res = "";
+		for(const c of document.getElementById("email_inputs").children){
+			res += c.firstElementChild.firstElementChild.value + ",";
+		}
+		res = res.substring(0, res.length-1);
+		document.getElementById("id_emails").value = res;
+		console.log(document.getElementById("id_emails"));
+	}
+    </script>
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

@@ -24,20 +24,31 @@
             
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-            {% if not user.username%}
-            <li class="nav-item">
+          	 <li class="nav-item">
                 <a class="nav-link" href="/#about">About</a>
             </li>
-            
             <li class="nav-item">
-              <a class="nav-link" href="/#pricing">Pricing</a>
+                <a class="nav-link" href="/#releases">Releases</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#team">Team</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#faq">FAQ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pricing">Pricing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#contact">Contact</a>
             </li>
           </li>
-            {% endif %}
+          
           <li class="nav-item">
             <a class="nav-link" href="/list/public">Search capsules</a>
           </li> 
           {% if user.username %}
+            {% if user.username and not user.is_superuser %}
             <li class="nav-item dropdown dmenu">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 My Capsules
@@ -47,7 +58,8 @@
                 <a class="dropdown-item" href="/select_capsule">Create a capsule</a>
               </div>
             </li>
-            
+            {% endif %}
+
             <li class="nav-item dropdown dmenu">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 {{user.username}}
@@ -57,7 +69,9 @@
                   <a class="dropdown-item" href="/adm/list">List users</a>
                   <a class="dropdown-item" href="/adm/dashboard">Dashboard</a>
                 {% endif %}
+                {% if user.username and not user.is_superuser %}
                 <a class="dropdown-item" href="/user/myaccount">My account</a>
+                {% endif %}
                 <a class="dropdown-item" href="/logout">Exit</a>
               </div>
             </li>

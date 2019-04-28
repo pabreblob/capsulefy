@@ -903,3 +903,6 @@ class SimpleTest(TestCase):
         request.user = user
         deleteUser(request)
 
+    def test_error_404(self):
+        createcapsule = self.client.get('/error', follow=True)
+        self.assertEquals(createcapsule.status_code, 404)

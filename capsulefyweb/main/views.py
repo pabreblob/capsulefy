@@ -23,12 +23,35 @@ from django.template.loader import render_to_string
 import tweepy
 from _functools import reduce
 import operator
+
 from main.logic import check_modules_release, remove_expired_capsules, check_deadman_switch, upload_file, \
     checkModuleFiles, checkSize, delete_files, delete_file
 
+from main.logic import check_modules_release,remove_expired_capsules,check_deadman_switch
+from django.contrib import messages
+
+
 
 def index(request):
-    return render(request, 'index.html')
+
+    enterpriseEmail = "capsulefy.communications@gmail.com"
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["Name"]
+            email = form.cleaned_data["Email"]
+            message = form.cleaned_data["Message"]
+            form = ContactForm()
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(enterpriseEmail, "aG7nOp4FhG")
+            msg = name + "\n" + email + "\n" + message
+            msg = msg.encode('utf-8')
+            server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])
+            messages.success(request, " Contact message has been recieved succesfully. Capsulefy team will contact you has soon as possible.")
+            return render(request, 'index.html', {'form': form})
+    else:
+        form = ContactForm()
+    return render(request, 'index.html', {'form': form})
 
 
 def displayCapsules(request, id):
@@ -48,10 +71,20 @@ def displayCapsules(request, id):
         if not (creator == False and module.release_date > datetime.now(timezone.utc)):
             modules.append(module)
     modules.sort(key=lambda x: x.pk)
+
+    urlBack = request.META.get('HTTP_REFERER')
+    if urlBack == None:
+        urlBack = '/list/public'
+    elif not ('/list/public' in urlBack) and not ('/list/private' in urlBack):
+        if(request.user.is_authenticated):
+            urlBack = '/list/private'
+        else:
+            urlBack = '/list/public' 
+
     if len(modules) == 0:
         return HttpResponseNotFound()
     else:
-        return render(request, 'capsule/displaycapsule.html', {'capsule': capsule, 'modules': modules, 'editable': editable})
+        return render(request, 'capsule/displaycapsule.html', {'urlBack': urlBack, 'capsule': capsule, 'modules': modules, 'editable': editable})
 
 
 conversion_to_seconds = [60, 86400, 2592000, 31536000]
@@ -505,3 +538,6 @@ def update_notifemail(request):
     else:
         form = NotifEmailForm(instance=user)
     return render(request, 'user/notifemail.html', {'form': form})
+
+def terms(request):
+    return render(request, 'terms.html')

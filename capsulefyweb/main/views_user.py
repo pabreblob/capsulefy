@@ -15,8 +15,8 @@ def register(request):
             user=form.save(commit=False)
             user.set_password(raw_password=user.password)
             user.save()
-            messages.success(request, "Usuario registrado con exito."+
-            " Ya puede iniciar sesión ")
+            messages.success(request, "Registered user sucessfully."+
+            " Login now")
             return redirect('login')
     else:
         form=UserForm()

@@ -54,4 +54,5 @@ urlpatterns = [
     path('update/', views.update,name='update'),
     path('deleteUser/', views_user.deleteUser),
     path('user/notifemail/', views.update_notifemail, name='notifemail'),
+    path('terms', views.terms,name='terms'),
 ]

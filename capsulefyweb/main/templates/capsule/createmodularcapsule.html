@@ -178,6 +178,9 @@
 			    element.innerHTML = "Connect to Twitter?";
     		}
 	    }
+        if("{{capsuleForm.private.value}}" == "True"){
+	        document.getElementById("id_private").setAttribute("checked", "checked");
+	    }
         function add_private(element){
             if(!document.getElementById("id_private").hasAttribute("checked")){
                 document.getElementById("id_private").setAttribute("checked", "checked");
@@ -191,6 +194,9 @@
                 element.innerHTML = "Public capsule";
             }
         }
+        if("{{capsuleForm.deadman_switch.value}}" == "True"){
+	        document.getElementById("id_private").setAttribute("checked", "checked");
+	    }
         function add_deadman_switch(element){
             if(!document.getElementById("id_deadman_switch").hasAttribute("checked")){
                 document.getElementById("id_deadman_switch").setAttribute("checked", "checked");

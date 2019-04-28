@@ -38,21 +38,24 @@
             <hr>
 
             {% if capsuleForm.private.value != None and capsuleForm.private.value == True %}
-                <p><button type="button" onClick="add_private(this)" class="btn btn-success" id="private">Private capsule</button>
+                <p><button type="button" onClick="add_private(this)" class="btn btn-success" id="private">Private capsule</button></p>
             {% else %}
                 <p><button type="button" onClick="add_private(this)" class="btn btn-secondary" id="private">Public capsule</button></p>
             {% endif %}
             <input style="display: none" type="checkbox" class="form-check-input" name="private" id="id_private"
                 {% if capsuleForm.private.value == True %}checked{%endif%}>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="deadman_switch"
-                       onclick="deadman_switch_activated()" id="id_deadman_switch"
-                       {% if capsuleForm.deadman_switch.value == True %}checked{% endif %}>
-                <label class="form-check-label" for="id_deadman_switch">
-                    Activate deadman switch
-                </label>
-            </div>
+
+            {% if capsuleForm.deadman_switch.value != None and capsuleForm.deadman_switch.value == True %}
+                <p><button type="button" onClick="add_deadman_switch(this)" class="btn btn-success" id="deadman_switch">Deadman switch activated</button></p>
+            {% else %}
+                <p><button type="button" onClick="add_deadman_switch(this)" class="btn btn-secondary" id="deadman_swtich">Activate deadman switch?</button></p>
+            {% endif %}
+            <input style="display: none" type="checkbox" class="form-check-input" name="deadman_switch" id="id_deadman_switch"
+                {% if capsuleForm.deadman_switch.value == True %}checked{%endif%}>
+
+
+
             <hr>
             <div id="input_deadman" style="display: none;">
                 <div class="form-group row">
@@ -187,6 +190,20 @@
                 element.classList.add("btn-secondary");
                 element.innerHTML = "Public capsule";
             }
+        }
+        function add_deadman_switch(element){
+            if(!document.getElementById("id_deadman_switch").hasAttribute("checked")){
+                document.getElementById("id_deadman_switch").setAttribute("checked", "checked");
+                element.classList.remove("btn-secondary");
+                element.classList.add("btn-success");
+                element.innerHTML = "Deadman switch activated";
+            }else{
+                document.getElementById("id_deadman_switch").removeAttribute("checked");
+                element.classList.remove("btn-success");
+                element.classList.add("btn-secondary");
+                element.innerHTML = "Activate deadman switch?";
+            }
+            deadman_switch_activated();
         }
 
     </script>

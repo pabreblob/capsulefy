@@ -10,7 +10,7 @@
 
     <div id="module-btn-top" class="row justify-content-between">
         <div class="col-12 col-sm-10">
-            <button class="btn btn-secondary" onclick="window.location='/list/public/'">View published capsules</button>
+            <button class="btn btn-secondary" onclick="window.location='{{urlBack}}'">Back</button>
             {% if user.id == capsule.creator.id %}
                 {% if capsule.capsule_type == "F" and editable %}
                     <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
@@ -46,9 +46,9 @@
                 <div class="container">
                 <div class="row">
                     {% for file in module.files.all %}
-                        <div class="col-sm-12 col-md-5 elem-display">
+                        <div class="col-sm-12 col-md-5">
                             {% if file.type == "I" %}
-                                <img class="img-fluid rounded" src="{{ file.url }}"/>
+                                <img class="img-fluid rounded elem-display" src="{{ file.url }}"/>
                             {% endif %}
                             {% if file.type == "F" %}
                                 <div class="button_div">
@@ -73,7 +73,7 @@
     <br>
     <div id="module-btn-bottom" class="row justify-content-between">
         <div class="col-12 col-sm-10">
-            <button class="btn btn-secondary" onclick="window.location='/list/public/'">View published capsules</button>
+            <button class="btn btn-secondary" onclick="window.location='{{urlBack}}'">Back</button>
             {% if user.id == capsule.creator.id %}
                 {% if capsule.capsule_type == "F" and editable %}
                     <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>

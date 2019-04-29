@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block contenido %}
+<div id="maindiv" class="container">
+<div class="row justify-content-md-center">
+<div class="col-12 col-md-4">
+    <img class="img-fluid" src="https://cdn.pixabay.com/photo/2016/02/11/22/01/mistake-1194670_960_720.png"/>
+    <p class="error-text">Sorry, the page you tried cannot be found.</p>
+    <button type="button" class="btn btn-back btn-secondary" onclick="window.location = '/'">Go Home</button>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styleErrors.css' %}"/>
+{% endblock  %}

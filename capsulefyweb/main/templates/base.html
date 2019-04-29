@@ -24,17 +24,26 @@
             
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-            {% if not user.username%}
-            <li class="nav-item">
+          	 <li class="nav-item">
                 <a class="nav-link" href="/#about">About</a>
             </li>
-            {% if not user.username or not user.is_superuser %}
             <li class="nav-item">
-              <a class="nav-link" href="/#pricing">Pricing</a>
+                <a class="nav-link" href="/#releases">Releases</a>
             </li>
-            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="/#team">Team</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#faq">FAQ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pricing">Pricing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#contact">Contact</a>
+            </li>
           </li>
-            {% endif %}
+          
           <li class="nav-item">
             <a class="nav-link" href="/list/public">Search capsules</a>
           </li> 

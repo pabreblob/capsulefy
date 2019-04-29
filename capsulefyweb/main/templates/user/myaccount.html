@@ -19,11 +19,14 @@
         {% endif %}
         <hr>
         <div id="buttonrow" class="row justify-content-between">
-          <div class="col-12 col-sm-5">
+          <div class="col">
             <button class="btn btn-secondary" onclick="window.location='/'">Back</button>
-            <button class="btn btn-primary" onclick="window.location='/user/notifemail'">Edit email for notifications</button><br>
+            <button class="btn btn-primary" onclick="window.location='/user/notifemail'">Edit email for notifications</button>
+          	
           </div>
-          <div class="col-12 col-sm-3">
+          <div class="col">
+          	<button class="btn btn-primary" onclick="window.location='/user/changepassword'">Change password</button>
+          
             <button class="btn btn-danger" onClick="confirmAlert('Are you sure you want to delete your account?', '/deleteUser')">Delete account</button>
           </div>
         </div>

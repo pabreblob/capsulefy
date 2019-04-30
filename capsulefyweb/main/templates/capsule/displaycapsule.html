@@ -4,7 +4,7 @@
 <div class="container main-capsule">
     <h3> {{ capsule.title }} 
         <blockquote class="blockquote">
-            <p class="blockquote-footer">Written by <cite title="Source Title">{{ capsule.creator.username }}</cite></p>
+            <p class="blockquote-footer">Written by <cite title="Source Title">{{capsule.creator.username}}</cite>, created in {{capsule.creation_date|date:'Y-m-d'}}</p>
         </blockquote>
     </h3>
 
@@ -34,11 +34,7 @@
     <br>
         <div class="card">
             <div class="card-header">
-            {% if forloop.counter0 == 0 %}
-                    Capsule
-                {% else %}
-                    Module {{ forloop.counter0 }}
-                {% endif %}
+            Module {{ forloop.counter }} - Released in {{module.release_date|date:'Y-m-d'}}
             </div>
             <div class="card-body">
                 <h4 class="description">{{ module.description }}</h4><br>

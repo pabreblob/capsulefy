@@ -1,6 +1,0 @@
-The full project will be developed in Django. There will be a main web application, which will be the website that the
-end users will interact with. For styling, Bootstrap will be used. AJAX and Jquery will also be useful at some points.
-Then, there will be different applications. Each of them will be focused on one thing: users, capsules or social media.
-These will be APIs that use the Django REST Framework package. The users and capsules APIs will make use of a PostgreSQL
-database. The social media API may also need a database.
-For continuous integration, we will use Travis CI. This website integrates nicely with GitHub.

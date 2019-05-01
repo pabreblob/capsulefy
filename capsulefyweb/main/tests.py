@@ -14,7 +14,7 @@ class SimpleTest(TestCase):
         self.request_factory = RequestFactory()
         self.username = 'testuser'
         self.email = 'testuser@test.com'
-        self.password = 'testpass'
+        self.password = 'pASSw0rd1234'
         self.test_user = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
         login = self.client.login(username=self.username, password=self.password)
         self.assertEqual(login, True)
@@ -647,7 +647,7 @@ class SimpleTest(TestCase):
         self.request_factory = RequestFactory()
         self.username = 'testuser2'
         self.email = 'testuser2@test.com'
-        self.password = 'testpass2'
+        self.password = 'pASSw0rd1234'
         self.test_user2 = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
         login = self.client.login(username=self.username, password=self.password)
 
@@ -771,7 +771,7 @@ class SimpleTest(TestCase):
         views.testMode = False
         self.username = 'testuser2'
         self.email = 'testuser2@test.com'
-        self.password = 'testpass2'
+        self.password = 'pASSw0rd1234'
         self.test_user2 = User.objects.create_user(self.username, self.email, self.password, birthdate='2001-01-01')
         login = self.client.login(username=self.username, password=self.password)
         request = self.request_factory.get('/refresh/')
@@ -836,7 +836,7 @@ class SimpleTest(TestCase):
             'first_name': 'Name',
             'last_name': 'Surname',
             'username': 'username',
-            'password': 'password',
+            'password': 'pASSw0rd1234',
             'birthdate': '2000-10-10',
             'email': 'email@domain.com',
             'email_notification': 'email2@domain.com'
@@ -854,7 +854,7 @@ class SimpleTest(TestCase):
             'first_name': 'Name',
             'last_name': 'Surname',
             'username': 'username',
-            'password': 'password',
+            'password': 'pASSw0rd1234',
             'birthdate': '2040-10-10',
             'email': 'email@domain.com',
             'email_notification': 'email2@domain.com'
@@ -872,7 +872,7 @@ class SimpleTest(TestCase):
             'first_name': 'Name',
             'last_name': 'Surname',
             'username': 'username',
-            'password': 'password',
+            'password': 'pASSw0rd1234',
             'birthdate': '2000-10-10',
             'email': 'email@domain.com',
             'email_notification': 'email2@domain.com'
@@ -883,7 +883,7 @@ class SimpleTest(TestCase):
         setattr(request, '_messages', messages)
         response = register(request)
         user = User.objects.filter(username="username").first()
-        login = self.client.login(username="username", password="password")
+        login = self.client.login(username="username", password="pASSw0rd1234")
 
         createcapsule = self.client.get('/newfreecapsule', follow=True)
         self.assertEquals(createcapsule.status_code, 200)

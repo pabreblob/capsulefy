@@ -2,6 +2,7 @@ from django.forms.models import ModelForm
 from main.models import User
 from django.forms.widgets import DateInput
 from django import forms
+from main.validators import validatePassword
 
 class UserForm(ModelForm):
     email=forms.EmailField(required=True)
@@ -13,13 +14,20 @@ class UserForm(ModelForm):
             widgets={
                     'birthdate':DateInput(),
                     }
-            
+    
+    def clean_password(self):
+        password= self.cleaned_data['password'] 
+        validatePassword(password)
+        return password
 class PasswordForm(ModelForm):
     old_pass=forms.CharField(max_length=128)
     class Meta:
             model=User
             fields = ('password',)
-    
+    def clean_password(self):
+        password= self.cleaned_data['password'] 
+        validatePassword(password)
+        return password
     def clean_old_pass(self):
         data = self.cleaned_data['old_pass']
         

@@ -29,18 +29,11 @@
             
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-          	 <li class="nav-item">
-                <a class="nav-link" href="/#about">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/#releases">Releases</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/#team">Team</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/#faq">FAQ</a>
-            </li>
+            {% if not user.username %}
+              <li class="nav-item">
+                  <a class="nav-link" href="/#faq">FAQ</a>
+              </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="/#pricing">Pricing</a>
             </li>
@@ -113,7 +106,7 @@
     
     <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
       <div class="container text-center">
-      <small>Do you want more information about out team? Click <a href="http://capsulefy01.herokuapp.com/">here</a> to know about us</small>
+      <small>Do you want more information about out team? Click <a href="/#team">here</a> to know about us</small>
       <br>
       <small>Copyright &copy; Capsulefy</small>
     </div>

@@ -1,8 +1,0 @@
-Las cápsulas del tiempo es algo que se ha usado durante muchos años, tirando botellas con un mensaje al mar, enterrando mensajes, etc. 
-
-Nuestra app parte de esa idea, la de almacenar un mensaje y ser liberado en un tiempo concreto.
-Teniendo en cuenta el análisis de competidores, nuestra aplicación va un paso más allá. Nuestros competidores se limitan a publicar en su web un mensaje (texto, video, audio, etc.) pero no se enlazan con redes sociales, pudiendo publicar en ellas. Además en nuestro caso, permitimos la escritura de una cápsula que será liberada cuando el usuario fallezca, para controlar esto, el usuario no establece una fecha de liberación, si no que por defecto se libera en X tiempo, si el usuario no refresca el contador, la capsula se liberará.
-
-Además tiene otro tipo de uso, el de publicar contenido de forma automática en las redes sociales. (Creo que estaría bien el poder borrar una cuenta cuando el usuario muere, lo propongo como idea)
-
-Con respecto a la tecnología, se usará Django para el desarrollo del backend y se creará una interfaz web con HTML apoyada por Boostrap para ofrecer una mejor experiencia de usuario. Para la interacción con las redes sociales se utilizarán las apis correspondientes (Facebook API, Twitter API, etc.)

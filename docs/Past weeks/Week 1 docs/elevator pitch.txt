@@ -1,6 +1,0 @@
-Tenemos la necesidad de desconectar de la rutina. Para ello salimos y una de las muchas opciones es tomar una bebida en algún bar en el que nos gustaría escuchar nuestra música favorita, para ello
-salimos sin conocer que canción vamos a escuchar y en algunos casos no podemos sugerir que pongan cierta canción en concreto.
-
-Con JukeVote este problema no existe. Los clientes pueden conocer previamente que música se va a reproducir en el local y votar la canción que queremos escuchar dentro de las canciones seleccionadas por el local. 
-
-Además JukeVote muestra los locales que usan nuestra aplicación, proporcionando información del mismo y asegurando que los clientes que vayan al local van a estar agusto con el estilo musical.

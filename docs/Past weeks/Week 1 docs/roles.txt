@@ -1,5 +1,0 @@
-Adri:Business management/Mobile application developer
-Dani:Analyst/Front end developer
-Juan:Requirements engineer/Backend developer
-Pablo:Project manager/Backend developer
-Rafa: Backend developer/ API integration

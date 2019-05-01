@@ -5,6 +5,22 @@
 {% block contenido %}
 {% load static %}
 <script>
+function checkSubmit(){
+	if (checkPassword() && $("#id_terms").is(':checked') ){
+		return true
+	}else{
+		if(!$("#id_terms").is(':checked')){
+			$("#id_error_terms").html("Accept terms is obligatory.")
+			return false
+		}else{
+			$("#id_error_terms").html("")
+			return false
+		}
+		
+	}
+	
+}
+
 function checkPassword(){
 	p1=$("#id_password").val()
 	p2=$("#id_password2").val()
@@ -21,7 +37,7 @@ function checkPassword(){
 
 </script>
 <div class="container">
-		<form action="" method="post"  novalidate onsubmit="return checkPassword();">
+		<form action="" method="post"  novalidate onsubmit="return checkSubmit();">
     {% csrf_token %}
 		<h3 class="title">Signing up</h3>
 		<hr>
@@ -70,7 +86,7 @@ function checkPassword(){
 		    <label for="id_birthdate"><span class="red">*</span> 
 		    		Birthdate {{ form.birthdate.errors }}
 		    	</label>
-		    <input type="text" class="form-control" name="birthdate" 
+		    <input type="date" class="form-control" name="birthdate" 
 		    	id="id_birthdate"  placeholder="YYYY-MM-DD"
 		    	value="{% if form.birthdate.value != None %}{{form.birthdate.value}}{% endif %}" required placeholder="yyyy-mm-dd">
 		</div>
@@ -90,6 +106,18 @@ function checkPassword(){
 		    	id="id_email_notification" maxlength="250" 
 		    	value="{% if form.email_notification.value != None %}{{form.email_notification.value}}{% endif %}" required placeholder="Email for notifications">
 		</div>
+		<div class="form-group">
+		    <label for="id_terms"><span class="red">*</span> 
+		    	 Please, accept <a href="/terms" target="_blank">terms</a>. {{ form.email.errors }}
+		    	 <span id="id_error_terms" class="red"></span>
+		    	</label>
+		    	<br>
+			<!--  switch -->
+			<label class="switch">
+			  <input type="checkbox" id="id_terms">
+			  <span class="slider"></span>
+			</label>
+		</div>
 		<button type="submit" value="submit" class="btn btn-primary">Submit</button>
     <button type="button" class="btn btn-secondary" onclick="window.location='/'">Cancel</button>
 		</form>
@@ -100,4 +128,5 @@ function checkPassword(){
 {% endblock %}
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/slideButton.css' %}"/>
 {% endblock %}

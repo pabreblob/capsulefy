@@ -4,13 +4,13 @@
 <div class="container main-capsule">
     <h3> {{ capsule.title }} 
         <blockquote class="blockquote">
-            <p class="blockquote-footer">Written by <cite title="Source Title">{{ capsule.creator.username }}</cite></p>
+            <p class="blockquote-footer">Written by <cite title="Source Title">{{capsule.creator.username}}</cite>, created in {{capsule.creation_date|date:'Y-m-d'}}</p>
         </blockquote>
     </h3>
 
     <div id="module-btn-top" class="row justify-content-between">
         <div class="col-12 col-sm-10">
-            <button class="btn btn-secondary" onclick="window.location='/list/public/'">View published capsules</button>
+            <button class="btn btn-secondary" onclick="window.location='{{urlBack}}'">Back</button>
             {% if user.id == capsule.creator.id %}
                 {% if capsule.capsule_type == "F" and editable %}
                     <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>
@@ -34,11 +34,7 @@
     <br>
         <div class="card">
             <div class="card-header">
-            {% if forloop.counter0 == 0 %}
-                    Capsule
-                {% else %}
-                    Module {{ forloop.counter0 }}
-                {% endif %}
+            Module {{ forloop.counter }} - Released in {{module.release_date|date:'Y-m-d'}}
             </div>
             <div class="card-body">
                 <h4 class="description">{{ module.description }}</h4><br>
@@ -46,9 +42,9 @@
                 <div class="container">
                 <div class="row">
                     {% for file in module.files.all %}
-                        <div class="col-sm-12 col-md-5 elem-display">
+                        <div class="col-sm-12 col-md-5">
                             {% if file.type == "I" %}
-                                <img class="img-fluid rounded" src="{{ file.url }}"/>
+                                <img class="img-fluid rounded elem-display" src="{{ file.url }}"/>
                             {% endif %}
                             {% if file.type == "F" %}
                                 <div class="button_div">
@@ -73,7 +69,7 @@
     <br>
     <div id="module-btn-bottom" class="row justify-content-between">
         <div class="col-12 col-sm-10">
-            <button class="btn btn-secondary" onclick="window.location='/list/public/'">View published capsules</button>
+            <button class="btn btn-secondary" onclick="window.location='{{urlBack}}'">Back</button>
             {% if user.id == capsule.creator.id %}
                 {% if capsule.capsule_type == "F" and editable %}
                     <button class="btn btn-primary" onclick="window.location='/editfreecapsule/{{capsule.id}}'">Edit capsule</button>

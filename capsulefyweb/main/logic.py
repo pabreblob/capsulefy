@@ -24,13 +24,12 @@ from django.conf import settings
 
 def send_email(module):
     try:
-        html_message = "<p><b>Capsule title: </b>" \
-                       + module.capsule.title + "</p>" \
-                       + "<p><b>Module content: </b>" \
-                       + module.description + "</p>" \
-                       + "<br><br><p><b>Author: </b>" \
-                       + module.capsule.creator.first_name + " " \
-                       + module.capsule.creator.last_name + "</p>"
+        
+        html_message='A time capsule module created by '+module.capsule.creator.first_name\
+        +' '+module.capsule.creator.last_name+ \
+        'has just been released! <br>Check it out at https://capsul' +\
+        'efy.herokuapp.com/displaycapsule/' + str(module.capsule_id)
+        
         mail_list = module.capsule.emails.split(',')
         i = 0
         while i < len(mail_list):

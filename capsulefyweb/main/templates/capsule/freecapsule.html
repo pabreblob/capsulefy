@@ -3,7 +3,7 @@
 {% load static %}
 
 <div class="container">
-    <form action="" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+    <form action="" method="post" class="needs-validation" novalidate onsubmit="submitEmail()" enctype="multipart/form-data">
     	{% if '/editfreecapsule/' in request.path %}
         	<h3 class="title">Editing the capsule</h3>
 		{% else %}
@@ -24,9 +24,12 @@
 			    <input type="date" class="form-control" id="id_release_date" name="release_date" maxlength="250" value="{% if form.release_date.value != None %}{{form.release_date.value}}{% endif %}" required placeholder="YYYY-MM-DD HH:MM">
 			</div>
 			<div class="form-group">
-			    <label for="id_emails">Emails {{ form.emails.errors }}</label>
-			    <input type="text" class="form-control" id="id_release_date" name="emails" value="{% if form.emails.value != None %}{{form.emails.value}}{% endif %}" maxlength="250">
+			    <label>Emails {{ form.emails.errors }}</label>
+			    <div id="email_inputs">	
+					</div>
+					<button type="button" onclick="addEmail()" class="btn btn-success">Add email</button>
 			</div>
+			<input type="hidden" id="id_emails" name="emails">
 
 			<p><b>{{ form.twitter.errors }}</b></p>
 			{% if form.twitter.value != None and form.twitter.value == True %}
@@ -117,13 +120,46 @@
 		}
 	}
 </script>
-  <script>
+<script>
   function confirmAlert(message, url){
     if(confirm(message)){
       window.location = url;
     }
   }
-  </script>
+</script>
+<script>
+	var numberEmails = 0;
+	function removeEmail(e){
+		document.getElementById("email_"+e).parentNode.parentNode.remove();
+	}
+	
+	function addEmail(){
+		$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + numberEmails + '" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+numberEmails+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+		numberEmails++;
+	}
+
+	var values = "{{form.emails.value}}";
+	if(values != "None" && values != ""){
+		var emails = values.split(",");
+
+		for(var i = 0; i < emails.length; i++){
+			$("#email_inputs").append('<div class="row"><div class="col-sm-9"><input type="text" class="form-control" id="email_' + i + '" value="'+$.trim(emails[i])+'" maxlength="250"></div><div class="col-sm-2"><button type="button" onclick="removeEmail('+i+')" class="btn btn-danger">Delete</button></div><br><br></div>');
+			numberEmails = i;
+		}
+	}
+	numberEmails++;
+
+	function submitEmail(){
+		var res = "";
+		for(const c of document.getElementById("email_inputs").children){
+			res += c.firstElementChild.firstElementChild.value + ",";
+		}
+		res = res.substring(0, res.length-1);
+		document.getElementById("id_emails").value = res;
+		console.log(document.getElementById("id_emails"));
+	}
+</script>
+
 {% endblock %}
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styleForm.css' %}"/>

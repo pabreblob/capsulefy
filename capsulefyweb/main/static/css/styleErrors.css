@@ -1,0 +1,12 @@
+#maindiv{
+    text-align: center;
+}
+
+.error-text{
+    font-size: 1.2em;
+}
+
+.btn-back{
+    width: 100%;
+    margin-bottom: 5%;
+}

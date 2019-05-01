@@ -13,3 +13,17 @@ class UserForm(ModelForm):
             widgets={
                     'birthdate':DateInput(),
                     }
+            
+class PasswordForm(ModelForm):
+    old_pass=forms.CharField(max_length=128)
+    class Meta:
+            model=User
+            fields = ('password',)
+    
+    def clean_old_pass(self):
+        data = self.cleaned_data['old_pass']
+        
+        if not self.instance.check_password(data):
+            raise forms.ValidationError('The old password is not correct.')
+        return data
+            

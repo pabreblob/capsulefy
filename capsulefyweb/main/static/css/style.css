@@ -220,3 +220,18 @@ footer {
 .loginlogo{
   text-align: center;
 }
+
+#acceptCookies{
+  position: fixed; 
+  bottom: 0px; 
+  color: white; 
+  background-color: black; 
+  z-index: 1; 
+  width: 100%; 
+  text-align: center;
+  padding: 1%;
+}
+#acceptCookies > *{
+  margin: 0;
+  padding: 0;
+}

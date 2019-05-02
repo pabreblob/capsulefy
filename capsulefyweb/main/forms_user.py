@@ -35,8 +35,3 @@ class PasswordForm(ModelForm):
             raise forms.ValidationError('The old password is not correct.')
         return data
 
-    def clean(self):
-        if not re.match(r'^(?=.*[a-z])(?=.*?[A-Z])(?=.*\d)[A-Za-z\d@$!¡¿?/%*#?&.:,;Çç\-*+\\<>]{8,}$', self.password):
-            raise forms.ValidationError({'password': forms.ValidationError(
-                'Password incorrect, at least 8 characters, one number, one capital letter, one small letter ' + \
-                ' (Optinal allow: @$!¡¿?/%*#?&.:,;Çç-*+\<>).'), })

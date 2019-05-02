@@ -31,27 +31,8 @@ from main.logic import check_modules_release,remove_expired_capsules,check_deadm
 from django.contrib import messages
 
 
-
 def index(request):
-
-    enterpriseEmail = "capsulefy.communications@gmail.com"
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data["Name"]
-            email = form.cleaned_data["Email"]
-            message = form.cleaned_data["Message"]
-            form = ContactForm()
-            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login(enterpriseEmail, "aG7nOp4FhG")
-            msg = name + "\n" + email + "\n" + message
-            msg = msg.encode('utf-8')
-            server.sendmail(msg=msg, from_addr=email, to_addrs=[enterpriseEmail])
-            messages.success(request, " Contact message has been recieved succesfully. Capsulefy team will contact you has soon as possible.")
-            return render(request, 'index.html', {'form': form})
-    else:
-        form = ContactForm()
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'index.html')
 
 
 def displayCapsules(request, id):

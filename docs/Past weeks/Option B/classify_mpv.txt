@@ -1,3 +1,0 @@
-According to Minimum Viable Product, we conclude our software provide a 
-service where the clients are the users. Users will use the service we 
-provide to them. In return, they will pay us.

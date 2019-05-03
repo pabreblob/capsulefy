@@ -1,7 +1,0 @@
-- Core use cases: Registered users should be able to create the different kinds of time capsules. Moreover, unregistered users must be able to retrieve public capsules and search using certain filters
-
-- Registration: Users should be able to register into the system using their own credentials, in order to manage their time capsules. Administrators will be manually introduced into the database.
-
-- Payment: Registered users may pay a subscription fee to use certain types of capsules which are not free. They may cancel the subscription at any time.
-
-- Basic admin: Administrators must be able to ban users who misuse the system. In addition, a dashboard displaying basic usage statistics should be available.

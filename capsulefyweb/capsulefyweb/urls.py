@@ -55,4 +55,5 @@ urlpatterns = [
     path('deleteUser/', views_user.deleteUser),
     path('user/notifemail/', views.update_notifemail, name='notifemail'),
     path('terms', views.terms,name='terms'),
+    path('user/changepassword/', views_user.change_password,name='change_password'),
 ]

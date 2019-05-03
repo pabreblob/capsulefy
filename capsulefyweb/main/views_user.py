@@ -1,5 +1,5 @@
 from main.models import User,Capsule
-from main.forms_user import UserForm
+from main.forms_user import UserForm, PasswordForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -37,3 +37,21 @@ def deleteUser(request):
     user_auth=UserA.objects.filter(id=user_del.id)
     user_auth.delete()
     return redirect('login')
+
+def change_password(request):
+    user = User.objects.get(id=request.user.id)
+    if(request.method=='POST'):
+        form = PasswordForm(request.POST,instance=user)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(raw_password=user.password)
+            user.save()
+            messages.success(request, "Your password has been change user sucessfully.")
+            return redirect('myaccount')
+    else:
+        form=PasswordForm(instance=user)
+            
+    return render(request, 'user/change_password.html',
+                          {'form': form})
+
+    

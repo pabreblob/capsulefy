@@ -28,43 +28,6 @@
             <img class="capsuleimg" class="img-fluid" src="{% static 'images/capsule.png' %}"/>
         </div>
 
-        <a name="releases"></a>
-        <div class="container">
-        <h1 class="title">Releases</h1><br>
-        <div class="row justify-content-center">
-        <div class="col-5">
-        <table class="table table-borderer">
-            <thead class="thead-dark">
-              <tr>
-                <th style="text-align:center" scope="col">Sprint</th>
-                <th style="text-align:center" scope="col">Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th style="text-align:center" scope="row">Sprint 1</th>
-                <td style="text-align:center"><button onclick="window.location='http://capsulefy02.herokuapp.com'" class="btn btn-primary">Click me</button></td>
-              </tr>
-              <tr>
-                <th style="text-align:center" scope="row">Sprint 2</th>
-                <td style="text-align:center"><button onclick="window.location='http://capsulefy03.herokuapp.com'" class="btn btn-primary">Click me</button></td>
-              </tr>
-              <tr>
-                <th style="text-align:center" scope="row">Sprint 3</th>
-                <td style="text-align:center"><button class="btn btn-secondary">Uncoming</button></td>
-              </tr>
-            </tbody>
-        </table>
-        </div>
-        </div>
-        </div>    
-                
-        <div class="capsule container">
-            <img class="capsuleimg" class="img-fluid" src="{% static 'images/capsule.png' %}"/>
-        </div>
-
-
-
     <a name="team"></a>
     <div class="container">
         <h1 class="title">Our Team</h1><br>
@@ -365,25 +328,7 @@ information about our storage size, check out our <a href="#pricing">pricing</a>
 <div class="container">
 <div class="col-9 container-fluid">
     <h1 class="title">Contact us</h1>
-    <p class="text">If you wish to contact us, you can send an <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#97;&#112;&#115;&#117;&#108;&#101;&#102;&#121;&#46;&#99;&#111;&#109;&#109;&#117;&#110;&#105;&#99;&#97;&#116;&#105;&#111;&#110;&#115;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">email</a> or fill this form:</p>
-    <div class="form rounded">
-     <form method=POST>
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_Name">Name</label>
-            <input class="form-control" type="text" name="Name" maxlength="50" required="" id="id_Name">
-        </div>
-        <div class="form-group">
-            <label for="id_Email">Email</label>
-            <input class="form-control" type="email" name="Email" required="" id="id_Email">
-        </div>
-        <div class="form-group">
-            <label for="id_Message">Message</label>
-            <textarea class="form-control" name="Message" rows="3" required="" id="id_Message"></textarea>
-        </div>
-        <input class="btn btn-secondary rounded" type="submit" value="Send"/>
-    </form>
-</div>
+    <p class="text">If you wish to contact us, you can send an <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#97;&#112;&#115;&#117;&#108;&#101;&#102;&#121;&#46;&#99;&#111;&#109;&#109;&#117;&#110;&#105;&#99;&#97;&#116;&#105;&#111;&#110;&#115;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">email</a>.</p>
 </div>
 </div>
 

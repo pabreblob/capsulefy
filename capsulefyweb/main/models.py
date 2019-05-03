@@ -1,11 +1,11 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
 
 from datetime import timezone, datetime
 from django.core.exceptions import ValidationError
+
 
 
 # Create your models here.
@@ -22,6 +22,12 @@ class Actor(User):
 
 class User(Actor):
     email_notification=models.EmailField(blank=True)
+    '''
+    def clean(self):
+        if not re.match(r'^(?=.*[a-z])(?=.*?[A-Z])(?=.*\d)[A-Za-z\d@$!¡¿?/%*#?&.:,;Çç\-*+\\<>]{8,}$', self.password):
+            raise ValidationError({'password': ValidationError('Password incorrect, at least 8 characters, one number, one capital letter, one small letter '+\
+                                                           ' (Optinal allow: @$!¡¿?/%*#?&.:,;Çç-*+\<>).'),})
+     '''       
 
 class Social_network(models.Model):
     social_type=models.CharField(max_length=1,choices=(('F','FACEBOOK'),('T','TWITTER')))

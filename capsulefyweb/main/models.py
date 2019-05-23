@@ -5,7 +5,7 @@ from django.db.models.deletion import CASCADE
 
 from datetime import timezone, datetime
 from django.core.exceptions import ValidationError
-import re
+
 
 
 # Create your models here.

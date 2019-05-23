@@ -34,4 +34,4 @@ class PasswordForm(ModelForm):
         if not self.instance.check_password(data):
             raise forms.ValidationError('The old password is not correct.')
         return data
-            
+

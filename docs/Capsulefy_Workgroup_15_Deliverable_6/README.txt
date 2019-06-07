@@ -1,0 +1,1 @@
+Our knowledge database is avaliable at: https://github.com/pabreblob/capsulefy/wiki
